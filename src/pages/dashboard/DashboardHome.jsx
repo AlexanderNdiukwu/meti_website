@@ -135,6 +135,7 @@ function StatusMessage({ user }) {
       </Card>
     );
   }
+  
 
   // Payment pending — submitted but not yet verified
   if (
