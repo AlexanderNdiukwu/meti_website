@@ -135,7 +135,7 @@ function StatusMessage({ user }) {
       </Card>
     );
   }
-  
+
 
   // Payment pending — submitted but not yet verified
   if (
@@ -322,7 +322,7 @@ const handleDownload = async (type) => {
       const { pdf } = await import('@react-pdf/renderer');
       let blob;
       if (type === 'admission') {
-        const { AdmissionLetterPDF } = await import('../../components/pdf/AdmissionLetterpdf');
+        const { AdmissionLetterPDF } = await import('../../components/pdf/AdmissionLetterPDF');
         blob = await pdf(
           <AdmissionLetterPDF
             application={user}
