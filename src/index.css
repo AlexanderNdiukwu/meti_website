@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-uniport-blue: #003366;
+  --color-brand-primary: #1B3A6B;
+  --color-brand-accent: #C9A227;
+  --color-brand-neutral: #F8F7F4;
+  --font-sans: "Inter", sans-serif;
+}
+
+@utility glass-nav {
+  background-color: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgb(229 231 235 / 0.5);
+}
+
+@utility glass-card {
+  background-color: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(229 231 235 / 0.5);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  border-radius: 1rem;
+}
+
+@utility text-gradient {
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--color-uniport-blue), #60a5fa);
+}
+
+@utility clip-irregular {
+  clip-path: polygon(0 0, 100% 5%, 95% 100%, 5% 95%);
+}
+
+@layer base {
+  body {
+    background-color: #ffffff;
+    color: #111827;
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+}
