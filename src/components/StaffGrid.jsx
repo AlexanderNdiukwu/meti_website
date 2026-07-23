@@ -41,7 +41,7 @@ const facilitators = [
   },
   {
     name: "Ibisotonte A. Ekine",
-    role: "Director Personal Assistant",
+    role: "Director's Personal Assistant",
     special: "",
     image: "staff_of_meti4.jpeg"
   },
