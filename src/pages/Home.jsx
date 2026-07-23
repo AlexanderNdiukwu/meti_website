@@ -9,7 +9,7 @@ import Testimonials from '../components/Testimonials';
 import Staff from '../components/Staff';
 import CallToAction from '../components/CallToAction';
 import Facilitators from '../components/Facilitators';
-import ScrollVelocity from '../components/ScrollVelocity';
+import ScrollVelocity from '../components/ScrollVelocity'
 
 const Home = () => {
   return (

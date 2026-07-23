@@ -256,7 +256,7 @@ export default function AdminPanel() {
       let blob;
       if (type === 'admission') {
         // const { ApplicationFormPDF } = await import('../components/pdf/ApplicationFormPDF');
-        const { AdmissionLetterPDF } = await import('../components/pdf/AdmissionLetterPDF');
+        const { AdmissionLetterPDF } = await import('../components/pdf/AdmissionLetterpdf');
         blob = await pdf(
          <AdmissionLetterPDF
             application={selectedApp}
