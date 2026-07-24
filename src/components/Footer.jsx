@@ -76,6 +76,11 @@ const Footer = () => {
           <p>
           <Link to={'/faq'} className='hover:text-white '> FAQs</Link>
 
+          </p>
+          
+            <p>
+          <Link to={'/support'} className='hover:text-white '> Support METI</Link>
+
           </p> 
           
             <p>
@@ -84,17 +89,14 @@ const Footer = () => {
           </p>  
           
            <p>
-          <Link to={'/about'} className='hover:text-white ' >About Meti </Link>
+          <Link to={'/about'} className='hover:text-white ' >About METI </Link>
 
           </p>
 
-           <p>
-          <Link to={'/lecturers'} className='hover:text-white ' >lectures </Link>
-
-          </p>
+         
 
               <p>
-          <Link to={'/about/duration'} className='hover:text-white ' >program durations </Link>
+          <Link to={'/about/duration'} className='hover:text-white ' >Program Durations </Link>
 
           </p>
 

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Heart, Landmark, GraduationCap, Users, BookOpen, TrendingUp, Shield, Globe, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+
 const IMPACT_POINTS = [
   {
     icon: <GraduationCap className="w-6 h-6 text-white" />,
@@ -193,7 +194,7 @@ export default function Support() {
 
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2.5  rounded-2xl">
-                <img src="/src/assets/unilogos/metilogo1.png" alt="METI Logo" className="w-14 h-14 object-contain bg-white rounded-full" />
+                <img src="/images/metilogo1.png" alt="METI Logo" className="w-14 h-14 object-contain bg-white rounded-full" />
                 {/* <Landmark size={24} className="text-blue-200" /> */}
               </div>
               <span className="font-extrabold uppercase text-lg tracking-widest text-blue-200">Official METI Account Details</span>

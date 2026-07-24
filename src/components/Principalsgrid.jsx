@@ -67,11 +67,11 @@ const Principalsgrid = () => {
 
       <div className=' pt-5 gap-4'>
         <div className='flex justify-center'>
-      <img src="/src/assets/principalofficers/pal7.png" alt="" className={'w-70 h-90'}/>
+      <img src="/images/pal7.png" alt="" className={'w-70 h-90'}/>
 
 
         </div>
-       <div className='flex-col justify-start'>
+       <div className='flex-col justify-start pt-1'>
         <p className='font-bold text-2xl '>Prof. CHIKE PRINCEWILL REWHUAMWHU CHIKE</p>
         <p className='font-bold text-uniport-blue'>10th Vice-Chancellor , University of Port Harcourt</p>
         <p className='font-bold'>MD , DMP ,DSSRS</p>
