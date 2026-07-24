@@ -52,8 +52,8 @@ const Navbar = () => {
     // { name: 'Director\'s Profile', path: '/about/director', tooltip: 'Profile details of Dr. Akuro Big-Alabo' },
     { name: 'Programme Duration', path: '/about/duration', tooltip: 'Calendar timeline and academic schedules' },
     { name: 'Staffs & Facilitators', path: '/lecturers', tooltip: 'Meet our faculty' },
-    { name: 'FAQ', path: '/faq', tooltip: 'Frequently asked questions' },
     { name: 'Support METI', path: '/support', tooltip: 'Support the institute with your donation' },
+    { name: 'FAQ', path: '/faq', tooltip: 'Frequently asked questions' },
   ];
 
   const containerVariants = {

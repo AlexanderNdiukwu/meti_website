@@ -15,7 +15,14 @@ Object.entries(imageModules).forEach(([path, mod]) => {
 
 // STAFF DATA — each image key matches the filename in public/assets/staff_of_meti/
 const facilitators = [
+  //  {
+  //   name: "Prof. CHIKE PRINCEWILL REWHUAMWHU CHIKE",
+  //   role: "10th Vice-Chancellor , University of Port Harcourt",
+  //   special: "MD , DMP ,DSSRS",
+  //   image: "pal7.png"
+  // },
   {
+    
     name: "PROFESSOR CHUKWUDI O. ONYEASO",
     role: "Deputy Vice-Chancellor",
     special: "BDS [IB], FWACS, FWFO, MSIL, MICS,FICOI, D.Sc, FIMC, CMC",
@@ -51,17 +58,32 @@ const facilitators = [
     special: "University Librarian",
     image: "pal5.jpeg"
   },
-//   {
-//     name: "Mrs Florence Ogbegbe",
-//     role: "Care-Taker",
-//     special: "",
-//     image: "pal7.jpeg"
-//   }
+ 
 ];
 
 const Principalsgrid = () => {
   return (
+    <div>
+
+      <div className=' pt-5 gap-4'>
+        <div className='flex justify-center'>
+      <img src="/src/assets/principalofficers/pal7.png" alt="" className={'w-70 h-90'}/>
+
+
+        </div>
+       <div className='flex-col justify-start'>
+        <p className='font-bold text-2xl '>Prof. CHIKE PRINCEWILL REWHUAMWHU CHIKE</p>
+        <p className='font-bold text-uniport-blue'>10th Vice-Chancellor , University of Port Harcourt</p>
+        <p className='font-bold'>MD , DMP ,DSSRS</p>
+       </div>
+
+      </div>
+
+
+
+    
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-6 pt-10">
+      
     
       {facilitators.map((staff, idx) => (
         <motion.div
@@ -92,6 +114,12 @@ const Principalsgrid = () => {
         </motion.div>
       ))}
     </div>
+
+    </div>
+
+
+
+
   );
 };
 

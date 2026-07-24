@@ -123,8 +123,9 @@ export default function PaymentPage() {
               <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-48 h-48 bg-white/5 rounded-full blur-xl" />
               
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2.5 bg-white/10 rounded-2xl">
-                  <Landmark size={24} className="text-blue-200" />
+                <div className=" ">
+                <img src="/src/assets/unilogos/metilogo1.png" alt="" className={'w-12 bg-white h-12 rounded-full'}/>
+                  {/* <Landmark size={24} className="text-blue-200" /> */}
                 </div>
                 <span className="font-extrabold uppercase text-xs tracking-widest text-blue-200">Official METI Account Details</span>
               </div>
