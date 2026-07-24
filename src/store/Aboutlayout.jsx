@@ -7,7 +7,7 @@ export default function Aboutlayout() {
   return (
     <div>
 
-       <div className=' bg-white hover:text-blue-600 hover:text-black ' >
+       <div className=' bg-white  hover:text-black ' >
        <p className='h-5'></p>
      <Link to={'/'} className='text-blue-500 hover:text-black  pt-5 ml-5 '>
         {"< "}

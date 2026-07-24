@@ -23,7 +23,7 @@ const facilitators = [
   },
   {
     name: "Mrs Helen Ezekiel",
-    role: "P.A.R (Admin Head)",
+    role: "P.A.R (ADMIN HEAD)",
     special: "",
     image: "staff_of_meti1.jpeg"
   },
@@ -35,7 +35,7 @@ const facilitators = [
   },
   {
     name: "Mrs Ronke A. Rotimi",
-    role: "P.A.R (ADMIN)",
+    role: "P.A.R (Admin)",
     special: "",
     image: "staff_of_meti2.jpeg"
   },

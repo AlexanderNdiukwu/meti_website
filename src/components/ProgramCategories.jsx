@@ -12,7 +12,7 @@ const ProgramCategories = () => {
     },
     {
       id: 'masters',
-      title: 'M.sc Programs',
+      title: 'MSc Programs',
       desc: 'Advanced technical acumen combined with strategic management skills. Full-time or Part-time available.',
       link: '/masters',
       icon: <GraduationCap className="w-10 h-10 text-blue-600" />

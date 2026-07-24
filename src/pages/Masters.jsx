@@ -44,7 +44,7 @@ const Masters = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16 text-center"
         >
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">Masters Programs (M.Sc)</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">Masters Programs (MSc)</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Our Masters degree programs are designed to equip you with advanced technical acumen and strategic management skills.
           </p>

@@ -17,7 +17,7 @@ Object.entries(imageModules).forEach(([path, mod]) => {
 const facilitators = [
   {
     name: "Prof. Joseph A. Ajienka",
-    role: "Emeritus Professor",
+    role: "Emeritus Professor 7th VC",
     special: "Petroleum and Gas Engineering",
     image: "fat1.jpeg"
   },
@@ -48,7 +48,7 @@ const facilitators = [
   {
     name: "Prof. Mary Paschal Iwundu",
     role: "Director of Information and Communications Technology Center (ICTC), UNIPORT.",
-    special: "(Mathematics and Statistics)",
+    special: "Mathematics and Statistics",
     image: "fat8.jpeg"
   },
     {
@@ -72,7 +72,7 @@ const facilitators = [
     {
     name: "Dr Amieibibama Joseph ",
     role: "Associate Professor of Petroleum & Gas Engineering",
-    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.Former Deputy Director IPES, the Institute of Petroleum and Energy Studies (IPES), Uniport.",
+    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.\n  Former Deputy Director IPES, Uniport.",
     image: "fat11.jpeg"
   }
 
