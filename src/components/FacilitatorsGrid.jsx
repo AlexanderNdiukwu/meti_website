@@ -72,7 +72,7 @@ const facilitators = [
     {
     name: "Dr Amieibibama Joseph ",
     role: "Associate Professor of Petroleum & Gas Engineering",
-    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.\n  Former Deputy Director IPES, Uniport.",
+    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
     image: "fat11.jpeg"
   }
 
@@ -106,7 +106,7 @@ const FacilitatorsGrid = () => {
           {/* TEXT */}
           <h3 className="font-bold text-lg text-gray-900 mb-1">{staff.name}</h3>
           <p className="text-sm font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
-          <p className="text-sm font-bold  leading-relaxed">{staff.special}</p>
+          <p className="text-sm font-bold  leading-relaxed whitespace-pre-line">{staff.special}</p>
         </motion.div>
       ))}
     </div>
