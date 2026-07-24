@@ -31,8 +31,8 @@ import AdmissionsLogin from '../pages/AdmissionsLogin';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 
 import PaymentPage from '../pages/PaymentPage';
-
 import ApplicationFormPage from '../pages/ApplicationFormPage';
+import Support from '../pages/Support';
 
 import DashboardLayout from '../pages/dashboard/DashboardLayout';
 
@@ -112,9 +112,10 @@ export const router = createBrowserRouter([
       { path: 'duration', element: <ProgramDuration /> },
 
     ]
-
+    
   },
-
+  { path: '/support', element: <Support /> },
+  
 
 
   // ── Admissions portal (standalone, outside main App layout) ──

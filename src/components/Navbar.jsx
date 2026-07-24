@@ -53,6 +53,7 @@ const Navbar = () => {
     { name: 'Programme Duration', path: '/about/duration', tooltip: 'Calendar timeline and academic schedules' },
     { name: 'Staffs & Facilitators', path: '/lecturers', tooltip: 'Meet our faculty' },
     { name: 'FAQ', path: '/faq', tooltip: 'Frequently asked questions' },
+    { name: 'Support METI', path: '/support', tooltip: 'Support the institute with your donation' },
   ];
 
   const containerVariants = {
