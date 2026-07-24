@@ -112,7 +112,7 @@ export default function PaymentPage() {
                 Step 5: Payment Details
               </span>
               <h2 className="text-2xl font-black text-gray-900 mb-2">Application Form Sale</h2>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-lg">
                 To purchase the application form for the {currentSession} session, please pay the prescribed fee below.
               </p>
             </div>
@@ -152,12 +152,12 @@ export default function PaymentPage() {
             </div>
 
             {/* Important Notices */}
-            <div className="bg-red-50/50 border border-red-200 p-6 rounded-3xl space-y-3">
-              <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
+            <div className="bg-red-50/50 border  border-red-200 p-6 rounded-3xl space-y-3">
+              <div className="flex items-center gap-2 text-red-700 font-bold text-xl">
                 <ShieldAlert size={16} />
                 <span>Important Safety Warning</span>
               </div>
-              <ul className="list-disc list-inside text-xs text-red-600 space-y-2 leading-relaxed">
+              <ul className="list-disc list-inside text-lg font-bold text-red-600 space-y-2 leading-relaxed">
                 <li>Input your <span className="font-bold">Full Legal Name</span> as the transaction narration.</li>
                 <li>Do not pay twice. Payment validation takes 24–48 hours.</li>
                 <li>Submitting false receipts or duplicate bank slips will result in <span className="font-bold">permanent disqualification</span> and report to security agencies.</li>
@@ -218,7 +218,7 @@ export default function PaymentPage() {
                     onChange={() => setGenuineChecked(!genuineChecked)}
                     className="mt-0.5 size-4 rounded border-gray-300 text-uniport-blue focus:ring-uniport-blue"
                   />
-                  <span className="text-xs text-gray-500 font-medium leading-relaxed">
+                  <span className="text-sm text-gray-500 font-medium leading-relaxed">
                     I confirm that this payment evidence is genuine, is for my personal application, and corresponds to the First Bank payment reference.
                   </span>
                 </label>

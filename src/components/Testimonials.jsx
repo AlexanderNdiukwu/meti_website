@@ -29,7 +29,7 @@ const Testimonials = () => {
       <div className="container mx-auto px-6 mb-12">
         <div className="text-center">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">What Our Students Say</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">Hear from our alumni and current students about their experience at METI.</p>
+          <p className=" max-w-2xl text-xl mx-auto">Hear from our alumni and current students about their experience at METI.</p>
         </div>
 
         
@@ -57,8 +57,8 @@ const Testimonials = () => {
           {[...testimonials, ...testimonials, ...testimonials].map((test, idx) => (
             <motion.div 
               key={idx} 
-              className="bg-gray-50/50 p-8 rounded-2xl border border-gray-200 shadow-sm relative w-[300px] md:w-[420px] shrink-0"
-              whileHover={{ y: -6, borderColor: "#1a4fa0", scale: 1.01 }}
+              className="bg-gray-50/50 p-8 rounded-2xl border border-gray-200 shadow-sm relative w-75 md:w-105 shrink-0"
+              whileHover={{ y: -6,  scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Quote className="absolute top-6 right-6 w-8 h-8 text-blue-100" />

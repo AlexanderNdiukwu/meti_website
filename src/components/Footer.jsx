@@ -70,31 +70,31 @@ const Footer = () => {
         </div>
 
           <div className=' '>
-          <p>Fast links</p>
+          <p>Quick links</p>
 
           <div className='text-blue-500 pt-5 '>
           <p>
-          <Link to={'/faq'} className='hover:text-white '>Click to FAQs</Link>
+          <Link to={'/faq'} className='hover:text-white '> FAQs</Link>
 
           </p> 
           
             <p>
-          <Link to={'/courses'} className='hover:text-white ' >Click to Courses </Link>
+          <Link to={'/courses'} className='hover:text-white ' >Courses </Link>
 
           </p>  
           
            <p>
-          <Link to={'/about'} className='hover:text-white ' >Click to About Meti </Link>
+          <Link to={'/about'} className='hover:text-white ' >About Meti </Link>
 
           </p>
 
            <p>
-          <Link to={'/lecturers'} className='hover:text-white ' >Click to lectures </Link>
+          <Link to={'/lecturers'} className='hover:text-white ' >lectures </Link>
 
           </p>
 
               <p>
-          <Link to={'/about/duration'} className='hover:text-white ' >Click to program durations </Link>
+          <Link to={'/about/duration'} className='hover:text-white ' >program durations </Link>
 
           </p>
 

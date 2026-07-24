@@ -12,7 +12,7 @@ const ProgramCategories = () => {
     },
     {
       id: 'masters',
-      title: 'Masters Programs ( M.Sc)',
+      title: 'M.sc Programs',
       desc: 'Advanced technical acumen combined with strategic management skills. Full-time or Part-time available.',
       link: '/masters',
       icon: <GraduationCap className="w-10 h-10 text-blue-600" />
@@ -31,7 +31,7 @@ const ProgramCategories = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Program Categories</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">Select the academic pathway that aligns with your career goals.</p>
+          <p className="text-gray-600 text-xl max-w-2xl mx-auto">Select the academic pathway that aligns with your career goals.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -43,7 +43,7 @@ const ProgramCategories = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-3">{cat.title}</h3>
               <p className="text-gray-600 mb-8 grow">{cat.desc}</p>
               <Link to={cat.link} className="inline-flex items-center font-semibold text-uniport-blue hover:text-blue-800 transition-colors mt-auto">
-                View Programs <ArrowRight className="ml-2 w-5 h-5" />
+                View details <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
             </div>
           ))}

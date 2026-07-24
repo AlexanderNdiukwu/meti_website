@@ -54,17 +54,17 @@ const facilitators = [
     {
     name: "Prof. Budu Dennis Eme",
     role: "Professor of Civil Engineering",
-    special: "Former Director of the Center for Geo-technical and Coastal Engineering Research (CGCER), Uniport.",
+    special: "Pioneer Director of the Center for Geo-technical and Coastal Engineering Research (CGCER), Uniport.",
     image: "fat7.jpeg"
   },
     {
     name: "Prof. Ejikeme Ugwoha",
-    role: "Professor of Civil and Environmental Engineering",
+    role: "Professor of Environmental Engineering",
     special: "Deputy Director of the Centre for Occupational Health, Safety and Environment (COHSE), Uniport.",
     image: "fat9.jpeg"
   },
     {
-    name: "Prof. Ifeoma Asianuba",
+    name: "Dr. Ifeoma Asianuba",
     role: "Associate Professor of Electrical/Electronic Engineering",
     special: "Assistant Director Emerald Energy Institute, Uniport.",
     image: "fat10.jpeg"
@@ -72,7 +72,7 @@ const facilitators = [
     {
     name: "Dr Amieibibama Joseph ",
     role: "Associate Professor of Petroleum & Gas Engineering",
-    special: "Immediate past Head of Department (HOD), Petroleum & Gas Engineering, Uniport.Deputy Director, the Institute of Petroleum and Energy Studies (IPES), Uniport.",
+    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.Former Deputy Director IPES, the Institute of Petroleum and Energy Studies (IPES), Uniport.",
     image: "fat11.jpeg"
   }
 
@@ -106,7 +106,7 @@ const FacilitatorsGrid = () => {
           {/* TEXT */}
           <h3 className="font-bold text-lg text-gray-900 mb-1">{staff.name}</h3>
           <p className="text-sm font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
-          <p className="text-xs text-gray-500 leading-relaxed">{staff.special}</p>
+          <p className="text-sm font-bold  leading-relaxed">{staff.special}</p>
         </motion.div>
       ))}
     </div>

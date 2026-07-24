@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeroOverlay from './HeroOverlay';
-import ScrollVelocity from './ScrollVelocity';
+// import ScrollVelocity from './ScrollVelocity';
 
 // DYNAMICALLY SCAN ALL IMAGES INSIDE public/Metiheroimagesslides
 const imageModules = import.meta.glob(
@@ -62,7 +62,7 @@ const Hero = () => {
       </div>
 
       {/* ── ScrollVelocity OUTSIDE the overflow-hidden container ───── */}
-      <div className="w-full py-1 bg-black/80 ">
+      {/* <div className="w-full py-1 bg-black/80 ">
         <ScrollVelocity
           texts={['METI ·  INSTITUTE OF ENGINEERING, TECHNOLOGY AND INNOVATION MANAGEMENT ·', "Master's · PhD · PGD · Apply Now ·"]}
           velocity={10}
@@ -71,7 +71,7 @@ const Hero = () => {
           damping={50}
           stiffness={400}
         />
-      </div>
+      </div> */}
     </>
   );
 };

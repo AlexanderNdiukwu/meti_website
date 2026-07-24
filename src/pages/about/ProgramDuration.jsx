@@ -28,7 +28,7 @@ export default function ProgramDuration() {
         
         {/* Header */}
         <div className="text-center">
-          <span className="text-xs font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
+          <span className="text-lg font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
             Timelines
           </span>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Programme Duration</h1>

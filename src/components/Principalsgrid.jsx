@@ -62,6 +62,7 @@ const facilitators = [
 const Principalsgrid = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-6 pt-10">
+    
       {facilitators.map((staff, idx) => (
         <motion.div
           key={idx}

@@ -3,8 +3,8 @@ const ApplicationTimeline = () => {
     { step: "01", title: "Submit Application", desc: "Complete the online application form and upload required documents (Transcripts, CV, Recommendations)." },
     { step: "02", title: "Screening & Review", desc: "Our admission board will thoroughly review your academic and professional background." },
     { step: "03", title: "Interview (If applicable)", desc: "Shortlisted candidates for PhD and selected Masters programs will be invited for an interview." },
-    { step: "04", title: "Admission Offer", desc: "Successful candidates will receive an official offer letter from the School of Graduate Studies." },
-    { step: "05", title: "Registration & Orientation", desc: "Accept your offer, complete registration, and attend the mandatory orientation session." }
+    { step: "04", title: "Admission Offer", desc: "Successful candidates will receive an official offer letter ." },
+    { step: "05", title: "Registration & Orientation", desc: "Accept your offer, complete registration, and attend the orientation session." }
   ];
 
   return (
@@ -12,7 +12,7 @@ const ApplicationTimeline = () => {
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Application Timeline</h2>
-          <p className="text-gray-600">Follow these simple steps to join our prestigious programs.</p>
+          <p className="text-xl ">Follow these simple steps to join our prestigious programs.</p>
         </div>
 
         <div className="space-y-8">

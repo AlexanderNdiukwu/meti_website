@@ -19,7 +19,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "2025",
-    title: "Modern Technological Restructuring",
+    title: "Program Restructuring",
     desc: "In 2025, CETM launched new programmes matching current technological developments and labour market demands. New postgraduate programmes were introduced leading to a Post Graduate Diploma (PGD) in Engineering Innovation and Technology Management, Master of Engineering (M.Eng), and Doctor of Philosophy (PhD) in specialties such as Supply Chain Technology Management, Industrial Systems & Process, Production & Manufacturing, Artificial Intelligence & Automation, and Energy Technology Management.",
     icon: <Award className="w-5 h-5 text-white" />,
     color: "bg-emerald-600"
@@ -42,7 +42,7 @@ export default function History() {
         
         {/* Page Header */}
         <div className="text-center">
-          <span className="text-xs font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
+          <span className="text-xl border font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
             Our Legacy
           </span>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Historical Background</h1>
@@ -63,7 +63,7 @@ export default function History() {
               className="relative bg-white p-6 md:p-8 rounded-3xl border border-black/10 shadow-sm"
             >
               {/* Event Circle Dot Icon */}
-              <div className={`absolute -left-[50px] top-8 size-10 rounded-full flex items-center justify-center shadow-md ${evt.color}`}>
+              <div className={`absolute -left-12.5 top-8 size-10 rounded-full flex items-center justify-center shadow-md ${evt.color}`}>
                 {evt.icon}
               </div>
 

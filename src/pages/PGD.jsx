@@ -55,7 +55,7 @@ const PGD = () => {
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
                   <p className="text-gray-600 text-sm md:text-base leading-relaxed">
-                    Candidates shall be required to possess a bachelor’s degree (<span className="font-semibold text-gray-800">B.Eng., B.Tech., or B.Sc.</span>) in an Engineering discipline or Pure and Applied Science disciplines with a <span className="font-semibold text-gray-800">third (3rd) class</span> from an approved university.
+                    Candidates shall possess a Higher National Diploma (HND) or a Third-Class Bachelor’s Degree (<span className="font-semibold text-gray-800">B.Eng, B.Tech, or B.Sc.</span>) in an Engineering discipline or the Pure and Applied science from a recognised university.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">

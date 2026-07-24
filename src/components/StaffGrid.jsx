@@ -23,19 +23,19 @@ const facilitators = [
   },
   {
     name: "Mrs Helen Ezekiel",
-    role: "Admin Head",
+    role: "P.A.R (Admin Head)",
     special: "",
     image: "staff_of_meti1.jpeg"
   },
   {
     name: "Mrs Rose Ugari",
-    role: "Deputy Bursar(Finance)",
+    role: "Deputy Bursar (Finance)",
     special: "",
     image: "staff_of_meti3.jpeg"
   },
   {
     name: "Mrs Ronke A. Rotimi",
-    role: "P.A.R(ADMIN)",
+    role: "P.A.R (ADMIN)",
     special: "",
     image: "staff_of_meti2.jpeg"
   },
@@ -46,16 +46,16 @@ const facilitators = [
     image: "staff_of_meti4.jpeg"
   },
   {
-    name: "Mrs Beauty Ichechukwu",
-    role: "Cleaner",
-    special: "",
-    image: "staff_of_meti6.jpeg"
-  },
-  {
     name: "Mrs Florence Ogbegbe",
     role: "Care-Taker",
     special: "",
     image: "staff_of_meti5.jpeg"
+  },
+  {
+    name: "Mrs Beauty Ichechukwu",
+    role: "Cleaner",
+    special: "",
+    image: "staff_of_meti6.jpeg"
   }
 ];
 
@@ -87,7 +87,7 @@ const StaffGrid = () => {
           {/* TEXT */}
           <h3 className="font-bold text-lg text-gray-900 mb-1">{staff.name}</h3>
           <p className="text-sm font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
-          <p className="text-xs text-gray-500 leading-relaxed">{staff.special}</p>
+          <p className="text-sm font-bold leading-relaxed">{staff.special}</p>
         </motion.div>
       ))}
     </div>
