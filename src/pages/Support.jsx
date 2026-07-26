@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Heart, Landmark, GraduationCap, Users, BookOpen, TrendingUp, Shield, Globe, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ScrollToTop from '../components/ScrollToTop';
 
 
 const IMPACT_POINTS = [
@@ -67,6 +68,7 @@ export default function Support() {
   return (
 
     <div>
+      <ScrollToTop/>
         <div className='   pt-3 ' >
          <Link to={'/'} className='text-blue-500 hover:text-black  pt-5  ml-5 '>
                 {"< "}
@@ -76,7 +78,7 @@ export default function Support() {
 
         </div>
 
-    <div className="pt-10 pb-24 bg-black/5 min-h-screen">
+    <div className="pt-15 pb-24 bg-black/5 min-h-screen">
       <div className="container mx-auto px-6 max-w-7xl  space-y-16">
 
 
@@ -87,11 +89,11 @@ export default function Support() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <span className="text-lg border font-bold bg-red-50 text-red-600 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
+          {/* <span className="text-lg border font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
             Your Support Matters
-          </span>
+          </span> */}
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Support the Institute of <br/>Engineering, Technology & Innovation Management</h1>
-          <p className=" text-sm max-w-2xl mx-auto leading-relaxed">
+          <p className=" text-lg max-w-2xl mx-auto leading-relaxed">
             Your generous contribution helps METI continue its mission of producing world-class engineers, 
             advancing cutting-edge research, and driving technological innovation in Nigeria and beyond.
           </p>
