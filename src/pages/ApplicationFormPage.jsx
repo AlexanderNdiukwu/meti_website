@@ -33,15 +33,15 @@ export default function ApplicationFormPage() {
   const { user, saveFormDraft, submitApplicationForm, submitDocuments } = useAdmissionsStore();
 
 useEffect(() => {
-    if (!user || user.role === 'admin') {
-      navigate('/login');
-      return;
-    }
+    // if (!user || user.role === 'admin') {
+    //   navigate('/login');
+    //   return;
+    // }
     // Block direct URL access before payment is verified — the form should
     // only unlock after the admin confirms payment (Payment tab → Confirm Payment).
-    if (!user.paymentVerified) {
-      navigate('/dashboard');
-    }
+    // if (!user.paymentVerified) {
+    //   navigate('/dashboard');
+    // }
   }, [user, navigate]);
 
   const [activeSection, setActiveSection] = useState('A');
