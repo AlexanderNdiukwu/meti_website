@@ -45,6 +45,7 @@ useEffect(() => {
   }, [user, navigate]);
 
   const [activeSection, setActiveSection] = useState('A');
+  
   const [saveStatus, setSaveStatus] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
 
