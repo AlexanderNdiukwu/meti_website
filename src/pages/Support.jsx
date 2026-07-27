@@ -79,7 +79,7 @@ export default function Support() {
         </div>
 
     <div className="pt-15 pb-24 bg-black/5 min-h-screen">
-      <div className="container mx-auto px-6 max-w-7xl  space-y-16">
+      <div className="container mx-auto px-3 max-w-7xl  space-y-16">
 
 
         {/* ── Hero Header ── */}
@@ -92,7 +92,7 @@ export default function Support() {
           {/* <span className="text-lg border font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
             Your Support Matters
           </span> */}
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Support the Institute of <br/>Engineering, Technology & Innovation Management</h1>
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Support the Institute of <br className='hidden lg:block '/>Engineering, Technology & Innovation Management</h1>
           <p className=" text-lg max-w-2xl mx-auto leading-relaxed">
             Your generous contribution helps METI continue its mission of producing world-class engineers, 
             advancing cutting-edge research, and driving technological innovation in Nigeria and beyond.
@@ -195,8 +195,8 @@ export default function Support() {
             <div className="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 w-48 h-48 bg-white/5 rounded-full blur-xl" />
 
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2.5  rounded-2xl">
-                <img src="/images/metilogo1.png" alt="METI Logo" className="w-14 h-14 object-contain bg-white rounded-full" />
+              <div className="p-2.5 bg-white  rounded-2xl">
+                <img src="/images/metilogo1.png" alt="METI Logo" className="w-12 h-12 object-contain  rounded-full" />
                 {/* <Landmark size={24} className="text-blue-200" /> */}
               </div>
               <span className="font-extrabold uppercase text-lg tracking-widest text-blue-200">Official METI Account Details</span>
@@ -217,7 +217,7 @@ export default function Support() {
                   <span className="text-2xl font-extrabold tracking-wider text-green-300">2016040805</span>
                 </div>
                 <div className="text-right">
-                  <label className="text-lg text-blue-200 uppercase tracking-wider block font-bold">Currency</label>
+                  <label className="lg:text-lg text-xs text-blue-200 uppercase tracking-wider block font-bold">Currency</label>
                   <span className="text-xl font-black">NGN</span>
                 </div>
               </div>

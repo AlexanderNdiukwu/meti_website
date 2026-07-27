@@ -141,17 +141,24 @@ function StatusMessage({ user }) {
   if (
     ['Payment Pending','payment_pending','Payment Verification'].includes(s) &&
     user?.paymentSubmitted
-  ) {
+  )  {
     return (
       <Card colour="amber" icon={<Clock size={20} />} title="Payment Under Review">
         <p>
           We have received your payment receipt. Our admin team is verifying it.
           This typically takes <strong>24–48 working hours</strong>.
         </p>
-        <p className="flex items-center gap-1.5 mt-2">
-          <Mail size={13} className="shrink-0" />
+        <p className="flex relative items-center gap-1.5 mt-2">
+          <div className='w-5 pr-3'>
+          <Mail size={15} className="shrink-0 absolute top-1  " />
+
+          </div>
+          <p>
+
           An email will be sent to <strong className="mx-1">{email}</strong> once confirmed.
           No action needed right now.
+
+          </p>
         </p>
       </Card>
     );

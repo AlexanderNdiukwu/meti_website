@@ -3,7 +3,7 @@ import Staff from '../components/Staff';
 
 const Lecturers = () => {
   return (
-    <div className="pt-24 pb-12 min-h-screen bg-black/5">
+    <div className="pt-38 pb-12 min-h-screen bg-black/5">
       <Staff />
       <Facilitators/>
     </div>

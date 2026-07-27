@@ -38,7 +38,7 @@ export default function History() {
   return (
     <div className="pt-10 pb-24 bg-black/5 min-h-screen">
         {/* <About/> */}
-      <div className="container mx-auto px-6  max-w-4xl space-y-16">
+      <div className="container  px-5  space-y-16">
         
         {/* Page Header */}
         <div className="text-center">
@@ -52,7 +52,7 @@ export default function History() {
         </div>
 
         {/* Timeline Layout */}
-        <div className="relative border-l-2 border-gray-200 pl-7 ml-4 md:ml-6 space-y-12">
+        <div className="relative  border-gray-200 pl-6 ml-2 md:ml-6 space-y-12">
           {TIMELINE_EVENTS.map((evt, idx) => (
             <motion.div
               key={idx}
@@ -60,7 +60,7 @@ export default function History() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
-              className="relative bg-white p-6 md:p-8 rounded-3xl border border-black/10 shadow-sm"
+              className="relative bg-white p-4 md:p-8 rounded-3xl border border-black/10 shadow-sm"
             >
               {/* Event Circle Dot Icon */}
               <div className={`absolute -left-12.5 top-8 size-10 rounded-full flex items-center justify-center shadow-md ${evt.color}`}>
@@ -75,13 +75,14 @@ export default function History() {
         </div>
 
         {/* Photo Gallery Placeholder */}
-        <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-sm">
+        <div className=" p-3 rounded-3xl border border-black/10 shadow-sm">
         
 
              <img 
-                  src="/images/metilogo1.png" 
+                  // src="/images/metibuilding.jpg" 
+                  src="/images/imageswesbite.jpg" 
                   alt="Uniport Logo" 
-                  className="w-full object-cover  shadow-sm" 
+                  className="w-full object-contain h-140  " 
                 />
           {/* <h3 className="text-xl font-bold text-gray-900 mb-6">Institute Archives</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -97,7 +98,7 @@ export default function History() {
         </div>
 
         {/* Past Directors Grid */}
-        <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-sm">
+        <div className="bg-white p-3 rounded-3xl border border-black/10 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 bg-blue-50 text-uniport-blue rounded-xl">
               <Users size={20} />

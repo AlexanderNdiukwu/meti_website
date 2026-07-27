@@ -124,7 +124,7 @@ export default function PaymentPage() {
               
               <div className="flex items-center gap-3 mb-6">
                 <div className=" ">
-                <img src="/images/metilogo1.png" alt="" className={'w-11 bg-white h-12 rounded-full'}/>
+                <img src="/images/metilogo1.png" alt="" className={'w-11 bg-white h-11 rounded-full'}/>
                   {/* <Landmark size={24} className="text-blue-200" /> */}
                 </div>
                 <span className="font-extrabold uppercase text-xs tracking-widest text-blue-200">Official METI Account Details</span>
