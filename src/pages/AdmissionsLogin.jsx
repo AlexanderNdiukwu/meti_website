@@ -61,6 +61,7 @@ export default function AdmissionsLogin() {
       <div className="">
         
         {/* TAB TOGGLE SELECTOR */}
+        <div className='mx-6 lg:mx-0'>
         <div className="bg-white p-2 rounded-2xl border border-black/10 shadow-sm flex mb-6 container mx-auto px-6 max-w-md">
           <Link to="/signup" className="w-1/2 text-center py-2.5 font-bold text-sm text-gray-500 hover:text-gray-900 rounded-xl transition-colors">
             Create Account
@@ -68,6 +69,9 @@ export default function AdmissionsLogin() {
           <div className="w-1/2 text-center py-2.5 font-bold text-sm bg-uniport-blue text-white rounded-xl shadow-inner">
             Already Applied
           </div>
+        </div>
+
+
         </div>
 
         <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-lg">

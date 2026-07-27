@@ -79,7 +79,7 @@ export default function History() {
         
 
              <img 
-                  src="/images/metipic.png" 
+                  src="/images/metilogo1.png" 
                   alt="Uniport Logo" 
                   className="w-full object-cover  shadow-sm" 
                 />

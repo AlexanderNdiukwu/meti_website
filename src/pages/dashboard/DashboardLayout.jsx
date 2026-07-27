@@ -31,7 +31,7 @@ useEffect(() => {
   return (
     <div className="flex h-screen overflow-hidden">
       <aside
-        className={`shrink-0 flex flex-col bg-brand-primary text-white transition-all duration-300 ${
+        className={`shrink-0 flex flex-col  bg-brand-primary text-white transition-all duration-300 ${
           expanded ? 'w-64' : 'w-16'
         }`}
         onMouseEnter={() => setExpanded(true)}

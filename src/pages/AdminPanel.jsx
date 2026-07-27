@@ -172,6 +172,7 @@ export default function AdminPanel() {
   const [annMessage, setAnnMessage] = useState('');
   const [annFile,    setAnnFile]    = useState(null);
   const [annTarget,  setAnnTarget]  = useState('all');
+  const [annAudience, setAnnAudience] = useState('all_applicants');
   const annFileRef = useRef(null);
   // Dev test upload
   const testUploadRef  = useRef(null);
@@ -925,7 +926,11 @@ MANAGEMENT (METI)
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
-                          <p className="text-[10px] text-gray-400 mt-0.5">{item.createdAt} {item.programme_filter ? `· ${item.programme_filter.toUpperCase()} only` : '· All students'}</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5">
+                            {item.createdAt} {item.programme_filter ? `· ${item.programme_filter.toUpperCase()} only` : '· All programmes'}
+                            {item.audience === 'paid_only' && <span className="ml-1 text-orange-600 font-bold">· Paid Students Only</span>}
+                            {item.audience === 'public' && <span className="ml-1 text-blue-600 font-bold">· Public</span>}
+                          </p>
                         </div>
                         <button onClick={() => deleteAnnouncement(item.id)} className="text-red-400 hover:text-red-600 p-1"><Trash2 size={13} /></button>
                       </div>
@@ -941,12 +946,20 @@ MANAGEMENT (METI)
                   <h3 className="font-bold text-gray-900">Create Announcement</h3>
                   <input value={annTitle} onChange={e => setAnnTitle(e.target.value)} placeholder="Title" className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" />
                   <textarea value={annMessage} onChange={e => setAnnMessage(e.target.value)} rows={4} placeholder="Message *" className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm resize-none" />
-                  <select value={annTarget} onChange={e => setAnnTarget(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm">
+                <select value={annTarget} onChange={e => setAnnTarget(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm">
                     <option value="all">All Active Students</option>
                     <option value="pgd">PGD Students Only</option>
                     <option value="msc">MSc Students Only</option>
                     <option value="phd">PhD Students Only</option>
                   </select>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Audience</label>
+                    <select value={annAudience} onChange={e => setAnnAudience(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm">
+                      <option value="public">Public — anyone, even before paying (recruitment)</option>
+                      <option value="all_applicants">All Applicants — anyone signed up, paid or not</option>
+                      <option value="paid_only">Paid Students Only — operational/sensitive notices</option>
+                    </select>
+                  </div>
                   <input type="file" ref={annFileRef} className="hidden" accept=".pdf,.jpg,.jpeg,.png,.docx" onChange={e => setAnnFile(e.target.files[0])} />
                   {!annFile
                     ? <button onClick={() => annFileRef.current?.click()} className="w-full border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 font-semibold hover:border-brand-primary flex items-center justify-center gap-1"><Paperclip size={13} /> Attach file (optional)</button>
@@ -954,9 +967,9 @@ MANAGEMENT (METI)
                   }
                  <button onClick={() => {
                     if (!annMessage.trim()) return;
-                    const publish = (aUrl) => {
-                      sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, attachmentName: annFile?.name||null, attachmentUrl: aUrl, programme_filter: annTarget==='all'?null:annTarget });
-                      setAnnTitle(''); setAnnMessage(''); setAnnFile(null); setAnnTarget('all');
+                  const publish = (aUrl) => {
+                      sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, attachmentName: annFile?.name||null, attachmentUrl: aUrl, programme_filter: annTarget==='all'?null:annTarget, audience: annAudience });
+                      setAnnTitle(''); setAnnMessage(''); setAnnFile(null); setAnnTarget('all'); setAnnAudience('all_applicants');
                     };
                     if (annFile) {
                       const reader = new FileReader();

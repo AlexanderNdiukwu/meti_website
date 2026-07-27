@@ -39,6 +39,7 @@ const INITIAL_ANNOUNCEMENTS = [
     attachmentName: 'admission-brief.pdf',
     attachmentUrl: null,
     programme_filter: null,
+    audience: 'public',
     createdAt: '2026-06-03',
     author: 'METI Admissions',
   },
@@ -49,6 +50,7 @@ const INITIAL_ANNOUNCEMENTS = [
     attachmentName: null,
     attachmentUrl: null,
     programme_filter: 'msc',
+    audience: 'paid_only',
     createdAt: '2026-07-01',
     author: 'METI Admin',
   },
@@ -723,7 +725,7 @@ adminConfirmApplicationForm: (applicantId) => {
 
       // ── ANNOUNCEMENTS ──
 
-      sendAnnouncement: (payload) => {
+  sendAnnouncement: (payload) => {
         set(state => ({
           announcements: [
             {
@@ -733,6 +735,9 @@ adminConfirmApplicationForm: (applicantId) => {
               attachmentName:   payload.attachmentName || null,
               attachmentUrl:    payload.attachmentUrl  || null,
               programme_filter: payload.programme_filter || null,
+              // Matches the SQL check constraint: 'public' | 'all_applicants' | 'paid_only'.
+              // Defaults to 'all_applicants' so nothing existing breaks by omission.
+              audience:         payload.audience || 'all_applicants',
               createdAt:        new Date().toISOString().split('T')[0],
               author:           'METI Admin',
               targetAudience:   payload.targetAudience || 'All Students',
