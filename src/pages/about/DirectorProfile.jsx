@@ -152,6 +152,163 @@ export default function DirectorProfile() {
         </div>
 
       </div>
+      {/* Awards, Scholarships & Recognition */}
+
+
+
+<div className="bg-white p-8 mt-6 mx-6 rounded-3xl border border-black/10 shadow-sm space-y-8">
+  <h3 className="text-lg font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
+    <Award className="text-uniport-blue" size={20} />
+    Awards, Scholarships & Recognition
+  </h3>
+
+  {/* Undergraduate Prizes */}
+  <div>
+    <h4 className="text-xl font-bold text-gray-900 mb-3">
+      Undergraduate Academic Prizes
+    </h4>
+
+    <p className="text-sm text-gray-500 mb-4">
+      University of Port Harcourt (2006)
+    </p>
+
+    <ul className="space-y-3">
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>Dean's Prize for Best Graduating Student in Engineering.</span>
+      </li>
+
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>
+          Nigerian Society of Engineers (Port Harcourt Branch) Prize for Best
+          Graduating Student in Engineering.
+        </span>
+      </li>
+
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>Subject Prize for Best Graduating Student in Mechanical Engineering.</span>
+      </li>
+
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>
+          Prof. E. K. Obiakor Memorial Prize for Best Graduating Student in
+          Mechanical Engineering.
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  {/* Secondary School */}
+  <div className="border-t pt-6">
+    <h4 className="text-xl font-bold text-gray-900 mb-3">
+      Secondary School Prizes
+    </h4>
+
+    <p className="text-sm text-gray-500 mb-4">
+      University of Port Harcourt Demonstration Secondary School (1999)
+    </p>
+
+    <ul className="space-y-3">
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>Overall Best Graduating Student (Science).</span>
+      </li>
+
+      <li className="flex gap-3">
+        <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
+        <span>
+          Best Student in Further Mathematics, Physics, Economics and
+          Agricultural Science.
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  {/* Scholarships */}
+  <div className="border-t pt-6">
+    <h4 className="text-xl font-bold text-gray-900 mb-4">
+      Scholarship Awards
+    </h4>
+
+    <div className="space-y-6">
+
+      <div>
+        <h5 className="font-bold text-uniport-blue mb-3">
+          Postgraduate Scholarships
+        </h5>
+
+        <ul className="space-y-3">
+          <li>• Post-Doctoral Research Award – University of Glasgow (2016).</li>
+          <li>• Commonwealth Scholarship for PhD (2011–2014).</li>
+          <li>• College of Science & Engineering Scholarship – University of Glasgow (Not Used).</li>
+          <li>• School of Engineering Bursary – University of Glasgow (Not Used).</li>
+          <li>• ETF Academic Staff Development Scholarship, Nigeria (Not Used).</li>
+          <li>• Rivers State Sustainable Development Agency Scholarship (UK Master's).</li>
+          <li>• Rivers State Scholarship Board (Master's Degree).</li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 className="font-bold text-uniport-blue mb-3">
+          Undergraduate Scholarships
+        </h5>
+
+        <ul className="space-y-3">
+          <li>• Federal Government of Nigeria.</li>
+          <li>• Mobil Producing Nigeria Unlimited.</li>
+          <li>• Nigerian Liquefied Natural Gas (NLNG).</li>
+          <li>• Nigerian Agip Oil Company.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  {/* Recognition */}
+  <div className="border-t pt-6">
+    <h4 className="text-xl font-bold text-gray-900 mb-4">
+      Awards & Recognition
+    </h4>
+
+    <div className="space-y-4">
+
+      <div className="rounded-xl border border-gray-200 p-4">
+        <span className="font-bold block">
+          Award of Excellence (2023)
+        </span>
+        <span className="text-gray-600">
+          Presented by NIMechE Students, University of Port Harcourt Chapter,
+          in recognition of outstanding support and involvement in student activities.
+        </span>
+      </div>
+
+      <div className="rounded-xl border border-gray-200 p-4">
+        <span className="font-bold block">
+          Certificate of Appreciation (2023)
+        </span>
+        <span className="text-gray-600">
+          Faculty of Engineering, University of Port Harcourt, for dedicated
+          support to the Office of the Dean.
+        </span>
+      </div>
+
+      <div className="rounded-xl border border-gray-200 p-4 bg-blue-50 border-blue-200">
+        <span className="font-bold block text-uniport-blue">
+          Innovator of the Year (2023)
+        </span>
+        <span className="text-gray-700">
+          Awarded by the University of Port Harcourt for securing Second Place
+          during the 2023 Innovation Week competition for exceptional innovation.
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
     </div>
   );
 }

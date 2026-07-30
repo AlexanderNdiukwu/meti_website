@@ -42,7 +42,7 @@ const HeroOverlay = () => {
   return (
     <div className="absolute inset-0 flex items-center justify-center z-20 px-6 pointer-events-none select-none">
       <motion.div 
-        className="max-w-5xl text-center lg:mt-80 mt-30 flex flex-col items-center justify-center bg-black/50 md:bg-black/40 p-7 md:p-12 lg:p-5 rounded-3xl  shadow-2xl pointer-events-auto"
+        className="max-w-5xl text-center lg:mt- mt-30 flex flex-col items-center justify-center  p-7 md:p-12 lg:p-5 rounded-3xl  shadow-2xl pointer-events-auto"
         // className="max-w-5xl text-center flex flex-col items-center justify-center bg-white/70 md:bg-white/70 p-8 md:p-12 lg:p-10 rounded-3xl border border-white/40 shadow-2xl pointer-events-auto"
         // className="max-w-5xl text-center flex flex-col items-center justify-center bg-white/70 md:bg-white/20 backdrop-blur-sm p-8 md:p-12 lg:p-16 rounded-3xl border border-white/40 shadow-2xl pointer-events-auto"
         initial={{ opacity: 0, y: 30 }}
@@ -59,8 +59,8 @@ const HeroOverlay = () => {
         
         {/* <div className="w-16 md:w-24 h-1 bg-[#1a4fa0] rounded-full mb-6" /> */}
         
-        <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 italic font-extrabold text-white tracking-wide leading-relaxed max-w-3xl">
-          DRIVING SUSTAINABLE DEVELOPMENT THROUGH <Typewriter text="INNOVATION" />
+        <p className="text-sm sm:text-base md:text-lg lg:text-4xl mb-4 italic font-extrabold text-white tracking-wide leading-relaxed font-serif max-w-3xl">
+          DRIVING SUSTAINABLE DEVELOPMENT THROUGH <br></br> <Typewriter text="INNOVATION" />
         </p>
 
            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
