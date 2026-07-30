@@ -59,7 +59,7 @@ const HeroOverlay = () => {
         
         {/* <div className="w-16 md:w-24 h-1 bg-[#1a4fa0] rounded-full mb-6" /> */}
         
-        <p className="text-sm sm:text-base md:text-lg lg:text-4xl mb-4 italic font-extrabold text-white tracking-wide leading-relaxed font-serif max-w-3xl">
+        <p className="text-xl sm:text-xl md:text-xl lg:text-4xl mb-4 italic font-extrabold text-white tracking-wide leading-relaxed font-serif max-w-3xl">
           DRIVING SUSTAINABLE DEVELOPMENT THROUGH <br></br> <Typewriter text="INNOVATION" />
         </p>
 
