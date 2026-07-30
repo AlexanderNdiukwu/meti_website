@@ -156,8 +156,8 @@ export default function DirectorProfile() {
 
 
 
-<div className="bg-white p-8 mt-6 mx-6 rounded-3xl border border-black/10 shadow-sm space-y-8">
-  <h3 className="text-lg font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
+<div className="bg-white text-lg p-8 mt-6 mx-6 rounded-3xl border border-black/10 shadow-sm space-y-8">
+  <h3 className="text-2xl font-bold text-gray-900 border-b pb-2 flex items-center gap-2">
     <Award className="text-uniport-blue" size={20} />
     Awards, Scholarships & Recognition
   </h3>
@@ -168,11 +168,11 @@ export default function DirectorProfile() {
       Undergraduate Academic Prizes
     </h4>
 
-    <p className="text-sm text-gray-500 mb-4">
+    <p className="text-lg  mb-4">
       University of Port Harcourt (2006)
     </p>
 
-    <ul className="space-y-3">
+    <ul className="space-y-3 text-lg">
       <li className="flex gap-3">
         <Award className="text-yellow-500 mt-1 shrink-0" size={18} />
         <span>Dean's Prize for Best Graduating Student in Engineering.</span>
@@ -207,7 +207,7 @@ export default function DirectorProfile() {
       Secondary School Prizes
     </h4>
 
-    <p className="text-sm text-gray-500 mb-4">
+    <p className="text-lg mb-4">
       University of Port Harcourt Demonstration Secondary School (1999)
     </p>
 
