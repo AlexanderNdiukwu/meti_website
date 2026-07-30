@@ -24,8 +24,8 @@ export default function DashboardLayout() {
 
   if (!user || user.role === 'admin') return null;
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 

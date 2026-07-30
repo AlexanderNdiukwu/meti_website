@@ -12,7 +12,7 @@ export default function AdmissionsLogin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLoginSubmit = (e) => {
+const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -22,15 +22,14 @@ export default function AdmissionsLogin() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const res = login(email, password);
+    try {
+      const res = await login(email, password);
       setLoading(false);
 
       if (res.success) {
         if (res.role === 'admin') {
           navigate('/admin');
         } else {
-          // Route the student to wherever they left off
           const currentUser = useAdmissionsStore.getState().user;
           if (!currentUser?.selectedProgram || !currentUser?.eligibilityChecked || !currentUser?.readinessChecked) {
             navigate('/apply');
@@ -43,7 +42,10 @@ export default function AdmissionsLogin() {
       } else {
         setError(res.message || 'Authentication failed.');
       }
-    }, 1200);
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || 'Authentication failed.');
+    }
   };
 
   return (
@@ -117,11 +119,9 @@ export default function AdmissionsLogin() {
                 Forgot password?
               </Link>
             </div>
-            {import.meta.env.VITE_APP_ENV === 'development' && (
-              <div className="text-right text-xs">
-                <span className="text-gray-400">Demo Login Details: <br/>Applicant: jane.chinedu@gmail.com / Test@1234<br/>Admin: admin@meti.edu.ng / admin123</span>
-              </div>
-            )}
+
+
+        
 
             <button
               type="submit"

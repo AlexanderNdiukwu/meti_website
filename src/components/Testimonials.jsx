@@ -62,11 +62,12 @@ const Testimonials = () => {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <Quote className="absolute top-6 right-6 w-8 h-8 text-blue-100" />
-              <p className="text-gray-600 mb-8 relative z-10 text-sm md:text-base leading-relaxed">
+              <p className=" mb-8 relative z-10 text-sm md:text-lg leading-relaxed">
                 "{test.quote}"
               </p>
               <div>
-                <h4 className="font-bold text-gray-900">{test.name}</h4>
+              
+                <h4 className="font-bold text-lg">{test.name}</h4>
                 <p className="text-sm text-[#1a4fa0] font-semibold">{test.role}</p>
                 <p className="text-xs text-gray-500">{test.company}</p>
               </div>

@@ -69,7 +69,7 @@ export default function PaymentPage() {
     setReceiptFile(file);
   };
 
-  const handlePaymentSubmit = (e) => {
+const handlePaymentSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -83,18 +83,15 @@ export default function PaymentPage() {
       return;
     }
 
-     setUploading(true);
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      submitPaymentReceipt(
-        receiptFile.name,
-        (receiptFile.size / 1024).toFixed(1) + ' KB',
-        ev.target.result
-      );
+   setUploading(true);
+    try {
+      await submitPaymentReceipt(receiptFile);
       setUploading(false);
       navigate('/dashboard');
-    };
-    reader.readAsDataURL(receiptFile);
+    } catch (err) {
+      setUploading(false);
+      setError('Upload failed. Please try again.');
+    }
   };
 
   

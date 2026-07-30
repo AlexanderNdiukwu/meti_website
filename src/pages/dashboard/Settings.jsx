@@ -6,7 +6,7 @@ import { toast } from '../../utils/toast';
 
 export default function DashboardSettings() {
   const navigate = useNavigate();
-  const { logout } = useAdmissionsStore();
+const { logout, updatePassword } = useAdmissionsStore();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,14 +28,19 @@ export default function DashboardSettings() {
       toast.error('Passwords do not match.');
       return;
     }
-    setUpdating(true);
-    await new Promise((r) => setTimeout(r, 700));
-    setUpdating(false);
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    toast.success('Password updated successfully.');
-    // TODO (Supabase): supabase.auth.updateUser({ password: newPassword })
+setUpdating(true);
+    try {
+      await updatePassword(newPassword);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      toast.success('Password updated successfully.');
+    } catch (err) {
+      toast.error(err.message || 'Failed to update password.');
+    } finally {
+      setUpdating(false);
+    }
+     // TODO (Supabase): supabase.auth.updateUser({ password: newPassword })
   };
 
   const handleSignOut = () => {

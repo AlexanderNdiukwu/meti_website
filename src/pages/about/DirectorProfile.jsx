@@ -10,15 +10,12 @@ export default function DirectorProfile() {
         <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-md flex flex-col md:flex-row gap-8 items-center mb-8">
           
           {/* Image */}
-          <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-white shadow-lg shrink-0 ">
+          <div className="relative w-40 h-40 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white shadow-lg shrink-0 ">
             <img 
-              src="/src/assets/staff_of_meti/staff_of_meti7.jpeg" 
+              src="/images/staff_of_meti7.jpeg" 
               alt="Dr. Akuro Big-Alabo" 
               className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "https://via.placeholder.com/150";
-              }}
+            
             />
           </div>
 
@@ -32,7 +29,7 @@ export default function DirectorProfile() {
               Associate Professor of Mechanical Engineering & Director of METI
             </p>
             <p className="text-sm ">
-              Former Head of Department of Mechanical Engineering (2020–2022) | Former Assistant Director of Intellectual Property and Technology Transfer Office (IPTTO), UNIPORT.
+              Former Head of Department of Mechanical Engineering (2020–2022) | Assistant Director of Intellectual Property and Technology Transfer Office (IPTTO), UNIPORT.
             </p>
           </div>
         </div>
@@ -71,17 +68,17 @@ export default function DirectorProfile() {
                 </div>
                 <div className="relative">
                   <span className="absolute -left-5.5 top-2 size-2 rounded-full bg-uniport-blue" />
-                  <span className="font-bold text-gray-900 text-lg block">PhD in Mechanical Engineering</span>
+                  <span className="font-bold text-gray-900 text-lg block">PhD Mechanical Engineering</span>
                   <span className=" block font-medium">University of Glasgow, United Kingdom</span>
                 </div>
                 <div className="relative">
                   <span className="absolute -left-5.5 top-2 size-2 rounded-full bg-uniport-blue" />
-                  <span className="font-bold text-gray-900 text-lg block">MSc in Mechanical Engineering and Management</span>
-                  <span className="text-sm block font-medium">University of Glasgow, United Kingdom (Earned with Distinction)</span>
+                  <span className="font-bold text-gray-900 text-lg block">MSc Mechanical Engineering and Management ( Distinction)</span>
+                  <span className="text-sm block font-medium">University of Glasgow, United Kingdom </span>
                 </div>
                 <div className="relative">
                   <span className="absolute -left-5.5 top-2 size-2 rounded-full bg-uniport-blue" />
-                  <span className="font-bold text-gray-900 text-lg block">B.Eng (First Class Honours) in Mechanical Engineering</span>
+                  <span className="font-bold text-gray-900 text-lg block">B.Eng  Mechanical Engineering (First Class Honours)</span>
                   <span className=" block font-medium">University of Port Harcourt, Rivers State, Nigeria </span>
                 </div>
               </div>

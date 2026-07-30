@@ -26,7 +26,7 @@ const AboutSection = () => {
       {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-uniport-blue opacity-20 blur-[120px] rounded-full pointer-events-none" /> */}
       
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
+        <div className="text-center mb-18">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -48,6 +48,9 @@ const AboutSection = () => {
           </motion.p>
         </div>
 
+      <p className='text-center text-2xl mb-5 font-bold '>MOTTO: DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
+
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {cards.map((card, idx) => (
             <motion.div
@@ -62,7 +65,7 @@ const AboutSection = () => {
                 {card.icon}
               </div>
               <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-lg leading-relaxed">
                 {card.desc}
               </p>
             </motion.div>
@@ -108,18 +111,18 @@ const AboutSection = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <h4 className="text-xs lg:text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Admission Criteria</h4>
+                  <h4 className="text-xs lg:text-sm font-bold  uppercase tracking-wider mb-3">Admission Criteria</h4>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                      <p className=" text-xs md:text-lg leading-relaxed">
                         Bachelor's degree (B.Eng., B.Tech., or B.Sc.) in Engineering or Pure and Applied Sciences with a <span className="font-semibold text-gray-800">Third Class (3rd)</span>.
                       </p>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
-                        Candidates from unrelated science disciplines must have a minimum of <span className="font-semibold text-gray-800">Second Class Lower (2/2)</span>.
+                      <p className=" text-xs md:text-lg leading-relaxed">
+                        Candidates from unrelated science disciplines must have a minimum of <span className="font-semibold ">Second Class Lower (2/2)</span>.
                       </p>
                     </li>
                   </ul>
@@ -128,17 +131,17 @@ const AboutSection = () => {
 
               <div>
                 <div className="border-t border-gray-200/80 pt-6">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-sm font-bold t uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <Clock size={14} /> Programme Duration
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Full-Time:</span>
-                      <span className="font-bold text-uniport-blue">12 - 24 Months</span>
+                      <span className="text-sm font-medium">Full-Time:</span>
+                      <span className="font-bold text-sm text-uniport-blue">12 - 24 Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Part-Time:</span>
-                      <span className="font-bold text-indigo-600">24 - 36 Months</span>
+                      <span className="text-sm font-medium">Part-Time:</span>
+                      <span className="font-bold text-sm text-indigo-600">24 - 36 Months</span>
                     </div>
                   </div>
                 </div>
@@ -162,17 +165,17 @@ const AboutSection = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Admission Criteria</h4>
+                  <h4 className="text-sm font-bold  uppercase tracking-wider mb-3">Admission Criteria</h4>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                      <p className=" text-xs md:text-lg leading-relaxed">
                         Bachelor’s degree (B.Eng., B.Tech., or B.Sc.) in Engineering or Pure/Applied Sciences with at least <span className="font-semibold text-gray-800">Second Class Lower Division</span>.
                       </p>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                      <p className=" text-xs md:text-lg leading-relaxed">
                         Or a PGD in Engineering or from METI with a minimum CGPA of <span className="font-semibold text-gray-800">3.5 on a 5.0 scale</span>.
                       </p>
                     </li>
@@ -182,17 +185,17 @@ const AboutSection = () => {
 
               <div>
                 <div className="border-t border-gray-200/80 pt-6">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-sm font-bold  uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <Clock size={14} /> Programme Duration
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Full-Time:</span>
-                      <span className="font-bold text-uniport-blue">12 - 24 Months</span>
+                      <span className="text-sm font-medium">Full-Time:</span>
+                      <span className="font-bold text-sm text-uniport-blue">12 - 24 Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Part-Time:</span>
-                      <span className="font-bold text-indigo-600">24 - 36 Months</span>
+                      <span className="text-sm font-medium">Part-Time:</span>
+                      <span className="font-bold text-sm text-indigo-600">24 - 36 Months</span>
                     </div>
                   </div>
                 </div>
@@ -216,17 +219,17 @@ const AboutSection = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Admission Criteria</h4>
+                  <h4 className="text-sm font-bold  uppercase tracking-wider mb-3">Admission Criteria</h4>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                      <p className=" text-xs md:text-lg leading-relaxed">
                         Master’s degree (M.Eng., M.Tech., or M.Sc.) in Engineering or Pure and Applied Science disciplines.
                       </p>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                      <p className=" text-xs md:text-lg leading-relaxed">
                         Or hold a degree from <span className="font-semibold text-gray-800">any METI programme</span> with a minimum CGPA of <span className="font-semibold text-gray-800">3.5 (on a 5.0 scale)</span>.
                       </p>
                     </li>
@@ -236,17 +239,17 @@ const AboutSection = () => {
 
               <div>
                 <div className="border-t border-gray-200/80 pt-6">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-sm font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <Clock size={14} /> Programme Duration
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Full-Time:</span>
-                      <span className="font-bold text-uniport-blue">36 - 48 Months</span>
+                      <span className="text-sm font-medium">Full-Time:</span>
+                      <span className="font-bold text-sm text-uniport-blue">36 - 48 Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-gray-500 font-medium">Part-Time:</span>
-                      <span className="font-bold text-indigo-600">36 - 60 Months</span>
+                      <span className="text-sm font-medium">Part-Time:</span>
+                      <span className="font-bold text-sm text-indigo-600">36 - 60 Months</span>
                     </div>
                   </div>
                 </div>

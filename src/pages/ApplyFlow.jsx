@@ -230,9 +230,13 @@ const {
         <Stepper
           initialStep={1}
           onStepChange={(step) => setActiveStep(step)}
-           onFinalStepCompleted={() => {
-            useAdmissionsStore.getState().commitApplyFlowToUser();
-            navigate('/payment');
+       onFinalStepCompleted={async () => {
+            try {
+              await useAdmissionsStore.getState().commitApplyFlowToUser();
+              navigate('/payment');
+            } catch (err) {
+              alert(err.message || 'Could not save your application details. Please try again.');
+            }
           }}
 
           nextButtonText={activeStep === 3 ? 'Continue to Payment' : 'Proceed'}

@@ -54,13 +54,13 @@ const PGD = () => {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Candidates shall possess a Higher National Diploma (HND) or a Third-Class Bachelor’s Degree (<span className="font-semibold text-gray-800">B.Eng, B.Tech, or B.Sc.</span>) in an Engineering discipline or the Pure and Applied science from a recognised university.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Candidates from unrelated science disciplines must have a minimum of <span className="font-semibold text-gray-800">second (2nd) class lower division</span> to be eligible for admission.
                   </p>
                 </li>

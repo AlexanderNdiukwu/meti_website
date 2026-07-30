@@ -30,7 +30,7 @@ const CLASS_OF_DEGREE_OPTIONS = [
 
 export default function ApplicationFormPage() {
   const navigate = useNavigate();
-  const { user, saveFormDraft, submitApplicationForm, submitDocuments } = useAdmissionsStore();
+ const { user, saveFormDraft, submitApplicationForm, submitDocuments, uploadPassportPhoto, uploadSignature } = useAdmissionsStore();
 
 useEffect(() => {
     if (!user || user.role === 'admin') {
@@ -71,7 +71,7 @@ useEffect(() => {
   const [passportPhotoError, setPassportPhotoError] = useState('');
   const passportInputRef = useRef(null);
 
-  const handlePassportUpload = (file) => {
+const handlePassportUpload = async (file) => {
     setPassportPhotoError('');
     if (!file) return;
     const ext = file.name.split('.').pop().toLowerCase();
@@ -83,9 +83,12 @@ useEffect(() => {
       setPassportPhotoError('Passport photo must be under 2MB.');
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (e) => setPassportPhoto(e.target.result);
-    reader.readAsDataURL(file);
+    try {
+      const url = await uploadPassportPhoto(file);
+      setPassportPhoto(url);
+    } catch (err) {
+      setPassportPhotoError('Upload failed. Please try again.');
+    }
   };
 
   // ── SECTION B: Programme Details (pre-filled, read-only + mode of study) ──
@@ -160,7 +163,7 @@ const [docs, setDocs] = useState({
   const sigUploadRef = useRef(null);
   const [signatureError, setSignatureError] = useState('');
 
-  const handleSignatureUpload = (file) => {
+const handleSignatureUpload = async (file) => {
     setSignatureError('');
     if (!file) return;
     const ext = file.name.split('.').pop().toLowerCase();
@@ -172,9 +175,12 @@ const [docs, setDocs] = useState({
       setSignatureError('Signature image must be under 2MB.');
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (e) => setSignature(e.target.result);
-    reader.readAsDataURL(file);
+    try {
+      const url = await uploadSignature(file);
+      setSignature(url);
+    } catch (err) {
+      setSignatureError('Upload failed. Please try again.');
+    }
   };
 
 
@@ -223,7 +229,9 @@ const [docs, setDocs] = useState({
 
   // Document upload handler
  // Document upload handler — now stores the real file content, not just the name
-  const handleDocUpload = (key, file) => {
+// Document upload handler — uploads straight to Supabase Storage,
+  // one file at a time (matches the new store signature)
+  const handleDocUpload = async (key, file) => {
     setUploadErrors((prev) => ({ ...prev, [key]: '' }));
     if (!file) return;
     const rejectedExtensions = ['exe', 'zip', 'rar', 'tar', 'gz', 'sh', 'bat'];
@@ -241,16 +249,12 @@ const [docs, setDocs] = useState({
       setUploadErrors((prev) => ({ ...prev, [key]: 'File size exceeds 5MB limit.' }));
       return;
     }
-   const reader = new FileReader();
-    reader.onload = (e) => {
-      const fileData = { name: file.name, type: file.type, url: e.target.result };
-      setDocs((prev) => {
-        const updated = { ...prev, [key]: fileData };
-        submitDocuments(updated, key);
-        return updated;
-      });
-    };
-    reader.readAsDataURL(file);
+    try {
+      await submitDocuments(key, file);
+      setDocs((prev) => ({ ...prev, [key]: { name: file.name, type: file.type } }));
+    } catch (err) {
+      setUploadErrors((prev) => ({ ...prev, [key]: 'Upload failed. Please try again.' }));
+    }
   };
 
   // Signature canvas handlers
@@ -285,10 +289,16 @@ const [docs, setDocs] = useState({
     ctx.stroke();
   };
 
-  const stopDrawing = () => {
+const stopDrawing = async () => {
     setIsDrawing(false);
     if (canvasRef.current) {
-      setSignature(canvasRef.current.toDataURL());
+      const dataUrl = canvasRef.current.toDataURL();
+      try {
+        const url = await uploadSignature(dataUrl);
+        setSignature(url);
+      } catch (err) {
+        setSignatureError('Signature upload failed. Please try again.');
+      }
     }
   };
 
@@ -300,8 +310,8 @@ const [docs, setDocs] = useState({
     }
   };
 
-  // Form submission
-  const handleFormSubmit = (e) => {
+// Form submission
+const handleFormSubmit = async (e) => {
     e.preventDefault();
     setUploadErrors({});
 
@@ -355,15 +365,18 @@ const [docs, setDocs] = useState({
       return;
     }
 
-    setSubmitLoading(true);
-    setTimeout(() => {
-      submitApplicationForm(
+ setSubmitLoading(true);
+    try {
+      await submitApplicationForm(
         { personal, passportPhoto, modeOfStudy, academic, work, otherInfo, referees: [referee1, referee2] },
         signature
       );
-      setSubmitLoading(false);
       navigate('/dashboard');
-    }, 1500);
+    } catch (err) {
+      setUploadErrors({ global: err.message || 'Could not submit your application. Please try again.' });
+    } finally {
+      setSubmitLoading(false);
+    }
   };
 
   const isFormLocked = user?.applicationFormSubmitted;

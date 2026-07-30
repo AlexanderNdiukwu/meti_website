@@ -5,14 +5,14 @@ import About from '../About';
 const TIMELINE_EVENTS = [
   {
     year: "2009",
-    title: "Senate Approval & Foundations",
+    title: "The Beginning",
     desc: "The Center for Engineering and Technology Management (CETM) in the Institute of Engineering, Technology and Innovation Management (METI), under the Faculty of Engineering, was approved at the 353rd extra-ordinary meeting of the Senate on December 3, 2009. MEM programmes were upgraded to Management of Engineering (MOE) and Management of Technology (MOT) in line with IAMOT, PICMET, and IEEE-IEMS international standards. This was done in collaboration with the Graduate School of Technology Management (GSTM) at the University of Pretoria, South Africa.",
     icon: <Calendar className="w-5 h-5 text-white" />,
     color: "bg-[#003366]"
   },
   {
     year: "2010 - 2024",
-    title: "Program Expansion & Academic Offerings",
+    title: "Academic Program and Commencement",
     desc: "Between 2010 and 2024, CETM offered postgraduate certificate/diploma programmes in Project Management, ICT Networks, Maintenance Management, and Business Information Systems, as well as Master and PhD programmes in Engineering Management, Technology Management, and ICT Management.",
     icon: <BookOpen className="w-5 h-5 text-white" />,
     color: "bg-blue-600"
@@ -79,8 +79,8 @@ export default function History() {
         
 
              <img 
-                  // src="/images/metibuilding.jpg" 
-                  src="/images/imageswesbite.jpg" 
+               
+                  src="/images/metibuilding.jpeg" 
                   alt="Uniport Logo" 
                   className="w-full object-contain h-140  " 
                 />

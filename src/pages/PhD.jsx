@@ -79,13 +79,13 @@ const PhD = () => {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Candidates shall be required to possess a Master’s degree (<span className="font-semibold text-gray-800">M.Eng., M.Tech., or M.Sc.</span>) in an Engineering discipline or Pure and Applied Science disciplines.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Alternatively, candidates who hold a degree from <span className="font-semibold text-gray-800">any METI programme</span> with a minimum Cumulative Grade Point Average of <span className="font-semibold text-gray-800">3.5 (on a 5.0 scale)</span> are also eligible to apply.
                   </p>
                 </li>
@@ -123,7 +123,7 @@ const PhD = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Full-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" text-base leading-relaxed mb-2">
                       Rigorous, dedicated full-time research under faculty supervision.
                     </p>
                     <div className="inline-flex gap-2">
@@ -140,7 +140,7 @@ const PhD = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Part-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" text-base leading-relaxed mb-2">
                       Flexible thesis research combined with industrial executive schedules.
                     </p>
                     <div className="inline-flex gap-2">

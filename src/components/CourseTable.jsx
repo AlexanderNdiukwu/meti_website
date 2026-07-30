@@ -14,6 +14,7 @@ const CourseTable = ({ programs }) => {
         tableStyle={{ minWidth: '50rem' }}
         className="p-datatable-sm"
       >
+        
         <Column 
           field="name" 
           header="Programme Name" 
@@ -25,14 +26,14 @@ const CourseTable = ({ programs }) => {
           field="description" 
           header="Description" 
           style={{ width: '40%' }}
-          body={(rowData) => <span className="text-gray-600 text-sm">{rowData.description}</span>}
+          body={(rowData) => <span className=" text-lg">{rowData.description}</span>}
         />
         <Column 
           field="focus" 
           header="Key Focus" 
           style={{ width: '25%' }}
           body={(rowData) => (
-            <span className="inline-block bg-blue-50 text-uniport-blue px-3 py-1 rounded-full text-xs font-semibold">
+            <span className="inline-block bg-blue-50 text-uniport-blue px-3 py-1 rounded-full text-lg font-semibold">
               {rowData.focus}
             </span>
           )}

@@ -1,41 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2, ArrowRight } from 'lucide-react';
-import OTPInput from '../../components/OTPInput';
 import { toast } from '../../utils/toast';
+import { useAdmissionsStore } from '../../store/admissionsStore';
+import { supabase } from '../../utils/supabase';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { requestPasswordReset, setNewPassword } = useAdmissionsStore();
 
-  const handleSendCode = async (e) => {
+  // If the user arrived here BY CLICKING THE EMAIL LINK, Supabase fires a
+  // PASSWORD_RECOVERY auth event and there's already a session — that's
+  // what tells us to skip straight to "set new password" instead of
+  // showing the email form.
+  const [recoveryMode, setRecoveryMode] = useState(false);
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') setRecoveryMode(true);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  const [email, setEmail] = useState('');
+  const [newPassword, setPw] = useState('');
+  const [confirmPassword, setConfirmPw] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const handleSendLink = async (e) => {
     e.preventDefault();
     if (!email.trim()) {
       toast.error('Please enter your email.');
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
-    setStep(2);
-    // TODO (Supabase): supabase.auth.resetPasswordForEmail(email)
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (otp.join('').length < 6) {
-      toast.error('Enter the 6-digit code.');
-      return;
+    try {
+      await requestPasswordReset(email);
+      setSent(true);
+    } catch (err) {
+      toast.error(err.message || 'Could not send reset link.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
-    setStep(3);
   };
 
   const handleSetPassword = async (e) => {
@@ -49,11 +56,15 @@ export default function ForgotPassword() {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 700));
-    setLoading(false);
-    toast.success('Password updated');
-    navigate('/login');
-    // TODO (Supabase): supabase.auth.updateUser({ password: newPassword })
+    try {
+      await setNewPassword(newPassword);
+      toast.success('Password updated');
+      navigate('/login');
+    } catch (err) {
+      toast.error(err.message || 'Could not update password.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,81 +72,71 @@ export default function ForgotPassword() {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-lg">
           <h1 className="text-2xl font-black text-gray-900 mb-2">Reset Password</h1>
-          <p className="text-sm text-gray-400 mb-6">
-            {step === 1 && 'Enter your registered email to receive a reset code.'}
-            {step === 2 && 'Enter the 6-digit code sent to your email.'}
-            {step === 3 && 'Choose a new password for your account.'}
-          </p>
 
-          {step === 1 && (
-            <form onSubmit={handleSendCode} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                  placeholder="name@domain.com"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-brand-primary hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
-              >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : <>Send Reset Code <ArrowRight size={16} /></>}
-              </button>
-            </form>
-          )}
-
-          {step === 2 && (
-            <form onSubmit={handleVerifyOtp} className="space-y-6">
-              <OTPInput value={otp} onChange={setOtp} disabled={loading} />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-brand-primary hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
-              >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : 'Verify Code'}
-              </button>
-            </form>
-          )}
-
-          {step === 3 && (
-            <form onSubmit={handleSetPassword} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">New Password</label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Confirm New Password</label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-brand-primary hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
-              >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : 'Set New Password'}
-              </button>
-            </form>
+          {!recoveryMode ? (
+            <>
+              <p className="text-sm text-gray-400 mb-6">
+                {sent
+                  ? 'Check your email for a reset link.'
+                  : 'Enter your registered email to receive a password reset link.'}
+              </p>
+              {!sent && (
+                <form onSubmit={handleSendLink} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                      placeholder="name@domain.com"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-brand-primary hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                  >
+                    {loading ? <Loader2 size={16} className="animate-spin" /> : <>Send Reset Link <ArrowRight size={16} /></>}
+                  </button>
+                </form>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-400 mb-6">Choose a new password for your account.</p>
+              <form onSubmit={handleSetPassword} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setPw(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Confirm New Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPw(e.target.value)}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-brand-primary hover:bg-blue-900 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                >
+                  {loading ? <Loader2 size={16} className="animate-spin" /> : 'Set New Password'}
+                </button>
+              </form>
+            </>
           )}
 
           <div className="mt-6 text-center">
-            <Link to="/login" className="text-sm text-brand-primary hover:underline">
-              Back to Login
-            </Link>
+            <Link to="/login" className="text-sm text-brand-primary hover:underline">Back to Login</Link>
           </div>
         </div>
       </div>

@@ -249,18 +249,7 @@ function StatusMessage({ user }) {
     );
   }
 
-  // Awaiting signature confirmation 
-  // i am no longer using the signing process of student signing on the acceptance , rather , they get the admission from the application form 
-  // if (s === 'awaiting_signature') {
-  //   return (
-  //     <Card colour="teal" icon={<FileSignature size={20} />} title="Documents Submitted — Awaiting Confirmation">
-  //       <p>
-  //         Your signed acceptance letter has been submitted to METI. Admin is reviewing it.
-  //         You will receive an email at <strong>{email}</strong> once your enrollment is confirmed.
-  //       </p>
-  //     </Card>
-  //   );
-  // }
+
 
   // Active student
   if (s === 'active_student') {

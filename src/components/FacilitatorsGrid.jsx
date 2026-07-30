@@ -41,14 +41,14 @@ const facilitators = [
   },
   {
     name: "Prof. Tobinson Alasin Briggs",
-    role: "Dean, Faculty of Engineering ",
-    special: "Industrial and Systems Engineering; Mechanical Engineering",
+    role: "Professor of Systems Engineering and Mechanical Engineering",
+    special: "Dean, Faculty of Engineering ",
     image: "fat5.jpeg"
   },
   {
     name: "Prof. Mary Paschal Iwundu",
     role: "Director of Information and Communications Technology Center (ICTC), UNIPORT.",
-    special: "Mathematics and Statistics",
+    special: "Professor of Mathematics and Statistics",
     image: "fat8.jpeg"
   },
     {
@@ -72,7 +72,7 @@ const facilitators = [
     {
     name: "Dr Amieibibama Joseph ",
     role: "Associate Professor of Petroleum & Gas Engineering",
-    special: "Immediate past HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
+    special: "Former past HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
     image: "fat11.jpeg"
   }
 

@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 .env
 .agents
-
+backend_sql_schema_and_queries.sql

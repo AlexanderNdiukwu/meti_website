@@ -18,43 +18,43 @@ const facilitators = [
   {
     name: "Dr. A. Big-Alabo",
     role: "Director",
-    special: "B.ENG , M,SC , PH.D , MIOP(UK) , MIAENG , MNSE , R.ENG",
+    special: "B.ENG (UPH) , M.SC , PH.D (Glasgow) , MIOP(UK) , MIA ENG (Hong Kong)  , MNSE (Nig) , R.ENG (COREN)",
     image: "staff_of_meti7.jpeg"
   },
   {
     name: "Mrs Helen Ezekiel",
     role: "P.A.R (ADMIN HEAD)",
-    special: "",
+    special: "B.Sc., MSc. (UPH) ",
     image: "staff_of_meti1.jpeg"
   },
   {
     name: "Mrs Rose Ugari",
     role: "Deputy Bursar (Finance)",
-    special: "",
+    special: "B.Sc. (UPH) , CNA ",
     image: "staff_of_meti3.jpeg"
   },
   {
     name: "Mrs Ronke A. Rotimi",
     role: "P.A.R (Admin)",
-    special: "",
+    special: "B.Tech. (FUT Minna), PGD (UPH)",
     image: "staff_of_meti2.jpeg"
   },
   {
     name: "Ibisotonte A. Ekine",
     role: "Director's Personal Assistant",
-    special: "",
+    special: "B.Sc. (UPH)",
     image: "staff_of_meti4.jpeg"
   },
   {
     name: "Mrs Florence Ogbegbe",
     role: "Care-Taker",
-    special: "",
+    special: "O\'Level",
     image: "staff_of_meti5.jpeg"
   },
   {
     name: "Mrs Beauty Ichechukwu",
     role: "Cleaner",
-    special: "",
+    special: "O\'Level",
     image: "staff_of_meti6.jpeg"
   }
 ];

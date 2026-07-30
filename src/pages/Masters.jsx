@@ -79,13 +79,13 @@ const Masters = () => {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Candidates shall be required to possess a bachelor’s degree (<span className="font-semibold text-gray-800">B.Eng., B.Tech., or B.Sc.</span>) in an Engineering discipline or Pure and Applied Science disciplines at a minimum of <span className="font-semibold text-gray-800">second (2nd) class lower division</span>.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
-                  <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                  <p className=" text-sm md:text-lg leading-relaxed">
                     Candidates with a <span className="font-semibold text-gray-800">Post Graduate Diploma (PGD)</span> in an Engineering discipline or from the Institute of Engineering, Technology and Innovation Management with a minimum Cumulative Grade Point Average of <span className="font-semibold text-gray-800">3.5 on a 5.0 scale</span> are also eligible to apply.
                   </p>
                 </li>
@@ -123,7 +123,7 @@ const Masters = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Full-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" text-base leading-relaxed mb-2">
                       The full-time master's programme runs for a rigorous calendar duration.
                     </p>
                     <div className="inline-flex gap-2">
@@ -140,7 +140,7 @@ const Masters = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Part-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" text-base leading-relaxed mb-2">
                       Structured learning with modules suitable for professional life.
                     </p>
                     <div className="inline-flex gap-2">

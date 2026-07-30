@@ -24,7 +24,7 @@ const DURATION_ITEMS = [
 export default function ProgramDuration() {
   return (
     <div className="pt-10 pb-24 bg-black/5 min-h-screen">
-      <div className="container mx-auto px-6 max-w-4xl space-y-12">
+      <div className="container mx-auto px-6 max-w-7xl space-y-12">
         
         {/* Header */}
         <div className="text-center">
@@ -32,7 +32,7 @@ export default function ProgramDuration() {
             Timelines
           </span>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Programme Duration</h1>
-          <p className="text-gray-500 text-sm max-w-xl mx-auto">
+          <p className="text-gray-500 text-lg max-w-xl mx-auto">
             Official calendar month thresholds for full-time and part-time study schedules at METI.
           </p>
         </div>
@@ -40,19 +40,19 @@ export default function ProgramDuration() {
         {/* Duration Cards */}
         <div className="space-y-6">
           {DURATION_ITEMS.map((item, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-3xl border border-black/10 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div key={idx} className="bg-white p-9 rounded-3xl border border-black/10 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               
               <div className="md:col-span-4 space-y-2">
                 <div className="flex items-center gap-2 text-uniport-blue font-bold">
                   <Clock size={18} />
-                  <h3 className="text-lg font-black text-gray-900 leading-tight">{item.program}</h3>
+                  <h3 className="text-lg font-black  leading-tight">{item.program}</h3>
                 </div>
-                <p className="text-gray-400 text-xs">{item.info}</p>
+                <p className=" text-sm">{item.info}</p>
               </div>
 
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Full-Time Track</span>
+                  <span className="text-[10px] font-bold  uppercase tracking-wider block">Full-Time Track</span>
                   <span className="text-sm font-extrabold text-gray-800 flex items-center gap-1">
                     <Calendar size={14} className="text-[#10b981]" />
                     {item.fullTime}
@@ -60,7 +60,7 @@ export default function ProgramDuration() {
                 </div>
 
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Part-Time Track</span>
+                  <span className="text-[10px] font-bold  uppercase tracking-wider block">Part-Time Track</span>
                   <span className="text-sm font-extrabold text-gray-800 flex items-center gap-1">
                     <Calendar size={14} className="text-uniport-blue" />
                     {item.partTime}
@@ -74,15 +74,15 @@ export default function ProgramDuration() {
 
         {/* Policy block */}
         <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-sm space-y-4">
-          <h4 className="text-base font-bold text-gray-900">Academic Progress Policy</h4>
+          <h4 className="text-lg font-bold ">Academic Progress Policy</h4>
           <ul className="space-y-3 text-xs text-gray-600 leading-relaxed">
             <li className="flex items-start gap-2.5">
               <CheckCircle2 size={16} className="text-uniport-blue shrink-0 mt-0.5" />
-              <span>Full-time students are expected to maintain minimum course unit loads each semester in compliance with the School of Graduate Studies regulations.</span>
+              <span className='text-lg'>Full-time students are expected to maintain minimum course unit loads each semester in compliance with the School of Graduate Studies regulations.</span>
             </li>
             <li className="flex items-start gap-2.5">
               <CheckCircle2 size={16} className="text-uniport-blue shrink-0 mt-0.5" />
-              <span>Part-time schedules utilize hybrid teaching methods, incorporating offline seminars and virtual modules to support professional executives.</span>
+              <span className='text-lg'>Part-time schedules utilize hybrid teaching methods, incorporating offline seminars and virtual modules to support professional executives.</span>
             </li>
           </ul>
         </div>

@@ -54,8 +54,8 @@ const facilitators = [
   },
   {
     name: "PROF. HELEN UZOEZI EMASEALU",
-    role: "B.A, MLS, Ph.D. [Ibadan] CLN.",
-    special: "University Librarian",
+    role: "University Librarian",
+    special: "B.A, MLS, Ph.D. [Ibadan] CLN.",
     image: "pal5.jpeg"
   },
  
@@ -73,7 +73,7 @@ const Principalsgrid = () => {
         </div>
        <div className='flex-col justify-start pt-1'>
         <p className='font-bold text-2xl '>Prof. CHIKE PRINCEWILL REWHUAMWHU CHIKE</p>
-        <p className='font-bold text-uniport-blue'>10th Vice-Chancellor , University of Port Harcourt</p>
+        <p className='font-bold text-xl text-uniport-blue'>10th Vice-Chancellor , University of Port Harcourt</p>
         <p className='font-bold'>MD , DMP ,DSSRS</p>
        </div>
 
@@ -110,7 +110,7 @@ const Principalsgrid = () => {
           {/* TEXT */}
           <h3 className="font-bold text-lg text-gray-900 mb-1">{staff.name}</h3>
           <p className="text-sm font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
-          <p className="text-xs text-gray-500 leading-relaxed">{staff.special}</p>
+          <p className="text-sm font-bold  leading-relaxed">{staff.special}</p>
         </motion.div>
       ))}
     </div>

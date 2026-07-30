@@ -124,15 +124,15 @@ export default function AdminPanel() {
   const location = useLocation();
   const params   = useParams();
 
- const {
+const {
     user, applicants, announcements, admissionCounters,
     adminApprovePayment, adminRejectPayment,
     adminApproveDoc, adminRejectDoc,
     adminConfirmApplicationForm, adminRejectApplication,
     adminReturnFormToStudent, adminSaveAdmissionLetter,
     adminAddNote, adminResetProgrammeSession,
-    sendAnnouncement, deleteAnnouncement,
-    resetAllData, logout,
+sendAnnouncement, deleteAnnouncement,
+    resetAllData, logout, getFileSignedUrl, updatePassword,
   } = useAdmissionsStore();
 
   const [sidebarExpanded,   setSidebarExpanded]   = useState(false);
@@ -175,9 +175,9 @@ export default function AdminPanel() {
   const [annAudience, setAnnAudience] = useState('all_applicants');
   const annFileRef = useRef(null);
   // Dev test upload
-  const testUploadRef  = useRef(null);
-  const [testUrl,  setTestUrl]  = useState(null);
-  const [testName, setTestName] = useState(null);
+  // const testUploadRef  = useRef(null);
+  // const [testUrl,  setTestUrl]  = useState(null);
+  // const [testName, setTestName] = useState(null);
   // PDF loading
   const [pdfLoading, setPdfLoading] = useState(null);
 
@@ -335,13 +335,19 @@ const handleDownloadApplicationFormPDF = async () => {
 };
 
   // Handle confirm application
-  const handleConfirmApp = async () => {
+const handleConfirmApp = async () => {
     setIsApproving(true);
-    await new Promise(r => setTimeout(r, 800));
-    const num = adminConfirmApplicationForm(selectedApp.id);
-    setIsApproving(false);
-    setConfirmOpen(false);
-    console.log('[EMAIL SIMULATED] Application approved →', num, '→', selectedApp.email);
+    try {
+      const num = await adminConfirmApplicationForm(selectedApp.id);
+      setIsApproving(false);
+      setConfirmOpen(false);
+      console.log('[EMAIL SIMULATED] Application approved →', num, '→', selectedApp.email);
+    } catch (err) {
+      setIsApproving(false);
+      // adminConfirmApplicationForm already alerts the specific reason
+      // (e.g. "Payment has not been verified") — just close the modal here.
+      setConfirmOpen(false);
+    }
   };
 
   // ──────────────────────────────────────────
@@ -699,7 +705,7 @@ MANAGEMENT (METI)
                           <p className="text-[11px] text-gray-500">Approve or reject each document. The Confirm button in the Decision tab only activates when <strong>all documents are approved</strong>.</p>
 
                           {/* Dev test upload */}
-                          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
+                          {/* <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
                             <p className="text-[10px] font-bold text-amber-700 uppercase">🛠 Dev Test Upload — remove before go-live</p>
                             <p className="text-[10px] text-amber-600">Upload any file here to test the viewer in all document slots below.</p>
                             <div className="flex items-center gap-2">
@@ -710,15 +716,25 @@ MANAGEMENT (METI)
                               {testName && <span className="text-[10px] text-amber-700 font-semibold">{testName}</span>}
                               {testUrl && <button onClick={() => { setTestUrl(null); setTestName(null); if(testUploadRef.current) testUploadRef.current.value=''; }} className="text-[10px] text-red-500 font-bold">Clear</button>}
                             </div>
-                          </div>
+                          </div> */}
 
-                          {selectedApp.uploadedDocs
+                         {selectedApp.uploadedDocs
                             ? Object.entries(selectedApp.uploadedDocs).map(([key, fileName]) => {
                                 if (!fileName) return null;
                                 const approval  = (selectedApp.docApprovals||{})[key];
                                 const rejReason = (selectedApp.docApprovals||{})[`${key}_reason`];
-                              const fileUrl   = testUrl || `https://placehold.co/400x200?text=${encodeURIComponent(fileName)}`;
-                                const dispName  = testName || fileName;
+                                const docPath   = (selectedApp.docPaths||{})[key];
+                                const dispName  = fileName;
+                                const openDoc = async () => {
+                                  const url = await getFileSignedUrl('documents', docPath);
+                                  if (url) setViewerFile({ url, name: dispName });
+                                  else alert('Could not load this file — it may have been removed.');
+                                };
+                                const downloadDoc = async () => {
+                                  const url = await getFileSignedUrl('documents', docPath);
+                                  if (url) window.open(url, '_blank');
+                                  else alert('Could not load this file — it may have been removed.');
+                                };
                                 return (
                                   <div key={key} className="border border-gray-100 rounded-2xl p-4 bg-gray-50 space-y-2">
                                     <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -727,8 +743,8 @@ MANAGEMENT (METI)
                                         <p className="text-[10px] text-gray-400 font-mono">{dispName}</p>
                                       </div>
                                       <div className="flex items-center gap-1.5 flex-wrap">
-                                        <button onClick={() => setViewerFile({ url:fileUrl, name:dispName })} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Eye size={12} /> View</button>
-                                        <a href={fileUrl} download={dispName} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Download size={12} /> Download</a>
+                                        <button onClick={openDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Eye size={12} /> View</button>
+                                        <button onClick={downloadDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Download size={12} /> Download</button>
                                         {approval !== 'approved'
                                           ? <button onClick={() => { adminApproveDoc(selectedApp.id, key); setRejectingDocKey(null); }} className="flex items-center gap-1 px-2.5 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700"><ThumbsUp size={12} /> Approve</button>
                                           : <span className="flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
@@ -772,20 +788,29 @@ MANAGEMENT (METI)
                           <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Payment Receipt</p>
                           {selectedApp.paymentSubmitted ? (
                             <>
-                              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between gap-3">
+                            <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between gap-3">
                                 <div><p className="font-bold text-gray-800 text-sm">{selectedApp.receiptName}</p><p className="text-[10px] text-gray-400">{selectedApp.receiptSize}</p></div>
                                 <div className="flex items-center gap-2">
-                                  <button onClick={() => setViewerFile({ url: testUrl||selectedApp.receiptUrl, name: testName||selectedApp.receiptName })} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Eye size={14} /></button>
-                                  <a href={testUrl||selectedApp.receiptUrl} download={testName||selectedApp.receiptName} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></a>
+                                  <button onClick={async () => {
+                                    const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
+                                    if (url) setViewerFile({ url, name: selectedApp.receiptName });
+                                    else alert('Could not load the receipt — it may have been removed.');
+                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Eye size={14} /></button>
+                                  <button onClick={async () => {
+                                    const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
+                                    if (url) window.open(url, '_blank');
+                                    else alert('Could not load the receipt — it may have been removed.');
+                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button>
                                   <StatusBadge status={selectedApp.paymentVerified ? 'Approved' : 'Payment Verification'} />
                                 </div>
                               </div>
-                              {(testUrl||selectedApp.receiptUrl) && (
-                                <div className="rounded-2xl border border-gray-200 overflow-hidden bg-gray-50 cursor-pointer" onClick={() => setViewerFile({ url:testUrl||selectedApp.receiptUrl, name:testName||selectedApp.receiptName })}>
-                                  {/\.(jpg|jpeg|png|gif|webp)$/i.test(testName||selectedApp.receiptName||'')
-                                    ? <img src={testUrl||selectedApp.receiptUrl} alt="Receipt" className="max-h-48 object-contain w-full p-2" />
-                                    : <div className="flex items-center justify-center h-32 gap-2 text-gray-400"><FileText size={28} /><span className="text-sm font-semibold">Click to view {testName||selectedApp.receiptName}</span></div>
-                                  }
+                              {selectedApp.receiptUrl && (
+                                <div className="rounded-2xl border border-gray-200 overflow-hidden bg-gray-50 cursor-pointer p-2" onClick={async () => {
+                                  const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
+                                  if (url) setViewerFile({ url, name: selectedApp.receiptName });
+                                  else alert('Could not load the receipt — it may have been removed.');
+                                }}>
+                                  <div className="flex items-center justify-center h-32 gap-2 text-gray-400"><FileText size={28} /><span className="text-sm font-semibold">Click to view {selectedApp.receiptName}</span></div>
                                 </div>
                               )}
                               {!selectedApp.paymentVerified && (
@@ -965,18 +990,13 @@ MANAGEMENT (METI)
                     ? <button onClick={() => annFileRef.current?.click()} className="w-full border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 font-semibold hover:border-brand-primary flex items-center justify-center gap-1"><Paperclip size={13} /> Attach file (optional)</button>
                     : <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2"><span className="text-xs font-semibold truncate">{annFile.name}</span><button onClick={() => { setAnnFile(null); if(annFileRef.current) annFileRef.current.value=''; }} className="text-red-500 text-xs font-bold ml-2 shrink-0">Remove</button></div>
                   }
-                 <button onClick={() => {
+               <button onClick={async () => {
                     if (!annMessage.trim()) return;
-                  const publish = (aUrl) => {
-                      sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, attachmentName: annFile?.name||null, attachmentUrl: aUrl, programme_filter: annTarget==='all'?null:annTarget, audience: annAudience });
+                    try {
+                      await sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, file: annFile, programme_filter: annTarget==='all'?null:annTarget, audience: annAudience });
                       setAnnTitle(''); setAnnMessage(''); setAnnFile(null); setAnnTarget('all'); setAnnAudience('all_applicants');
-                    };
-                    if (annFile) {
-                      const reader = new FileReader();
-                      reader.onload = (e) => publish(e.target.result);
-                      reader.readAsDataURL(annFile);
-                    } else {
-                      publish(null);
+                    } catch (err) {
+                      alert('Failed to publish announcement. Please try again.');
                     }
                   }} disabled={!annMessage.trim()} className="w-full rounded-full bg-brand-primary                                                                           text-white font-bold py-2.5 text-sm disabled:opacity-40 flex items-center justify-center gap-2">
                     <Send size={14} /> Publish Announcement
@@ -1000,9 +1020,9 @@ MANAGEMENT (METI)
                     <p className="font-bold text-gray-900 text-sm">Admin Email Aliases</p>
                     <p className="text-xs text-gray-500 mt-1">meti@uniport.edu.ng · ndiukwuchukwuemeka@gmail.com</p>
                   </div>
-                  <div className="rounded-2xl border border-gray-100 p-4 bg-gray-50">
+                 <div className="rounded-2xl border border-gray-100 p-4 bg-gray-50">
                     <p className="font-bold text-gray-900 text-sm">Workflow Mode</p>
-                    <p className="text-xs text-gray-500 mt-1">Mock UI — Phase 1. Supabase integration is Phase 2.</p>
+                    <p className="text-xs text-gray-500 mt-1">Connected to live Supabase backend.</p>
                   </div>
                 </div>
 
@@ -1064,7 +1084,20 @@ MANAGEMENT (METI)
                 </div>
                 
 
-                <form onSubmit={e => { e.preventDefault(); if(!settingsForm.newPassword||settingsForm.newPassword!==settingsForm.confirmPassword){setSettingsMsg('Passwords do not match.');return;} setSettingsMsg('Password updated (Phase 2: Supabase auth.updateUser).'); setSettingsForm({currentPassword:'',newPassword:'',confirmPassword:''}); }} className="rounded-2xl border border-gray-100 p-5 space-y-3">
+             <form onSubmit={async e => {
+                  e.preventDefault();
+                  if (!settingsForm.newPassword || settingsForm.newPassword !== settingsForm.confirmPassword) {
+                    setSettingsMsg('Passwords do not match.');
+                    return;
+                  }
+                  try {
+                    await updatePassword(settingsForm.newPassword);
+                    setSettingsMsg('Password updated successfully.');
+                    setSettingsForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                  } catch (err) {
+                    setSettingsMsg(err.message || 'Could not update password.');
+                  }
+                }} className="rounded-2xl border border-gray-100 p-5 space-y-3">
                   <p className="font-bold text-gray-900 text-sm">Change Password</p>
                   <input type="password" placeholder="Current password" value={settingsForm.currentPassword} onChange={e => setSettingsForm({...settingsForm,currentPassword:e.target.value})} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" />
                   <input type="password" placeholder="New password (min 8 chars)" value={settingsForm.newPassword} onChange={e => setSettingsForm({...settingsForm,newPassword:e.target.value})} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" />
