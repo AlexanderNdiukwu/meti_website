@@ -72,7 +72,7 @@ const facilitators = [
     {
     name: "Dr Amieibibama Joseph ",
     role: "Associate Professor of Petroleum & Gas Engineering",
-    special: "Former past HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
+    special: "Former HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
     image: "fat11.jpeg"
   }
 

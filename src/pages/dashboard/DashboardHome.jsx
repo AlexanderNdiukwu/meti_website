@@ -467,6 +467,7 @@ const handleDownload = async (type) => {
 
 // ── Announcement preview ──
 function AnnouncementPreview({ user, announcements }) {
+  const getAnnouncementAttachmentUrl = useAdmissionsStore((s) => s.getAnnouncementAttachmentUrl);
   const studentProgramme = user?.selectedProgram === 'Masters' ? 'msc'
     : user?.selectedProgram === 'PhD' ? 'phd'
     : user?.selectedProgram === 'PGD' ? 'pgd' : null;
@@ -499,18 +500,42 @@ const items = (announcements || [])
             </div>
             {ann.title && <p className="text-sm font-bold text-gray-900 mb-0.5">{ann.title}</p>}
             <p className="text-sm text-gray-600 leading-relaxed">{ann.message}</p>
-            {(ann.attachment_url || ann.attachmentUrl) && (
-              <a href={ann.attachment_url || ann.attachmentUrl}
-                download={ann.attachment_name || ann.attachmentName}
-                className="inline-flex items-center gap-1 text-xs text-brand-primary underline mt-2">
+          {(ann.attachment_url || ann.attachmentUrl) && (
+              <button onClick={async () => {
+                const path = ann.attachment_url || ann.attachmentUrl;
+                const name = ann.attachment_name || ann.attachmentName;
+                const url = await getAnnouncementAttachmentUrl(path);
+                if (url) await downloadFile(url, name);
+                else alert('Could not load this attachment — it may have been removed.');
+              }} className="inline-flex items-center gap-1 text-xs text-brand-primary underline mt-2">
                 📎 {ann.attachment_name || ann.attachmentName}
-              </a>
+              </button>
             )}
           </div>
         ))}
       </div>
     </div>
   );
+}
+
+// Forces a real file download regardless of signed-URL cross-origin
+// restrictions or async popup-blocking — mirrors the fix used in
+// AdminPanel.jsx for the exact same underlying browser behavior.
+async function downloadFile(url, filename) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename || 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    alert('Could not download the file — it may have been removed.');
+  }
 }
 
 // ── Reusable coloured card ──

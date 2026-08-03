@@ -2,8 +2,27 @@
 import { useEffect } from 'react';
 import { useAdmissionsStore } from '../../store/admissionsStore';
 
+// Forces a real file download regardless of signed-URL cross-origin
+// restrictions or async popup-blocking.
+async function downloadFile(url, filename) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename || 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    alert('Could not download the file — it may have been removed.');
+  }
+}
+
 export default function DashboardAnnouncements() {
-  const { user, announcements, subscribeToOwnApplicantChanges } = useAdmissionsStore();
+  const { user, announcements, subscribeToOwnApplicantChanges, getAnnouncementAttachmentUrl } = useAdmissionsStore();
 
   // Live updates — new announcements appear without a manual refresh.
   useEffect(() => {
@@ -49,11 +68,14 @@ const filtered = (announcements || [])
             </div>
             {ann.title && <p className="font-bold text-gray-900 text-sm">{ann.title}</p>}
             <p className="text-sm text-gray-700 leading-relaxed">{ann.message}</p>
-            {attachUrl && (
-              <a href={attachUrl} download={attachName}
-                className="inline-flex items-center gap-1.5 text-sm text-brand-primary underline font-semibold mt-1">
+          {attachUrl && (
+              <button onClick={async () => {
+                const url = await getAnnouncementAttachmentUrl(attachUrl);
+                if (url) await downloadFile(url, attachName);
+                else alert('Could not load this attachment — it may have been removed.');
+              }} className="inline-flex items-center gap-1.5 text-sm text-brand-primary underline font-semibold mt-1">
                 📎 {attachName}
-              </a>
+              </button>
             )}
           </div>
         );

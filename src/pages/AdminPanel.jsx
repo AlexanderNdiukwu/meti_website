@@ -37,6 +37,26 @@ function previewAppNumber(programme, admissionCounters) {
   return `APPL/${startYear}/METI/CETM/${code}/${String(nextSeq).padStart(3, '0')}`;
 }
 
+// Forces a real file download regardless of signed-URL cross-origin
+// restrictions or async popup-blocking — window.open()/<a download> both
+// silently fail here since the URL only exists after an async network call.
+async function downloadFile(url, filename) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename || 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    alert('Could not download the file — it may have been removed.');
+  }
+}
+
 const STATUS_COLOURS = {
   'Approved':             'bg-green-50 text-green-700 border-green-200',
   'active_student':       'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -75,7 +95,7 @@ const DOC_LABELS = {
 
 
 // File viewer modal
-function FileViewerModal({ fileUrl, fileName, onClose }) {
+function FileViewerModal({ fileUrl, fileName, onClose, onDownload }) {
   const isImg = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName || '');
   const isPdf = /\.pdf$/i.test(fileName || '');
   return (
@@ -84,9 +104,9 @@ function FileViewerModal({ fileUrl, fileName, onClose }) {
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
           <span className="font-bold text-sm truncate">{fileName}</span>
           <div className="flex items-center gap-2">
-            <a href={fileUrl} download={fileName} className="px-3 py-1.5 bg-brand-primary text-white rounded-lg text-xs font-bold flex items-center gap-1">
+           <button onClick={onDownload} className="px-3 py-1.5 bg-brand-primary text-white rounded-lg text-xs font-bold flex items-center gap-1">
               <Download size={12} /> Download
-            </a>
+            </button>
             <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100"><X size={16} /></button>
           </div>
         </div>
@@ -97,9 +117,9 @@ function FileViewerModal({ fileUrl, fileName, onClose }) {
             <div className="text-center text-gray-400 space-y-3">
               <FileText size={40} className="mx-auto" />
               <p className="text-sm font-semibold">{fileName}</p>
-              <a href={fileUrl} download={fileName} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-full text-xs font-bold">
+           <button onClick={onDownload} className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary text-white rounded-full text-xs font-bold">
                 <Download size={12} /> Download to view
-              </a>
+              </button>
             </div>
           )}
         </div>
@@ -133,7 +153,7 @@ const {
     adminAddNote, adminResetProgrammeSession,
 sendAnnouncement, deleteAnnouncement,
     resetAllData, logout, getFileSignedUrl, updatePassword,
-    subscribeToApplicantChanges,
+    subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
   } = useAdmissionsStore();
 
   const [sidebarExpanded,   setSidebarExpanded]   = useState(false);
@@ -421,7 +441,7 @@ const handleConfirmApp = async () => {
       {mobileSidebarOpen && (
         <><div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setMobileSidebarOpen(false)} /><SidebarContent mobile /></>
       )}
-      {viewerFile && <FileViewerModal fileUrl={viewerFile.url} fileName={viewerFile.name} onClose={() => setViewerFile(null)} />}
+     {viewerFile && <FileViewerModal fileUrl={viewerFile.url} fileName={viewerFile.name} onClose={() => setViewerFile(null)} onDownload={() => downloadFile(viewerFile.url, viewerFile.name)} />}
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile top bar */}
@@ -741,9 +761,9 @@ MANAGEMENT (METI)
                                   if (url) setViewerFile({ url, name: dispName });
                                   else alert('Could not load this file — it may have been removed.');
                                 };
-                                const downloadDoc = async () => {
+                               const downloadDoc = async () => {
                                   const url = await getFileSignedUrl('documents', docPath);
-                                  if (url) window.open(url, '_blank');
+                                  if (url) await downloadFile(url, dispName);
                                   else alert('Could not load this file — it may have been removed.');
                                 };
                                 return (
@@ -802,11 +822,11 @@ MANAGEMENT (METI)
                             <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between gap-3">
                                 <div><p className="font-bold text-gray-800 text-sm">{selectedApp.receiptName}</p><p className="text-[10px] text-gray-400">{selectedApp.receiptSize}</p></div>
                                 <div className="flex items-center gap-2">
-                                  <button onClick={async () => {
+                              <button onClick={async () => {
                                     const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
-                                    if (url) setViewerFile({ url, name: selectedApp.receiptName });
+                                    if (url) await downloadFile(url, selectedApp.receiptName);
                                     else alert('Could not load the receipt — it may have been removed.');
-                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Eye size={14} /></button>
+                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button>
                                   <button onClick={async () => {
                                     const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
                                     if (url) window.open(url, '_blank');
@@ -971,8 +991,12 @@ MANAGEMENT (METI)
                         <button onClick={() => deleteAnnouncement(item.id)} className="text-red-400 hover:text-red-600 p-1"><Trash2 size={13} /></button>
                       </div>
                       <p className="text-sm text-gray-600 mt-2">{item.message}</p>
-                      {item.attachmentName && (item.attachmentUrl
-                        ? <a href={item.attachmentUrl} download={item.attachmentName} className="inline-flex items-center gap-1 text-[11px] text-brand-primary       underline mt-2"><Paperclip size={11} />{item.attachmentName}</a>
+                    {item.attachmentName && (item.attachmentUrl
+                        ? <button onClick={async () => {
+                            const url = await getAnnouncementAttachmentUrl(item.attachmentUrl);
+                            if (url) await downloadFile(url, item.attachmentName);
+                            else alert('Could not load this attachment — it may have been removed.');
+                          }} className="inline-flex items-center gap-1 text-[11px] text-brand-primary underline mt-2"><Paperclip size={11} />{item.attachmentName}</button>
                         : <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 mt-2"><Paperclip size={11} />{item.attachmentName}</span>
                       )}
                     </div>
