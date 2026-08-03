@@ -52,7 +52,7 @@ export default function ProgramDuration() {
 
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-1">
-                  <span className="text-lg font-bold  uppercase tracking-wider block">Full-Time Track</span>
+                  <span className="text-lg font-bold  uppercase tracking-wider block">Full-Time </span>
                   <span className="text-sm font-extrabold text-gray-800 flex items-center gap-1">
                     <Calendar size={14} className="text-[#10b981]" />
                     {item.fullTime}
@@ -60,7 +60,7 @@ export default function ProgramDuration() {
                 </div>
 
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-1">
-                  <span className="text-lg font-bold  uppercase tracking-wider block">Part-Time Track</span>
+                  <span className="text-lg font-bold  uppercase tracking-wider block">Part-Time </span>
                   <span className="text-sm font-extrabold text-gray-800 flex items-center gap-1">
                     <Calendar size={14} className="text-uniport-blue" />
                     {item.partTime}
@@ -72,20 +72,7 @@ export default function ProgramDuration() {
           ))}
         </div>
 
-        {/* Policy block */}
-        <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-sm space-y-4">
-          <h4 className="text-lg font-bold ">Academic Progress Policy</h4>
-          <ul className="space-y-3 text-xs  leading-relaxed">
-            <li className="flex items-start gap-2.5">
-              <CheckCircle2 size={16} className="text-uniport-blue shrink-0 mt-0.5" />
-              <span className='text-lg'>Full-time students are expected to maintain minimum course unit loads each semester in compliance with the School of Graduate Studies regulations.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <CheckCircle2 size={16} className="text-uniport-blue shrink-0 mt-0.5" />
-              <span className='text-lg'>Part-time schedules utilize hybrid teaching methods, incorporating offline seminars and virtual modules to support professional executives.</span>
-            </li>
-          </ul>
-        </div>
+       
 
       </div>
     </div>

@@ -115,9 +115,9 @@ const AboutSection = () => {
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
-                      <p className=" text-xs md:text-lg leading-relaxed">
-                        Bachelor's degree (B.Eng., B.Tech., or B.Sc.) in Engineering or Pure and Applied Sciences with a <span className="font-semibold text-gray-800">Third Class (3rd)</span>.
-                      </p>
+                       <p className=" text-sm md:text-lg leading-relaxed">
+                    Candidates shall possess a Higher National Diploma (HND) or a Third-Class Bachelor’s Degree (<span className="font-semibold text-gray-800">B.Eng, B.Tech, or B.Sc.</span>) in an Engineering discipline or the Pure and Applied science from a recognised university.
+                  </p>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />

@@ -22,7 +22,7 @@ export default function DirectorProfile() {
           {/* Intro Text */}
           <div className="text-center md:text-left space-y-3">
             <span className="text-lg font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-              Institute Director Profile
+              Director's Profile
             </span>
             <h1 className="text-3xl font-black text-gray-900 leading-tight">Dr. Akuro Big-Alabo</h1>
             <p className=" font-semibold text-[#1a4fa0]">
@@ -134,7 +134,7 @@ export default function DirectorProfile() {
               <div className="space-y-3 text-lg text-gray-600">
                 <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
                   <span className="font-bold text-gray-900 block leading-tight">Director</span>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">METI (Current)</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">METI (2025-Date)</span>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
                   <span className="font-bold text-gray-900 block leading-tight">Head of Department</span>
@@ -243,9 +243,9 @@ export default function DirectorProfile() {
         <ul className="space-y-3">
           <li>• Post-Doctoral Research Award – University of Glasgow (2016).</li>
           <li>• Commonwealth Scholarship for PhD (2011–2014).</li>
-          <li>• College of Science & Engineering Scholarship – University of Glasgow (Not Used).</li>
-          <li>• School of Engineering Bursary – University of Glasgow (Not Used).</li>
-          <li>• ETF Academic Staff Development Scholarship, Nigeria (Not Used).</li>
+          <li>• College of Science & Engineering Scholarship – University of Glasgow .</li>
+          <li>• School of Engineering Bursary – University of Glasgow .</li>
+          <li>• ETF Academic Staff Development Scholarship, Nigeria .</li>
           <li>• Rivers State Sustainable Development Agency Scholarship (UK Master's).</li>
           <li>• Rivers State Scholarship Board (Master's Degree).</li>
         </ul>

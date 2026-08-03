@@ -42,13 +42,13 @@ const facilitators = [
   },
   {
     name: "MRS. GLORIA OBIAGERI CHINDAH",
-    role: "REGISTRAR",
+    role: "Registrar",
     special: "B.Ed. (Ibadan), M.Ed., Ph.D (UPH) FCIA",
     image: "pal4.jpeg"
   },
   {
     name: "DR. GODPOWER WOBIARAERI OBAH",
-    role: "BURSAR",
+    role: "Bursar",
     special: "FCNA, ACTI, AMNAA, B.SC [UPH],M.SC, PhD",
     image: "pal6.jpeg"
   },
@@ -72,7 +72,7 @@ const Principalsgrid = () => {
 
         </div>
        <div className='flex-col justify-start pt-1'>
-        <p className='font-bold text-2xl '>Prof. CHIKE PRINCEWILL REWHUAMWHU CHIKE</p>
+        <p className='font-bold text-2xl '>PROF. CHIKE PRINCEWILL REWHUAMWHU CHIKE</p>
         <p className='font-bold text-xl text-uniport-blue'>10th Vice-Chancellor , University of Port Harcourt</p>
         <p className='font-bold'>MD , DMP ,DSSRS</p>
        </div>

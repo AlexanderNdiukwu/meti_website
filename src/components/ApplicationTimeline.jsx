@@ -1,6 +1,6 @@
 const ApplicationTimeline = () => {
   const steps = [
-    { step: "01", title: "Submit Application", desc: "Complete the online application form and upload required documents (Transcripts,Degree Certification, ETC)." },
+    { step: "01", title: "Submit Application", desc: "Complete the online application form and upload required documents (Transcripts,Degree Certificates , etc )." },
     { step: "02", title: "Screening & Review", desc: "Our admission board will thoroughly review your academic and professional background." },
     { step: "03", title: "Interview (If applicable)", desc: "Shortlisted candidates for PhD and selected Masters programs will be invited for an interview." },
     { step: "04", title: "Admission Offer", desc: "Successful candidates will receive an official offer letter ." },
