@@ -49,7 +49,7 @@ const Navbar = () => {
     { name: 'All Courses', path: '/courses', tooltip: 'View all postgraduate courses' },
     // { name: 'Principal Officers', path: '/about/officers', tooltip: 'Meet our senior administrative leaders' },
     { name: 'Historical Background', path: '/about/history', tooltip: 'Discover METI creation origins and evolution' },
-    // { name: 'Director\'s Profile', path: '/about/director', tooltip: 'Profile details of Dr. Akuro Big-Alabo' },
+    { name: 'Director\'s Profile', path: '/about/director', tooltip: 'Profile details of Dr. Akuro Big-Alabo' },
     { name: 'Programme Duration', path: '/about/duration', tooltip: 'Calendar timeline and academic schedules' },
     { name: 'Staffs & Facilitators', path: '/lecturers', tooltip: 'Meet our faculty' },
     { name: 'Support METI', path: '/support', tooltip: 'Support the institute with your donation' },
