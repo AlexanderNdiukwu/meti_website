@@ -23,8 +23,8 @@ const WhyChooseMeti = () => {
             <div key={idx} className="flex items-start gap-4 p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow bg-gray-50/50">
               <CheckCircle2 className="w-8 h-8 text-uniport-blue shrink-0" />
               <div>
-                <h3 className="font-bold text-xl text-gray-900 mb-2">{reason.title}</h3>
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed">{reason.desc}</p>
+                <h3 className="font-bold text-xl  mb-2">{reason.title}</h3>
+                <p className=" text-sm md:text-base leading-relaxed">{reason.desc}</p>
               </div>
             </div>
           ))}

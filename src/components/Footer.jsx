@@ -23,7 +23,7 @@ const Footer = () => {
 
 
           </div>
-      <p className='py-2'> <span className='font-bold text-uniport-blue'>MOTTO:</span> DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
+      <p className='py-2 mt-4'> <span className='font-bold text-uniport-blue'>MOTTO:</span> DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
 
 
         </div>

@@ -46,7 +46,7 @@ export default function History() {
             Our Legacy
           </span>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Historical Background</h1>
-          <p className="text-gray-500 text-sm max-w-xl mx-auto">
+          <p className=" text-xl max-w-xl mx-auto">
             Discover the evolution of the Institute of Engineering, Technology and Innovation Management (METI).
           </p>
         </div>
@@ -67,9 +67,9 @@ export default function History() {
                 {evt.icon}
               </div>
 
-              <span className="text-sm font-black text-uniport-blue mb-1 block">{evt.year}</span>
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">{evt.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{evt.desc}</p>
+              <span className="text-xl font-black text-uniport-blue mb-1 block">{evt.year}</span>
+              <h3 className="text-lg md:text-2xl font-bold text-gray-900 mb-4">{evt.title}</h3>
+              <p className=" text-xl leading-relaxed">{evt.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -103,14 +103,14 @@ export default function History() {
             <div className="p-2.5 bg-blue-50 text-uniport-blue rounded-xl">
               <Users size={20} />
             </div>
-            <h3 className="text-xl font-bold text-gray-900">Past Directors of METI</h3>
+            <h3 className="text-2xl font-bold ">Past Directors of METI</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {PAST_DIRECTORS.map((dir, idx) => (
               <div key={idx} className="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
-                <h4 className="font-bold text-gray-900 text-sm leading-snug">{dir.name}</h4>
-                <span className="text-[10px] font-semibold text-uniport-blue mt-1 block uppercase tracking-wider">{dir.tenure}</span>
+                <h4 className="font-bold text-gray-900 text-xl leading-snug">{dir.name}</h4>
+                <span className="text-xl font-semibold text-uniport-blue mt-1 block uppercase tracking-wider">{dir.tenure}</span>
               </div>
             ))}
           </div>
