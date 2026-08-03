@@ -822,16 +822,16 @@ MANAGEMENT (METI)
                             <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between gap-3">
                                 <div><p className="font-bold text-gray-800 text-sm">{selectedApp.receiptName}</p><p className="text-[10px] text-gray-400">{selectedApp.receiptSize}</p></div>
                                 <div className="flex items-center gap-2">
-                              {/* <button onClick={async () => {
+                              <button onClick={async () => {
                                     const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
                                     if (url) await downloadFile(url, selectedApp.receiptName);
                                     else alert('Could not load the receipt — it may have been removed.');
-                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button> */}
-                                  <button onClick={async () => {
+                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button>
+                                  {/* <button onClick={async () => {
                                     const url = await getFileSignedUrl('receipts', selectedApp.receiptUrl);
                                     if (url) window.open(url, '_blank');
                                     else alert('Could not load the receipt — it may have been removed.');
-                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button>
+                                  }} className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:text-brand-primary"><Download size={14} /></button> */}
                                   <StatusBadge status={selectedApp.paymentVerified ? 'Approved' : 'Payment Verification'} />
                                 </div>
                               </div>
