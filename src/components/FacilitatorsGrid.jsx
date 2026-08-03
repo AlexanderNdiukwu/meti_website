@@ -47,7 +47,7 @@ const facilitators = [
   },
   {
     name: "Prof. Mary Paschal Iwundu",
-    role: "Director of Information and Communications Technology Center (ICTC), UNIPORT.",
+    role: "Director of ICTC , UNIPORT.",
     special: "Professor of Mathematics and Statistics",
     image: "fat8.jpeg"
   },
