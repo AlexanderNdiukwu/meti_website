@@ -1,7 +1,7 @@
 // FILE: DashboardHome.jsx
 // Place at: src/pages/dashboard/DashboardHome.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Clock, CheckCircle2, Circle, FileText,
@@ -169,19 +169,31 @@ function StatusMessage({ user }) {
   // (checked BEFORE the generic "fill your form" message, and keyed on
   // rejected_doc_types rather than formDone — formDone gets reset to
   // false when the form is unlocked, so it can't be the signal here)
-  if (s === 'Application Incomplete' && (user?.rejected_doc_types || []).length > 0) {
+ if (s === 'Application Incomplete' && (user?.rejected_doc_types || []).length > 0) {
     const rejectedDocs = user.rejected_doc_types;
     return (
       <Card colour="amber" icon={<FileText size={20} />} title="Documents Need Correction">
         <p>
           Some of your submitted documents were not approved, and your application has been
           returned for correction.
-          {user?.rejection_reason ? <><br /><strong>Reason:</strong> {user.rejection_reason}</> : ''}
         </p>
-        <p className="mt-2">
-          <strong>Documents to resubmit:</strong>{' '}
-          {rejectedDocs.map(k => DOC_LABELS_STUDENT[k] || k).join(', ')}
-        </p>
+        <div className="mt-2 space-y-1.5">
+          <p className="font-bold">Documents to resubmit:</p>
+          <ul className="list-disc list-inside space-y-1">
+            {rejectedDocs.map(k => {
+              const label  = DOC_LABELS_STUDENT[k] || k;
+              const reason = user?.docApprovals?.[`${k}_reason`];
+              return (
+                <li key={k}>
+                  <strong>{label}</strong>{reason ? <> — {reason}</> : ''}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        {user?.rejection_reason && (
+          <p className="mt-2"><strong>Overall note from admissions:</strong> {user.rejection_reason}</p>
+        )}
         <Link
           to="/application-form"
           className="inline-flex items-center gap-2 mt-3 px-6 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-blue-900 transition-colors"
@@ -459,8 +471,9 @@ function AnnouncementPreview({ user, announcements }) {
     : user?.selectedProgram === 'PhD' ? 'phd'
     : user?.selectedProgram === 'PGD' ? 'pgd' : null;
 
-  const items = (announcements || [])
+const items = (announcements || [])
     .filter(a => !a.programme_filter || a.programme_filter === studentProgramme)
+    .filter(a => a.audience !== 'paid_only' || user?.paymentVerified)
     .slice(0, 2);
 
   if (!items.length) return null;
@@ -527,7 +540,15 @@ function Card({ colour, icon, title, children }) {
 // MAIN COMPONENT
 // ════════════════════════════════════════════════════════
 export default function DashboardHome() {
-  const { user, announcements } = useAdmissionsStore();
+  const { user, announcements, subscribeToOwnApplicantChanges } = useAdmissionsStore();
+
+  // Live updates — status changes and new announcements appear without
+  // the student needing to refresh the page.
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = subscribeToOwnApplicantChanges();
+    return () => { if (channel) channel.unsubscribe(); };
+  }, [user?.id]);
 
   const fullName = user?.applicationForm?.personal?.fullName || user?.name || 'Student';
   const today    = new Date().toLocaleDateString('en-GB', {

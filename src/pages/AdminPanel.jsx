@@ -133,6 +133,7 @@ const {
     adminAddNote, adminResetProgrammeSession,
 sendAnnouncement, deleteAnnouncement,
     resetAllData, logout, getFileSignedUrl, updatePassword,
+    subscribeToApplicantChanges,
   } = useAdmissionsStore();
 
   const [sidebarExpanded,   setSidebarExpanded]   = useState(false);
@@ -190,10 +191,20 @@ sendAnnouncement, deleteAnnouncement,
     else                                            setActiveView('Overview');
   }, [location.pathname]);
 
-  useEffect(() => {
+useEffect(() => {
     if (params.id) { setSelectedAppId(params.id); setActiveDetailTab('Print'); }
     else            setSelectedAppId(null);
   }, [params.id]);
+
+  // Live dashboard updates — subscribes once the admin is authenticated,
+  // cleans up the channel on unmount or logout so it can never double-subscribe.
+  useEffect(() => {
+    if (!user || user.role !== 'admin') return;
+    const channel = subscribeToApplicantChanges();
+    return () => {
+      if (channel) channel.unsubscribe();
+    };
+  }, [user?.id]);
 
   if (!user || user.role !== 'admin') {
     return (
@@ -909,7 +920,7 @@ MANAGEMENT (METI)
                             <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-xs text-red-700 font-semibold">✕ Application was rejected.</div>
                           )}
 
-                          {/* Notes */}
+                         {/* Notes */}
                           <div className="border-t pt-4 space-y-2">
                             <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Registrar Notes</p>
                             <p className="text-xs text-gray-600 italic bg-gray-50 p-3 rounded-xl border">{selectedApp.notes || 'No notes recorded.'}</p>
@@ -917,7 +928,7 @@ MANAGEMENT (METI)
                               <input type="text" placeholder="Add note…" value={noteText} onChange={e => setNoteText(e.target.value)} className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none" />
                               <button onClick={() => { if(noteText.trim()) { adminAddNote(selectedApp.id, noteText); setNoteText(''); } }} className="px-4 bg-brand-primary text-white rounded-xl text-xs font-bold hover:bg-blue-900">Save</button>
                             </div>
-                          </div>
+                           </div>
                         </div>
                       )}
 

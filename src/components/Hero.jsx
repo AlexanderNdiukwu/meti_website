@@ -9,17 +9,42 @@ const imageModules = import.meta.glob(
   { eager: true }
 );
 
-// Each module's default export is the built asset URL. This only works for
-// files under src/ — files under public/ are copied as-is and invisible to
-// import.meta.glob, which is why the slideshow always fell back to one
-// static image regardless of how many photos were in the public folder.
+// Mobile-specific slideshow images — drop your mobile-cropped/generated
+// versions into this folder. Falls back to the desktop set automatically
+// if this folder is empty or doesn't exist yet.
+const mobileImageModules = import.meta.glob(
+  '/src/assets/Metiheroimagesslides-mobile/*.{jpeg,jpg,png,PNG,JPG,JPEG,webp}',
+  { eager: true }
+);
+
 const slideImages = Object.values(imageModules).map((mod) => mod.default);
+const mobileSlideImages = Object.values(mobileImageModules).map((mod) => mod.default);
 
 const Hero = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // If no images found, fallback to default hero images
-  const imagesToUse = slideImages.length > 0 ? slideImages : ['/images/desktophero.jpeg'];
+  // Detect mobile viewport, stays in sync if the window is resized
+  // or the device rotates.
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)');
+    setIsMobile(mql.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+
+  // Pick the right image set — mobile set if we're on mobile AND it
+  // actually has images, otherwise fall back to desktop.
+  const baseImages = isMobile && mobileSlideImages.length > 0 ? mobileSlideImages : slideImages;
+  const imagesToUse = baseImages.length > 0 ? baseImages : ['/images/desktophero.jpeg'];
+
+  // Reset to slide 0 when switching image sets (e.g. resizing across
+  // the mobile breakpoint) so we never point at an index that doesn't
+  // exist in the new array.
+  useEffect(() => {
+    setCurrentIdx(0);
+  }, [isMobile]);
 
   useEffect(() => {
     if (imagesToUse.length <= 1) return;
@@ -60,18 +85,6 @@ const Hero = () => {
         {/* Centered Typography Overlay with Typewriter Looping */}
         <HeroOverlay />
       </div>
-
-      {/* ── ScrollVelocity OUTSIDE the overflow-hidden container ───── */}
-      {/* <div className="w-full py-1 bg-black/80 ">
-        <ScrollVelocity
-          texts={['METI ·  INSTITUTE OF ENGINEERING, TECHNOLOGY AND INNOVATION MANAGEMENT ·', "Master's · PhD · PGD · Apply Now ·"]}
-          velocity={10}
-          className="text-gray-100/50 text-lg md:text-xl font-bold bg-black/20 uppercase tracking-widest"
-          numCopies={6}
-          damping={50}
-          stiffness={400}
-        />
-      </div> */}
     </>
   );
 };

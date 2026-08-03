@@ -286,10 +286,20 @@ export const useAdmissionsStore = create(
         const { error } = await supabase.auth.updateUser({ password: newPassword });
         if (error) throw error;
       },
-
-      updatePassword: async (newPassword) => {
+updatePassword: async (newPassword) => {
         const { error } = await supabase.auth.updateUser({ password: newPassword });
         if (error) throw error;
+      },
+
+      // Sends a transactional email via the Supabase Edge Function
+      // (send-email → Resend). Never throws — a failed email must
+      // never block the actual admin action that triggered it.
+      notifyByEmail: async (to, subject, html) => {
+        try {
+          await supabase.functions.invoke('send-email', { body: { to, subject, html } });
+        } catch (err) {
+          console.error('Email send failed:', err);
+        }
       },
 
       // ── WIZARD ──
@@ -417,7 +427,7 @@ export const useAdmissionsStore = create(
         return uploaded.url;
       },
 
-      // Accepts either a raw File (uploaded signature) or a data URL
+    // Accepts either a raw File (uploaded signature) or a data URL
       // string (from the signature canvas).
       uploadSignature: async (fileOrDataUrl) => {
         const { user } = get();
@@ -425,6 +435,30 @@ export const useAdmissionsStore = create(
         const file = typeof fileOrDataUrl === 'string' ? dataUrlToFile(fileOrDataUrl) : fileOrDataUrl;
         const uploaded = await uploadToBucket('signatures', user.profileId || user.id, file);
         return uploaded.url;
+      },
+
+      // Student-side live updates — mirrors the admin version but scoped
+      // to only this student's own applicant/document rows, plus all
+      // announcements (audience/programme filtering already handles who
+      // actually sees each one, done client-side in the pages themselves).
+      subscribeToOwnApplicantChanges: () => {
+        const { user } = get();
+        if (!user?.id) return null;
+        const channel = supabase
+          .channel(`student-live-${user.id}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'applicants', filter: `id=eq.${user.id}` }, async () => {
+            const full = await loadFullApplicant(user.id);
+            set({ user: full });
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'documents', filter: `applicant_id=eq.${user.id}` }, async () => {
+            const full = await loadFullApplicant(user.id);
+            set({ user: full });
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
+            get().fetchAnnouncements();
+          })
+          .subscribe();
+        return channel;
       },
 
       // ── ADMIN: FETCHING ──
@@ -447,7 +481,7 @@ export const useAdmissionsStore = create(
         }
       },
 
-      fetchAnnouncements: async () => {
+ fetchAnnouncements: async () => {
         const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
         if (data) {
           set({
@@ -465,9 +499,29 @@ export const useAdmissionsStore = create(
         }
       },
 
-      // ── ADMIN ACTIONS ──
+      // Subscribes the admin dashboard to live database changes — call
+      // once when AdminPanel mounts, unsubscribe on unmount.
+      subscribeToApplicantChanges: () => {
+        const channel = supabase
+          .channel('admin-live-updates')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'applicants' }, () => {
+            get().fetchAllApplicants();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'documents' }, () => {
+            get().fetchAllApplicants();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'payments' }, () => {
+            get().fetchAllApplicants();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
+            get().fetchAnnouncements();
+          })
+          .subscribe();
+        return channel;
+      },
 
-      adminApprovePayment: async (applicantId) => {
+      // ── ADMIN ACTIONS ──
+adminApprovePayment: async (applicantId) => {
         const applicant = get().applicants.find((a) => a.id === applicantId);
         await supabase.from('payments').update({ verified: true, verified_at: new Date().toISOString() }).eq('applicant_id', applicantId);
         const { error } = await supabase
@@ -475,16 +529,31 @@ export const useAdmissionsStore = create(
           .update({ payment_verified: true, status: applicant?.applicationFormSubmitted ? 'Under Review' : 'Application Incomplete' })
           .eq('id', applicantId);
         if (error) throw error;
+        if (applicant?.email) {
+          get().notifyByEmail(
+            applicant.email,
+            'Payment Confirmed — METI Admissions',
+            `<p>Hi ${applicant.name},</p><p>Your payment has been verified. You can now proceed to fill out your application form.</p>`
+          );
+        }
         await get().fetchAllApplicants();
       },
 
-      adminRejectPayment: async (applicantId, comment = '') => {
+   adminRejectPayment: async (applicantId, comment = '') => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
         await supabase.from('payments').update({ verified: false, rejection_reason: comment }).eq('applicant_id', applicantId);
         const { error } = await supabase
           .from('applicants')
           .update({ payment_submitted: false, payment_verified: false, status: 'Payment Pending', notes: comment })
           .eq('id', applicantId);
         if (error) throw error;
+        if (applicant?.email) {
+          get().notifyByEmail(
+            applicant.email,
+            'Payment Not Verified — METI Admissions',
+            `<p>Hi ${applicant.name},</p><p>Your submitted payment evidence could not be verified.</p><p><strong>Reason:</strong> ${comment}</p><p>Please review the payment details and upload a new receipt.</p>`
+          );
+        }
         await get().fetchAllApplicants();
       },
 
@@ -510,7 +579,8 @@ export const useAdmissionsStore = create(
 
       // Calls the atomic RPC from Step 4.5 — every business rule is
       // enforced INSIDE the database, not just by a greyed-out button.
-      adminConfirmApplicationForm: async (applicantId) => {
+     adminConfirmApplicationForm: async (applicantId) => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
         const { data, error } = await supabase.rpc('confirm_applicant_and_generate_number', {
           p_applicant_id: applicantId,
         });
@@ -518,11 +588,19 @@ export const useAdmissionsStore = create(
           alert(error.message);
           throw error;
         }
+        if (applicant?.email) {
+          get().notifyByEmail(
+            applicant.email,
+            'Application Confirmed — METI Admissions',
+            `<p>Hi ${applicant.name},</p><p>Your application has been approved. Your application number is:</p><p style="font-size:18px;font-weight:bold;">${data}</p><p>Log in to your dashboard to track next steps. Your admission letter will follow separately.</p>`
+          );
+        }
         await get().fetchAllApplicants();
         return data;
       },
 
-      adminReturnFormToStudent: async (applicantId, rejectedDocTypes, rejectionReason) => {
+   adminReturnFormToStudent: async (applicantId, rejectedDocTypes, rejectionReason) => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
         const { error } = await supabase
           .from('applicants')
           .update({
@@ -533,10 +611,29 @@ export const useAdmissionsStore = create(
           })
           .eq('id', applicantId);
         if (error) throw error;
+        if (applicant?.email) {
+          const docList = (rejectedDocTypes || [])
+            .map((key) => {
+              const label = DOC_LABELS[key] || key;
+              const reason = applicant.docApprovals?.[`${key}_reason`];
+              return reason ? `<li><strong>${label}:</strong> ${reason}</li>` : `<li><strong>${label}</strong></li>`;
+            })
+            .join('');
+          get().notifyByEmail(
+            applicant.email,
+            'Action Needed — Your METI Application Has Been Returned',
+            `<p>Hi ${applicant.name},</p>
+             <p>Some parts of your application were not approved and your form has been returned for correction.</p>
+             ${docList ? `<p><strong>Documents needing correction:</strong></p><ul>${docList}</ul>` : ''}
+             <p><strong>Overall note from the admissions team:</strong> ${rejectionReason}</p>
+             <p>Please log in to your dashboard to correct and resubmit.</p>`
+          );
+        }
         await get().fetchAllApplicants();
       },
 
-      adminRejectApplication: async (applicantId, comment = '') => {
+    adminRejectApplication: async (applicantId, comment = '') => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
         const { error } = await supabase
           .from('applicants')
           .update({
@@ -547,6 +644,13 @@ export const useAdmissionsStore = create(
           })
           .eq('id', applicantId);
         if (error) throw error;
+        if (applicant?.email) {
+          get().notifyByEmail(
+            applicant.email,
+            'Application Update — METI Admissions',
+            `<p>Hi ${applicant.name},</p><p>We regret to inform you that your application was not approved at this time.</p><p><strong>Reason:</strong> ${comment}</p><p>You can correct the issue and resubmit your application from your dashboard.</p>`
+          );
+        }
         await get().fetchAllApplicants();
       },
 
@@ -556,7 +660,8 @@ export const useAdmissionsStore = create(
         await get().fetchAllApplicants();
       },
 
-      adminSaveAdmissionLetter: async (applicantId, data) => {
+   adminSaveAdmissionLetter: async (applicantId, data) => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
         const payload = {
           admission_letter_title: data.letterTitle,
           admission_letter_acceptance: data.acceptanceFee,
@@ -578,6 +683,13 @@ export const useAdmissionsStore = create(
         }
         const { error } = await supabase.from('applicants').update(payload).eq('id', applicantId);
         if (error) throw error;
+        if (data.sent && applicant?.email) {
+          get().notifyByEmail(
+            applicant.email,
+            'Your Admission Letter is Ready — METI',
+            `<p>Hi ${applicant.name},</p><p>Congratulations! Your admission letter is ready. Log in to your dashboard to download your Admission Letter and Acceptance Letter.</p>`
+          );
+        }
         await get().fetchAllApplicants();
       },
 

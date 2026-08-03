@@ -1,15 +1,24 @@
 // FILE: src/pages/dashboard/Announcements.jsx
+import { useEffect } from 'react';
 import { useAdmissionsStore } from '../../store/admissionsStore';
 
 export default function DashboardAnnouncements() {
-  const { user, announcements } = useAdmissionsStore();
+  const { user, announcements, subscribeToOwnApplicantChanges } = useAdmissionsStore();
+
+  // Live updates — new announcements appear without a manual refresh.
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = subscribeToOwnApplicantChanges();
+    return () => { if (channel) channel.unsubscribe(); };
+  }, [user?.id]);
 
   const studentProg = user?.selectedProgram === 'Masters' ? 'msc'
     : user?.selectedProgram === 'PhD' ? 'phd'
     : user?.selectedProgram === 'PGD' ? 'pgd' : null;
 
-  const filtered = (announcements || [])
+const filtered = (announcements || [])
     .filter(a => !a.programme_filter || a.programme_filter === studentProg)
+    .filter(a => a.audience !== 'paid_only' || user?.paymentVerified)
     .sort((a, b) => new Date(b.created_at || b.createdAt) - new Date(a.created_at || a.createdAt));
 
   return (

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router'
 import ToastContainer from './components/ToastContainer'
+import LoadingScreen from './components/LoadingScreen'
 import { useAdmissionsStore } from './store/admissionsStore'
 import './index.css'
 import 'primereact/resources/themes/lara-light-blue/theme.css'
@@ -26,12 +27,8 @@ function Root() {
     return () => subscription?.unsubscribe();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-sm text-gray-400 font-semibold">Loading…</p>
-      </div>
-    );
+if (loading) {
+    return <LoadingScreen />;
   }
 
   return (
