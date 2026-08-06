@@ -29,7 +29,7 @@ const Navbar = () => {
 
   const programLinks = [
     { name: 'Postgraduate Diploma (PGD)', path: '/pgd', desc: 'Foundational bridge for various academic backgrounds' },
-    { name: 'Masters Programs (M.Sc)', path: '/masters', desc: 'Advanced technical acumen and strategic business leadership' },
+    { name: 'Masters Programs (MSc)', path: '/masters', desc: 'Advanced technical acumen and strategic business leadership' },
     { name: 'PhD Programs', path: '/phd', desc: 'Deep, independent doctoral research and innovation' }
   ];  
 

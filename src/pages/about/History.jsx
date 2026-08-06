@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Calendar, Award, BookOpen, Clock, Users } from 'lucide-react';
 import About from '../About';
+import metilogo from '../../assets/unilogos/metilogo1.png';
 
 const TIMELINE_EVENTS = [
   {
@@ -41,6 +42,12 @@ export default function History() {
       <div className="container  px-5  space-y-16">
         
         {/* Page Header */}
+        <div className="flex justify-center gap-3 mb-6">
+
+            <img src={metilogo} alt="METI Logo" className="w-39 h-30" />
+
+        </div>
+
         <div className="text-center">
           <span className="text-xl border font-bold bg-blue-50 text-uniport-blue px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">
             Our Legacy
