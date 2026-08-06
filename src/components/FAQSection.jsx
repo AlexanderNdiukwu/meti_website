@@ -6,7 +6,7 @@ const FAQSection = () => {
 
   const faqs = [
     {
-      question: "What are the admission requirements for the Master's (MSc/MEng) programmes?",
+      question: "What are the admission requirements for the Master's (MSc) programmes?",
       answer: "Candidates must possess a bachelor's degree (B.Eng., B.Tech., or B.Sc.) in an Engineering discipline or Pure and Applied science disciplines with a minimum of Second Class Lower division. Candidates with a PGD from METI or related disciplines with a minimum CGPA of 3.5 (on a 5.0 scale) are also eligible."
     },
     {
@@ -15,7 +15,7 @@ const FAQSection = () => {
     },
     {
       question: "How long does it take to complete the programmes?",
-      answer: "For PGD and Masters: Full-time runs for 12-24 months, while Part-time runs for 24-36 months. For PhD: Full-time runs for 24-48 months, while Part-time runs for 36-60 months."
+      answer: "For PGD and Masters: Full-time runs for 12 months, while Part-time runs for 24 months. For PhD: Full-time runs for 36 months, while Part-time runs for 48 months."
     },
     {
       question: "What is the mode of programme delivery?",

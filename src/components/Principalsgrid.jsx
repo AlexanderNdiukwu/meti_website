@@ -24,19 +24,19 @@ const facilitators = [
   {
     
     name: "PROFESSOR CHUKWUDI O. ONYEASO",
-    role: "Deputy Vice-Chancellor",
+    role: "Deputy Vice-Chancellor ( Admin & Adv )",
     special: "BDS [IB], FWACS, FWFO, MSIL, MICS,FICOI, D.Sc, FIMC, CMC",
     image: "pal1.jpeg"
   },
   {
     name: "PROFESSOR ROSEMARY N. OGU",
-    role: "Deputy Vice-Chancellor",
+    role: "Deputy Vice-Chancellor ( Academic )",
     special: "MBBS, MScRH, FWACS, FICS, MScRH[UNIBEN], FMCOG",
     image: "pal2.jpeg"
   },
   {
     name: "PROFESSOR ANGELA I. FRANK-BRIGGS",
-    role: "Deputy Vice-Chancellor",
+    role: "Deputy Vice-Chancellor ( Research & Development )",
     special: "MBBch [UPH], FMC",
     image: "pal3.jpeg"
   },
@@ -82,7 +82,7 @@ const Principalsgrid = () => {
 
 
     
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-6 pt-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
       
     
       {facilitators.map((staff, idx) => (

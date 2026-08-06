@@ -115,8 +115,7 @@ export default function Support() {
           </div>
           <div className="space-y-4 text-gray-600 text-lg leading-relaxed">
             <p>
-              The <strong>Institute of Engineering, Technology and Innovation Management (METI)</strong> — formerly the 
-              Center for Engineering and Technology Management (CETM) — is a premier postgraduate institute under the 
+              The <strong>Institute of Engineering, Technology and Innovation Management (METI)</strong>  is a postgraduate institute under the 
               <strong> Faculty of Engineering, University of Port Harcourt</strong>.
             </p>
             <p>
@@ -125,9 +124,9 @@ export default function Support() {
               aligning its programmes with international standards set by IAMOT, PICMET, and IEEE-IEMS.
             </p>
             <p>
-              METI offers <strong>Postgraduate Diploma (PGD)</strong>, <strong>Master of Engineering (M.Eng)</strong>, and 
-              <strong> Doctor of Philosophy (PhD)</strong> programmes in specialisations such as Supply Chain Technology 
-              Management, Industrial Systems & Process, Production & Manufacturing, Artificial Intelligence & Automation, 
+              METI offers <strong>Postgraduate Diploma (PGD)</strong>, <strong>Master of Engineering (M.sc)</strong>, and 
+              <strong> Doctor of Philosophy (PhD)</strong> programmes in specialisations such as Engineering Innovation and Technology Management,  Supply Chain Technology 
+              Management, Industrial Systems & Process Technology Management  , Production & Manufacturing Technology Management , Artificial Intelligence & AutomationManagement, 
               and Energy Technology Management — equipping students with the skills needed for Industry 4.0 and beyond.
             </p>
           </div>

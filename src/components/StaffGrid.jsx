@@ -18,23 +18,23 @@ const facilitators = [
   {
     name: "Dr. A. Big-Alabo",
     role: "Director",
-    special: "B.ENG (UPH) , M.SC , PH.D (Glasgow) , MIOP(UK) , MIA ENG (Hong Kong)  , MNSE (Nig) , R.ENG (COREN)",
+    special: "B.Eng (UPH), MSc , PhD (Glasgow), MIOP(UK), MIAENG (Hong Kong), MNSE (Nig) , R.ENG (COREN)",
     image: "staff_of_meti7.jpeg"
   },
   {
-    name: "Mrs Helen Ezekiel",
+    name: "Mrs. Helen Ezekiel",
     role: "P.A.R (ADMIN HEAD)",
     special: "B.Sc., MSc. (UPH) ",
     image: "staff_of_meti1.jpeg"
   },
   {
-    name: "Mrs Rose Ugari",
+    name: "Mrs. Rose Ugari",
     role: "Deputy Bursar (Finance)",
     special: "B.Sc. (UPH) , CNA ",
     image: "staff_of_meti3.jpeg"
   },
   {
-    name: "Mrs Ronke A. Rotimi",
+    name: "Mrs. Ronke A. Rotimi",
     role: "P.A.R (Admin)",
     special: "B.Tech. (FUT Minna), PGD (UPH)",
     image: "staff_of_meti2.jpeg"
@@ -46,13 +46,13 @@ const facilitators = [
     image: "staff_of_meti4.jpeg"
   },
   {
-    name: "Mrs Florence Ogbegbe",
+    name: "Mrs. Florence Ogbegbe",
     role: "Care-Taker",
     special: "O\'Level",
     image: "staff_of_meti5.jpeg"
   },
   {
-    name: "Mrs Beauty Ichechukwu",
+    name: "Mrs. Beauty Ichechukwu",
     role: "Cleaner",
     special: "O\'Level",
     image: "staff_of_meti6.jpeg"

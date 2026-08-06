@@ -98,7 +98,7 @@ const PGD = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Full-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" leading-relaxed  mb-2">
                       The full-time programme runs for continuous immersive coursework and projects.
                     </p>
                     <div className="inline-flex gap-2">
@@ -115,7 +115,7 @@ const PGD = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">Part-Time Programme</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-2">
+                    <p className=" leading-relaxed mb-2">
                       Flexible evening or weekend study modules for working professionals.
                     </p>
                     <div className="inline-flex gap-2">

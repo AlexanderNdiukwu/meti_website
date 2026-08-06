@@ -242,7 +242,7 @@ const CourseRecommender = () => {
                           {suggestion.matchPercentage}% Match
                         </span>
                       </div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">M.Sc / M.Eng / PGD / PhD</span>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">M.Sc / PGD / PhD</span>
                       <h3 className="text-base font-bold text-gray-900 mb-2 leading-tight">{suggestion.title}</h3>
                       <p className="text-gray-500 mb-6 text-xs leading-relaxed">{suggestion.desc}</p>
                     </div>

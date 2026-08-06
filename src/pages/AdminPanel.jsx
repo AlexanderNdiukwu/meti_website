@@ -872,8 +872,19 @@ MANAGEMENT (METI)
                       )}
 
                       {/* ══ DECISION ══ */}
-                      {activeDetailTab === 'Decision' && (
+                   {activeDetailTab === 'Decision' && (
                         <div className="space-y-4">
+                          {/* ⚠️ TEMP DEBUG — remove once the confirm-button issue is solved */}
+                          <div className="bg-black text-green-400 font-mono text-[10px] rounded-xl p-3 space-y-1">
+                            <p>status: "{selectedApp.status}"</p>
+                            <p>paymentVerified: {String(selectedApp.paymentVerified)}</p>
+                            <p>applicationFormSubmitted: {String(selectedApp.applicationFormSubmitted)}</p>
+                            <p>uploadedDocs keys: {JSON.stringify(Object.keys(selectedApp.uploadedDocs || {}))}</p>
+                            <p>docApprovals: {JSON.stringify(selectedApp.docApprovals || {})}</p>
+                            <p>allDocsApproved(): {String(allDocsApproved(selectedApp))}</p>
+                            <p>canConfirm(): {String(canConfirm(selectedApp))}</p>
+                          </div>
+
                           {/* Timeline */}
                           <div>
                             <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold mb-3">Application Timeline</p>
@@ -1053,7 +1064,7 @@ MANAGEMENT (METI)
               <div className="grid gap-4 md:grid-cols-2">
                   <div className="rounded-2xl border border-gray-100 p-4 bg-gray-50">
                     <p className="font-bold text-gray-900 text-sm">Admin Email Aliases</p>
-                    <p className="text-xs text-gray-500 mt-1">meti@uniport.edu.ng · ndiukwuchukwuemeka@gmail.com</p>
+                    <p className="text-xs text-gray-500 mt-1">meti@uniport.edu.ng </p>
                   </div>
                  <div className="rounded-2xl border border-gray-100 p-4 bg-gray-50">
                     <p className="font-bold text-gray-900 text-sm">Workflow Mode</p>

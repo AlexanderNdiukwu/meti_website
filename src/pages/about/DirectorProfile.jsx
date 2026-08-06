@@ -91,7 +91,7 @@ export default function DirectorProfile() {
                 Scholarly Publications
               </h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                Dr. Big-Alabo has published over <span className="font-bold text-gray-900">60 scholarly articles</span> in highly reputable local and international journals.
+                 Dr. Big-Alabo has published over <span className="font-bold text-gray-900"> 60 scholarly articles</span> in highly reputable local and international journals. Co-inventor for Two National Patents
               </p>
               <div className="border border-gray-100 p-4 rounded-2xl bg-gray-50 flex items-center justify-between text-xs">
                 <span className="text-gray-500 text-lg font-semibold">Specialization Area:</span>
@@ -134,15 +134,15 @@ export default function DirectorProfile() {
               <div className="space-y-3 text-lg text-gray-600">
                 <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
                   <span className="font-bold text-gray-900 block leading-tight">Director</span>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">METI (2025-Date)</span>
+                  <span className="text-sm  font-extrabold uppercase tracking-wider">METI (2025 - Present)</span>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
                   <span className="font-bold text-gray-900 block leading-tight">Head of Department</span>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Mechanical Engineering (2020 - 2022)</span>
+                  <span className="text-sm  font-extrabold uppercase tracking-wider">Mechanical Engineering (2020 - 2022)</span>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
                   <span className="font-bold text-gray-900 block leading-tight">Assistant Director</span>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">IPTTO Office, UNIPORT</span>
+                  <span className="text-sm  font-extrabold uppercase tracking-wider">IPTTO Office, UNIPORT</span>
                 </div>
               </div>
             </div>

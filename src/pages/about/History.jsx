@@ -12,7 +12,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "2010 - 2024",
-    title: "Academic Program and Commencement",
+    title: "Academic Program Commencement",
     desc: "Between 2010 and 2024, CETM offered postgraduate certificate/diploma programmes in Project Management, ICT Networks, Maintenance Management, and Business Information Systems, as well as Master and PhD programmes in Engineering Management, Technology Management, and ICT Management.",
     icon: <BookOpen className="w-5 h-5 text-white" />,
     color: "bg-blue-600"
@@ -20,7 +20,7 @@ const TIMELINE_EVENTS = [
   {
     year: "2025",
     title: "Program Restructuring",
-    desc: "In 2025, CETM launched new programmes matching current technological developments and labour market demands. New postgraduate programmes were introduced leading to a Post Graduate Diploma (PGD) in Engineering Innovation and Technology Management, Master of Science (Msc), and Doctor of Philosophy (PhD) in specialties such as Engineering Innovation and Technology Management , Supply Chain Technology Management, Industrial Systems & Process Technology Management, Production & Manufacturing Technology Management , Artificial Intelligence & Automation Management, and Energy Technology Management.",
+    desc: "In 2025, CETM launched new programmes matching current technological developments and labour market demands. New postgraduate programmes were introduced leading to a Post Graduate Diploma (PGD) in Engineering Innovation and Technology Management, Master of Science (MSc), and Doctor of Philosophy (PhD) in specialties such as Engineering Innovation and Technology Management , Supply Chain Technology Management, Industrial Systems & Process Technology Management, Production & Manufacturing Technology Management , Artificial Intelligence & Automation Management, and Energy Technology Management.",
     icon: <Award className="w-5 h-5 text-white" />,
     color: "bg-emerald-600"
   }

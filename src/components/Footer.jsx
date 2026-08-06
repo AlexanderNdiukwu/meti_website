@@ -11,19 +11,8 @@ const Footer = () => {
             Institute of Engineering, Technology and Innovation Management.
           </p>
 
-          <div className='flex gap-6 items-center'>
-
-           <div className='bg-white px-6 py-0.5  mt-2 animate-pulse text-center rounded-full text-black font-light hover:border hover:border-black hover:text-blue-700'>
-            <Link to={'/signup'}>
-              APPLY HERE
-            </Link>
-            </div>
-
-            <ArrowBigLeft className='animate-ping'/>
-
-
-          </div>
-      <p className='py-2 mt-4'> <span className='font-bold text-uniport-blue'>MOTTO:</span> DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
+         
+      <p className='py-2 mt-4'> <span className='font-bold '>MOTTO:</span> Driving Sustainable Development Through Innovation</p>
 
 
         </div>
@@ -47,6 +36,19 @@ const Footer = () => {
             <li><Link to="/phd" className="hover:text-white transition">PhD</Link></li>
             <li><Link to="/pgd" className="hover:text-white transition">PGD</Link></li>
           </ul>
+
+           <div className='flex gap-6 pt-6 items-center'>
+
+           <div className='bg-white px-6 py-0.5  mt-2 animate-pulse text-center rounded-full text-black font-light hover:border hover:border-black hover:text-blue-700'>
+            <Link to={'/signup'}>
+              APPLY HERE
+            </Link>
+            </div>
+
+            <ArrowBigLeft className='animate-ping'/>
+
+
+          </div>
         </div>
 
       
@@ -122,7 +124,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className="container mx-auto px-6 mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
+      <div className="container mx-auto px-6 mt-12 pt-8 border-t text-xl border-gray-800 text-center ">
         <p>&copy; {new Date().getFullYear()} METI - University of Port Harcourt. All rights reserved.</p>
       </div>
     </footer>
