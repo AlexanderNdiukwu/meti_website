@@ -3,11 +3,11 @@ import { CheckCircle2 } from 'lucide-react';
 const WhyChooseMeti = () => {
   const reasons = [
     { title: "World-Class Facilitators", desc: "Learn from industry veterans and top academic minds." },
-    { title: "Cutting-Edge Research", desc: "Engage in research that solves real-world technological challenges." },
     { title: "Industry Connections", desc: "Extensive networking opportunities with leading tech and engineering firms." },
     { title: "Modern Curriculum", desc: "Programs tailored to current labor market demands and Industry 4.0." },
     { title: "Flexible Learning", desc: "Hybrid delivery modes combining virtual and in-person experiences." },
-    { title: "Career Acceleration", desc: "Equipping you to transition into senior management and executive roles." }
+    { title: "Career Acceleration", desc: "Equipping you to transition into senior management and executive roles." },
+    { title: "Flexible Payment Plan", desc: "Tuition fees can be paid in installments" },
   ];
 
   return (

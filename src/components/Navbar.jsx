@@ -63,8 +63,8 @@ const Navbar = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1
+        staggerChildren: 0.15,
+        delayChildren: 0.5
       }
     }
   };
@@ -265,9 +265,30 @@ const Navbar = () => {
       </nav>
 
       {/* LEFT OVERLAY MENU */}
-      <AnimatePresence>
-        {menuOpen && (
-          <>
+  
+<AnimatePresence>
+  {menuOpen && (
+    <>
+      {/* Overlay */}
+   <motion.div
+  initial={{ x: "-100%" }}
+  animate={{ x: 0 }}
+  exit={{ x: "-100%" }}
+  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+  className="hidden lg:block fixed top-0 right-9 h-full w-full z-60 overflow-hidden"
+>
+  <div className="">
+    <img
+      src="/images/metihero12.jpeg"
+      alt="METI"
+      className="w-full h-full object-cover"
+    />
+
+    {/* Dark Overlay */}
+    <div className="absolute inset-0 bg-black/40" />
+  
+  </div>
+</motion.div>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -280,16 +301,16 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full lg:w-110  w-80 sm:w-100 bg-white z-50 shadow-2xl flex flex-col"
+         className="fixed top-0 right-0 h-full lg:w-120 w-80 sm:w-100 bg-white z-100 shadow-2xl flex flex-col"
             >
-              <div className="p-6 flex justify-between items-center border-b border-gray-100">
+              <div className="p-6  flex justify-between items-center border-b border-gray-100">
                 <div className="flex items-center gap-2">
                    <img 
                   src="/images/metilogo1.png" 
                   alt="METI Logo" 
-                  className="size-12 object-cover rounded-full shadow-sm" 
+                  className="lg:size-20 size-15 object-cover rounded-full shadow-sm" 
                 />
-                  <span className="text-xl font-bold text-gray-900 ">METI</span>
+                  <span className="lg:text-2xl text-xl font-bold text-gray-900 ">METI</span>
                 </div>
                 <button onClick={() => setMenuOpen(false)} className="p-2 text-gray-500 hover:text-gray-900 bg-gray-100 rounded-full cursor-pointer">
                   <X size={20} />
@@ -300,7 +321,7 @@ const Navbar = () => {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-                className="flex-1 overflow-y-auto mt-1 py-6 px-4"
+                className="flex-1 lg:pt-15 pt-9 overflow-y-auto mt-1 py-6 px-4"
               >
                 <div className="space-y-1">
                   {sideMenuLinks.map((link) => (

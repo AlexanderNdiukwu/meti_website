@@ -64,6 +64,12 @@ const facilitators = [
     image: "fat9.jpeg"
   },
     {
+    name: "Prof. Chinwuba Victor  Ossia",
+    role: "Professor of Mechanical Engineering",
+    special: "",
+    image: "fat13.jpeg"
+  },,
+    {
     name: "Dr. Ifeoma Asianuba",
     role: "Associate Professor of Electrical/Electronic Engineering",
     special: "Assistant Director Emerald Energy Institute, Uniport.",
@@ -74,6 +80,12 @@ const facilitators = [
     role: "Associate Professor of Petroleum & Gas Engineering",
     special: "Former HOD, Petroleum & Gas Engineering, Uniport.\nFormer Deputy Director IPES, Uniport.",
     image: "fat11.jpeg"
+  },
+    {
+    name: "Engr. Dr. Martins Obaseki ",
+    role: "Associate Professor of Industrial & Manufacturing Engineering ",
+    special: "Dean, Faculty of Engineering,  Nigeria Maritime University.",
+    image: "fat12.jpeg"
   }
 
 ];
