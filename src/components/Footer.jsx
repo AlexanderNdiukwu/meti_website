@@ -55,9 +55,9 @@ const Footer = () => {
 
 
         <div>
-          <h4 className="font-semibold mb-4 ">University</h4>
+          <h4 className="font-semibold mb-4 ">Address</h4>
           <ul className=" text-gray-400">
-            <li className='border-b w-14'>Address</li>
+            {/* <li className='border-b w-14'></li> */}
 
             <div className='flex gap-2 items-start'>
               <MapPin className='lg:size-14 size-12'/>

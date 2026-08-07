@@ -65,8 +65,8 @@ const facilitators = [
   },
     {
     name: "Prof. Chinwuba Victor  Ossia",
-    role: "Professor of Mechanical Engineering",
-    special: "",
+    role: "Professor of Tribology",
+    special: "Former HOD, Mechanical Engineering ",
     image: "fat13.jpeg"
   },,
     {
@@ -84,7 +84,7 @@ const facilitators = [
     {
     name: "Engr. Dr. Martins Obaseki ",
     role: "Associate Professor of Industrial & Manufacturing Engineering ",
-    special: "Dean, Faculty of Engineering,  Nigeria Maritime University.",
+    special: "Ag. Dean, Faculty of Engineering,  Nigeria Maritime University.",
     image: "fat12.jpeg"
   }
 
