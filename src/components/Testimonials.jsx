@@ -6,7 +6,7 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: "Engr. Sarah O.",
-      role: "M.Eng Graduate",
+      role: "MSc Graduate",
       company: "Leading Tech Firm",
       quote: "The combination of deep engineering knowledge and business strategy completely transformed my career trajectory. I moved into a senior management role just months after graduating."
     },

@@ -11,7 +11,7 @@ const FAQSection = () => {
     },
     {
       question: "What are the requirements for the PhD programmes?",
-      answer: "Candidates are required to possess a Master's degree (M.Eng., M.Tech., or M.Sc.) in an Engineering discipline or Pure and Applied science disciplines, or hold a degree from any METI programme with a minimum CGPA of 3.5 on a 5.0 scale."
+      answer: "Candidates are required to possess a Master's degree (M.Eng., M.Tech., or MSc.) in an Engineering discipline or Pure and Applied science disciplines, or hold a degree from any METI programme with a minimum CGPA of 3.5 on a 5.0 scale."
     },
     {
       question: "How long does it take to complete the programmes?",

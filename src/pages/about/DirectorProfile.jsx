@@ -91,7 +91,7 @@ export default function DirectorProfile() {
                 Scholarly Publications
               </h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                 Dr. Big-Alabo has published over <span className="font-bold text-gray-900"> 60 scholarly articles</span> in highly reputable local and international journals. Co-inventor for Two National Patents
+                 Dr. Big-Alabo has published over <span className="font-bold text-gray-900"> 60 scholarly articles</span> in highly reputable local and international journals. Co-inventor for two(2) National Patents
               </p>
               <div className="border border-gray-100 p-4 rounded-2xl bg-gray-50 flex items-center justify-between text-xs">
                 <span className="text-gray-500 text-lg font-semibold">Specialization Area:</span>
@@ -295,7 +295,7 @@ export default function DirectorProfile() {
         </span>
       </div>
 
-      <div className="rounded-xl border border-gray-200 p-4 bg-blue-50 border-blue-200">
+      <div className="rounded-xl border border-gray-200 p-4 ">
         <span className="font-bold block text-uniport-blue">
           Innovator of the Year (2023)
         </span>

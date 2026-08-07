@@ -160,7 +160,7 @@ function PdfHeader({ uniportLogo, metiLogo }) {
       {/* METI logo — right */}
       {metiLogo
         ? <Image src={metiLogo} style={{ width: 55, height: 55, marginLeft: 8 }} />
-        : <View style={{ width: 55, height: 55, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
+        : <View style={{ width: 55, height: 49, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
       }
     </View>
   );
@@ -202,7 +202,7 @@ export default function ApplicationFormPDF({ application, uniportLogo, metiLogo 
   // Programme label mapping
   const progLabelMap = {
     PGD:     'Post Graduate Diploma (PGD)',
-    Masters: 'Master of Engineering / Science (M.Eng / MSc)',
+    Masters: 'Master of Science ( MSc)',
     PhD:     'Doctor of Philosophy (PhD)',
   };
   const programmeLabel = progLabelMap[application?.selectedProgram || application?.programme]

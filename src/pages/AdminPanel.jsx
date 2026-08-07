@@ -14,7 +14,7 @@ import {
   Search, ChevronRight, CheckCircle, XCircle, FileText, CreditCard,
   ClipboardCheck, AlertCircle, Download, Eye, X, Menu, Paperclip,
   CheckCircle2, Clock, FileSignature, Printer, Upload, RefreshCw,
-  ThumbsUp, ThumbsDown, Send, Trash2, RotateCcw
+  ThumbsUp, ThumbsDown, Send, Trash2, RotateCcw ,Loader2
 } from 'lucide-react';
 
 
@@ -150,7 +150,7 @@ const {
     adminApproveDoc, adminRejectDoc,
     adminConfirmApplicationForm, adminRejectApplication,
     adminReturnFormToStudent, adminSaveAdmissionLetter,
-    adminAddNote, adminResetProgrammeSession,
+adminAddNote, adminResetProgrammeSession, adminSetNextApplicationNumber,
 sendAnnouncement, deleteAnnouncement,
     resetAllData, logout, getFileSignedUrl, updatePassword,
     subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
@@ -168,8 +168,9 @@ sendAnnouncement, deleteAnnouncement,
   const [payRejectOpen,    setPayRejectOpen]    = useState(false);
   const [payRejectComment, setPayRejectComment] = useState('');
   // Doc rejection
-  const [rejectingDocKey,  setRejectingDocKey]  = useState(null);
+const [rejectingDocKey,  setRejectingDocKey]  = useState(null);
   const [docRejectReason,  setDocRejectReason]  = useState('');
+  const [approvingDocKey,  setApprovingDocKey]  = useState(null);
   // App rejection
   const [appRejectOpen,    setAppRejectOpen]    = useState(false);
   const [appRejectComment, setAppRejectComment] = useState('');
@@ -185,9 +186,14 @@ sendAnnouncement, deleteAnnouncement,
   const [settingsForm,     setSettingsForm]     = useState({ currentPassword:'', newPassword:'', confirmPassword:'' });
   const [settingsMsg,      setSettingsMsg]      = useState('');
   // New admission session reset
+// New admission session reset
   const [resetProgramme,   setResetProgramme]   = useState('PGD');
   const [resetSession,     setResetSession]     = useState(() => getSessionOptions()[1]);
   const [sessionResetMsg,  setSessionResetMsg]  = useState('');
+  // Manual application-number override
+  const [manualProgramme,  setManualProgramme]  = useState('PGD');
+  const [manualNextNum,    setManualNextNum]    = useState('');
+  const [manualMsg,        setManualMsg]        = useState('');
   // Announcement
   const [annTitle,   setAnnTitle]   = useState('');
   const [annMessage, setAnnMessage] = useState('');
@@ -200,7 +206,9 @@ sendAnnouncement, deleteAnnouncement,
   // const [testUrl,  setTestUrl]  = useState(null);
   // const [testName, setTestName] = useState(null);
   // PDF loading
+// PDF loading
   const [pdfLoading, setPdfLoading] = useState(null);
+  const [previewFile, setPreviewFile] = useState(null);
 
   useEffect(() => {
     const p = location.pathname;
@@ -277,8 +285,11 @@ useEffect(() => {
     app.status === 'Under Review' &&
     allDocsApproved(app);
 
-  // Generate and download PDF (admission or acceptance)
- const handleDownloadPDF = async (type, overrides = {}) => {
+  
+// Generate PDF — mode 'download' saves the file, mode 'preview' opens
+  // it in-page instead so the admin can check formatting without a
+  // download round-trip every single time they tweak a field.
+ const handleDownloadPDF = async (type, overrides = {}, mode = 'download') => {
     if (!selectedApp) return;
     setPdfLoading(type);
     try {
@@ -321,12 +332,17 @@ useEffect(() => {
         ).toBlob();
       }
 
-      const url  = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href     = url;
-      link.download = `METI_${type === 'admission' ? 'Admission' : 'Acceptance'}_Letter_${(selectedApp.name||'').replace(/\s+/g,'_')}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
+    const url  = URL.createObjectURL(blob);
+      const fileName = `METI_${type === 'admission' ? 'Admission' : 'Acceptance'}_Letter_${(selectedApp.name||'').replace(/\s+/g,'_')}.pdf`;
+      if (mode === 'preview') {
+        setPreviewFile({ url, name: fileName });
+      } else {
+        const link = document.createElement('a');
+        link.href     = url;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
     } catch (err) {
       console.error('PDF error:', err);
       alert('PDF generation failed. Ensure @react-pdf/renderer is installed and the PDF component file exists.');
@@ -441,7 +457,8 @@ const handleConfirmApp = async () => {
       {mobileSidebarOpen && (
         <><div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setMobileSidebarOpen(false)} /><SidebarContent mobile /></>
       )}
-     {viewerFile && <FileViewerModal fileUrl={viewerFile.url} fileName={viewerFile.name} onClose={() => setViewerFile(null)} onDownload={() => downloadFile(viewerFile.url, viewerFile.name)} />}
+  {viewerFile && <FileViewerModal fileUrl={viewerFile.url} fileName={viewerFile.name} onClose={() => setViewerFile(null)} onDownload={() => downloadFile(viewerFile.url, viewerFile.name)} />}
+     {previewFile && <FileViewerModal fileUrl={previewFile.url} fileName={previewFile.name} onClose={() => setPreviewFile(null)} onDownload={() => downloadFile(previewFile.url, previewFile.name)} />}
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile top bar */}
@@ -776,8 +793,16 @@ MANAGEMENT (METI)
                                       <div className="flex items-center gap-1.5 flex-wrap">
                                         <button onClick={openDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Eye size={12} /> View</button>
                                         <button onClick={downloadDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Download size={12} /> Download</button>
-                                        {approval !== 'approved'
-                                          ? <button onClick={() => { adminApproveDoc(selectedApp.id, key); setRejectingDocKey(null); }} className="flex items-center gap-1 px-2.5 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700"><ThumbsUp size={12} /> Approve</button>
+                                       {approval !== 'approved'
+                                          ? <button onClick={async () => {
+                                              setApprovingDocKey(key);
+                                              setRejectingDocKey(null);
+                                              try { await adminApproveDoc(selectedApp.id, key); }
+                                              finally { setApprovingDocKey(null); }
+                                            }} disabled={approvingDocKey === key} className="flex items-center gap-1 px-2.5 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 disabled:opacity-60">
+                                              {approvingDocKey === key ? <Loader2 size={12} className="animate-spin" /> : <ThumbsUp size={12} />}
+                                              {approvingDocKey === key ? 'Approving…' : 'Approve'}
+                                            </button>
                                           : <span className="flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
                                         }
                                         {approval !== 'rejected'
@@ -965,13 +990,14 @@ MANAGEMENT (METI)
 
                       {/* ══ LETTERS TAB ══ */}
                       {activeDetailTab === 'Letters' && (
-                      <LettersTab
+                    <LettersTab
                           app={selectedApp}
                           pdfLoading={pdfLoading}
                           onDownloadAdmission={(liveFields) => handleDownloadPDF('admission', liveFields)}
                           onDownloadAcceptance={() => handleDownloadPDF('acceptance')}
+                          onPreviewAdmission={(liveFields) => handleDownloadPDF('admission', liveFields, 'preview')}
+                          onPreviewAcceptance={() => handleDownloadPDF('acceptance', {}, 'preview')}
                           onSaveAdmissionLetter={(data) => adminSaveAdmissionLetter(selectedApp.id, data)}
-                         
                         />
                       )}
                     </div>
@@ -1036,13 +1062,14 @@ MANAGEMENT (METI)
                     ? <button onClick={() => annFileRef.current?.click()} className="w-full border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 font-semibold hover:border-brand-primary flex items-center justify-center gap-1"><Paperclip size={13} /> Attach file (optional)</button>
                     : <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2"><span className="text-xs font-semibold truncate">{annFile.name}</span><button onClick={() => { setAnnFile(null); if(annFileRef.current) annFileRef.current.value=''; }} className="text-red-500 text-xs font-bold ml-2 shrink-0">Remove</button></div>
                   }
-               <button onClick={async () => {
+              <button onClick={async () => {
                     if (!annMessage.trim()) return;
                     try {
                       await sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, file: annFile, programme_filter: annTarget==='all'?null:annTarget, audience: annAudience });
                       setAnnTitle(''); setAnnMessage(''); setAnnFile(null); setAnnTarget('all'); setAnnAudience('all_applicants');
                     } catch (err) {
-                      alert('Failed to publish announcement. Please try again.');
+                      console.error('Announcement publish error:', err);
+                      alert(`Failed to publish announcement: ${err.message || 'Unknown error — check the console for details.'}`);
                     }
                   }} disabled={!annMessage.trim()} className="w-full rounded-full bg-brand-primary                                                                           text-white font-bold py-2.5 text-sm disabled:opacity-40 flex items-center justify-center gap-2">
                     <Send size={14} /> Publish Announcement
@@ -1118,7 +1145,7 @@ MANAGEMENT (METI)
                     </div>
                   </div>
                   
-                  {sessionResetMsg && <p className="text-xs text-green-600 font-semibold">{sessionResetMsg}</p>}
+                 {sessionResetMsg && <p className="text-xs text-green-600 font-semibold">{sessionResetMsg}</p>}
                   <div className="text-[11px] text-gray-400 pt-1 border-t border-gray-100 grid grid-cols-3 gap-2">
                     {['PGD','MSC','PHD'].map(code => (
                       <div key={code}>
@@ -1128,7 +1155,55 @@ MANAGEMENT (METI)
                     ))}
                   </div>
                 </div>
-                
+
+                {/* Nudges the counter without wiping the whole session —
+                    distinct from the full reset above. */}
+                <div className="rounded-2xl border border-gray-100 p-5 space-y-3">
+                  <p className="font-bold text-gray-900 text-sm">Set Next Application Number Manually</p>
+                  <p className="text-xs text-gray-500">
+                    Only changes the counter going forward — it never renames a number already
+                    issued to a student. If the number you set has already been used, generation
+                    will fail with a clear error instead of creating a duplicate.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Programme</label>
+                      <select value={manualProgramme} onChange={e => setManualProgramme(e.target.value)}
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm">
+                        <option value="PGD">PGD</option>
+                        <option value="Masters">Masters (MSc)</option>
+                        <option value="PhD">PhD</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Next Number Should Be</label>
+                      <input type="number" min="1" value={manualNextNum} onChange={e => setManualNextNum(e.target.value)}
+                        placeholder="e.g. 5" className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" />
+                    </div>
+                    <div className="flex items-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const n = parseInt(manualNextNum, 10);
+                          if (!n || n < 1) { setManualMsg('Enter a valid number.'); return; }
+                          const currentSession = admissionCounters?.[PROG_CODE[manualProgramme]]?.session || getSessionOptions()[1];
+                          const t = window.prompt(
+                            `Type CONFIRM: the next ${manualProgramme} application generated will be numbered ${String(n).padStart(3,'0')} (session ${currentSession}).`
+                          );
+                          if (t === 'CONFIRM') {
+                            adminSetNextApplicationNumber(manualProgramme, currentSession, n);
+                            setManualMsg(`${manualProgramme} counter updated — next application will be ${previewAppNumber(manualProgramme, { ...admissionCounters, [PROG_CODE[manualProgramme]]: { session: currentSession, lastSeq: n - 1 } })}.`);
+                            setManualNextNum('');
+                          }
+                        }}
+                        className="w-full rounded-full bg-brand-primary hover:bg-blue-900 text-white font-bold px-4 py-2 text-sm"
+                      >
+                        Set Number
+                      </button>
+                    </div>
+                  </div>
+                  {manualMsg && <p className="text-xs text-green-600 font-semibold">{manualMsg}</p>}
+                </div>
 
              <form onSubmit={async e => {
                   e.preventDefault();
@@ -1215,7 +1290,7 @@ MANAGEMENT (METI)
 // Signature auto-fills from Section G of application form.
 // Student just downloads — no re-signing needed.
 // ──────────────────────────────────────────
-function LettersTab({ app, pdfLoading, onDownloadAdmission, onDownloadAcceptance, onSaveAdmissionLetter }) {
+function LettersTab({ app, pdfLoading, onDownloadAdmission, onDownloadAcceptance, onPreviewAdmission, onPreviewAcceptance, onSaveAdmissionLetter }) {
   const [section, setSection] = useState('admission'); // 'admission' | 'acceptance'
 
   // Admission letter editable fields
@@ -1328,6 +1403,12 @@ if (!['Approved','active_student'].includes(app?.status)) {
 
           {/* Actions */}
           <div className="flex gap-3 flex-wrap pt-2">
+          <button
+              onClick={() => onPreviewAdmission({ letterTitle, acceptanceFee, tuitionFee, scholarshipDiscount, netTuition, directorName, directorTitle, extraNotes, academicSession, bankName, accountName, accountNumber })}
+              disabled={!!pdfLoading}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-brand-primary text-brand-primary font-bold text-sm hover:bg-brand-primary/5 disabled:opacity-50">
+              <FileSignature size={14} />{pdfLoading==='admission' ? 'Generating…' : 'Preview'}
+            </button>
            <button
               onClick={() => onDownloadAdmission({ letterTitle, acceptanceFee, tuitionFee, scholarshipDiscount, netTuition, directorName, directorTitle, extraNotes, academicSession, bankName, accountName, accountNumber })}
               disabled={!!pdfLoading}
@@ -1432,6 +1513,10 @@ if (!['Approved','active_student'].includes(app?.status)) {
 
           {/* Download + Confirm enrollment */}
       <div className="flex gap-3 flex-wrap">
+          <button onClick={onPreviewAcceptance} disabled={!!pdfLoading}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-brand-primary text-brand-primary font-bold text-sm hover:bg-brand-primary/5 disabled:opacity-50">
+              <FileSignature size={14} />{pdfLoading==='acceptance' ? 'Generating…' : 'Preview'}
+            </button>
             <button onClick={onDownloadAcceptance} disabled={!!pdfLoading}
               className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-blue-900 disabled:opacity-50">
               <Download size={14} />{pdfLoading==='acceptance' ? 'Generating…' : 'Download Acceptance Letter PDF'}

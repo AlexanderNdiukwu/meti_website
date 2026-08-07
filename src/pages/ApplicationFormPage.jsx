@@ -83,11 +83,14 @@ const handlePassportUpload = async (file) => {
       setPassportPhotoError('Passport photo must be under 2MB.');
       return;
     }
+    setPassportUploading(true);
     try {
       const url = await uploadPassportPhoto(file);
       setPassportPhoto(url);
     } catch (err) {
       setPassportPhotoError('Upload failed. Please try again.');
+    } finally {
+      setPassportUploading(false);
     }
   };
 
@@ -152,7 +155,13 @@ const [docs, setDocs] = useState({
     phdMasterTranscript: user?.uploadedDocs?.phdMasterTranscript || null,
   });
 
-  const [uploadErrors, setUploadErrors] = useState({});
+ const [uploadErrors, setUploadErrors] = useState({});
+  // Shows a spinner mid-upload instead of a frozen-looking slot — Supabase
+  // Storage upload + signed URL generation can take several seconds on a
+  // slow connection, and a student needs visible proof it's working.
+  const [uploadingDocs, setUploadingDocs] = useState({});
+  const [passportUploading, setPassportUploading] = useState(false);
+  const [signatureUploading, setSignatureUploading] = useState(false);
 
   // ── SECTION G: Declaration ──
   const [signature, setSignature] = useState(user?.applicationForm?.signature || null);
@@ -175,11 +184,14 @@ const handleSignatureUpload = async (file) => {
       setSignatureError('Signature image must be under 2MB.');
       return;
     }
+    setSignatureUploading(true);
     try {
       const url = await uploadSignature(file);
       setSignature(url);
     } catch (err) {
       setSignatureError('Upload failed. Please try again.');
+    } finally {
+      setSignatureUploading(false);
     }
   };
 
@@ -249,11 +261,14 @@ const handleSignatureUpload = async (file) => {
       setUploadErrors((prev) => ({ ...prev, [key]: 'File size exceeds 5MB limit.' }));
       return;
     }
+   setUploadingDocs((prev) => ({ ...prev, [key]: true }));
     try {
       await submitDocuments(key, file);
       setDocs((prev) => ({ ...prev, [key]: { name: file.name, type: file.type } }));
     } catch (err) {
       setUploadErrors((prev) => ({ ...prev, [key]: 'Upload failed. Please try again.' }));
+    } finally {
+      setUploadingDocs((prev) => ({ ...prev, [key]: false }));
     }
   };
 
@@ -293,11 +308,14 @@ const stopDrawing = async () => {
     setIsDrawing(false);
     if (canvasRef.current) {
       const dataUrl = canvasRef.current.toDataURL();
+      setSignatureUploading(true);
       try {
         const url = await uploadSignature(dataUrl);
         setSignature(url);
       } catch (err) {
         setSignatureError('Signature upload failed. Please try again.');
+      } finally {
+        setSignatureUploading(false);
       }
     }
   };
@@ -490,7 +508,12 @@ const handleFormSubmit = async (e) => {
                       // className="w-28 h-32 border-2 border-dashed border-gray-300 hover:border-uniport-blue rounded-xl overflow-hidden cursor-pointer relative bg-gray-50 flex flex-col items-center justify-center text-center transition-colors"
                       onClick={() => passportInputRef.current?.click()}
                     >
-                      {passportPhoto ? (
+                     {passportUploading ? (
+                        <>
+                          <Loader2 size={20} className="text-blue-500 animate-spin mb-1" />
+                          <span className="text-[9px] text-blue-500 font-semibold px-1">Uploading…</span>
+                        </>
+                      ) : passportPhoto ? (
                         <img src={passportPhoto} alt="Passport" className="w-full h-full object-cover" />
                       ) : (
                         <>
@@ -1065,13 +1088,14 @@ const handleFormSubmit = async (e) => {
                     { key: 'referenceLetter2', label: '6. Academic Reference Letters 2 (Recommended)' },  
                     { key: 'other', label: '7. Any other relevant document', optional: true },
                   ].map((doc) => (
-                    <DocUploadSlot
+                  <DocUploadSlot
                       key={doc.key}
                       label={doc.label}
                       value={docs[doc.key]}
                       error={uploadErrors[doc.key]}
                       disabled={isFormLocked}
                       optional={doc.optional}
+                      uploading={!!uploadingDocs[doc.key]}
                       onUpload={(file) => handleDocUpload(doc.key, file)}
                     />
                   ))}
@@ -1081,11 +1105,12 @@ const handleFormSubmit = async (e) => {
                       <div className="sm:col-span-2">
                     
                       </div>
-                      <DocUploadSlot
+                     <DocUploadSlot
                         label="Master's Degree Certificate *"
                         value={docs.phdMasterCert}
                         error={uploadErrors.phdMasterCert}
                         disabled={isFormLocked}
+                        uploading={!!uploadingDocs.phdMasterCert}
                         onUpload={(file) => handleDocUpload('phdMasterCert', file)}
                       />
                       <DocUploadSlot
@@ -1093,6 +1118,7 @@ const handleFormSubmit = async (e) => {
                         value={docs.phdMasterTranscript}
                         error={uploadErrors.phdMasterTranscript}
                         disabled={isFormLocked}
+                        uploading={!!uploadingDocs.phdMasterTranscript}
                         onUpload={(file) => handleDocUpload('phdMasterTranscript', file)}
                       />
                     </>
@@ -1189,7 +1215,12 @@ const handleFormSubmit = async (e) => {
                     )}
                   </div>
 
-                  {signature && (
+                 {signatureUploading ? (
+                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 flex flex-col items-center justify-center h-36">
+                      <Loader2 size={20} className="text-blue-500 animate-spin mb-2" />
+                      <span className="text-[10px] text-blue-500 font-semibold">Uploading signature…</span>
+                    </div>
+                  ) : signature && (
                     <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200 flex flex-col items-center">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
                         Saved Signature Preview
@@ -1252,12 +1283,16 @@ const handleFormSubmit = async (e) => {
 }
 
 // ── Reusable Document Upload Slot ──
-function DocUploadSlot({ label, value, error, disabled, onUpload }) {
+function DocUploadSlot({ label, value, error, disabled, uploading, onUpload }) {
   return (
     <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200">
       <div className="flex justify-between items-center mb-2">
         <label className="text-xs font-bold text-gray-700">{label}</label>
-        {value && (
+        {uploading ? (
+          <span className="text-[10px] text-blue-600 font-extrabold bg-blue-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <Loader2 size={10} className="animate-spin" /> Uploading…
+          </span>
+        ) : value && (
           <span className="text-[10px] text-green-600 font-extrabold bg-green-50 px-2 py-0.5 rounded-full">
             Uploaded
           </span>
@@ -1266,13 +1301,13 @@ function DocUploadSlot({ label, value, error, disabled, onUpload }) {
       <div className="relative border border-dashed border-gray-300 hover:border-uniport-blue rounded-xl p-4 text-center cursor-pointer transition-colors bg-white">
         <input
           type="file"
-          disabled={disabled}
+          disabled={disabled || uploading}
           onChange={(e) => onUpload(e.target.files[0])}
           className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
         />
         <div className="flex items-center gap-2 justify-center text-xs text-gray-500 font-semibold pointer-events-none">
-          <FileUp size={16} />
-       <span className="truncate max-w-45">{value?.name || 'Select scan file'}</span>
+          {uploading ? <Loader2 size={16} className="animate-spin text-blue-500" /> : <FileUp size={16} />}
+          <span className="truncate max-w-45">{uploading ? 'Uploading, please wait…' : (value?.name || 'Select scan file')}</span>
         </div>
       </div>
       {error && <p className="text-[10px] text-red-500 font-bold mt-1">{error}</p>}

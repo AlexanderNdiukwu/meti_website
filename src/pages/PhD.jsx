@@ -80,7 +80,7 @@ const PhD = () => {
                 <li className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-uniport-blue mt-1 shrink-0" />
                   <p className=" text-sm md:text-lg leading-relaxed">
-                    Candidates shall be required to possess a Master’s degree (<span className="font-semibold text-gray-800">M.Eng., M.Tech., or M.Sc.</span>) in an Engineering discipline or Pure and Applied Science disciplines.
+                    Candidates shall be required to possess a Master’s degree (<span className="font-semibold text-gray-800">M.Eng., M.Tech., or MSc.</span>) in an Engineering discipline or Pure and Applied Science disciplines.
                   </p>
                 </li>
                 <li className="flex items-start gap-3">

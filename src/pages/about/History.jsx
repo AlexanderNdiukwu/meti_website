@@ -13,7 +13,7 @@ const TIMELINE_EVENTS = [
   },
   {
     year: "2010 - 2024",
-    title: "Academic Program Commencement",
+    title: "Academic Program Commencement and Progression",
     desc: "Between 2010 and 2024, CETM offered postgraduate certificate/diploma programmes in Project Management, ICT Networks, Maintenance Management, and Business Information Systems, as well as Master and PhD programmes in Engineering Management, Technology Management, and ICT Management.",
     icon: <BookOpen className="w-5 h-5 text-white" />,
     color: "bg-blue-600"

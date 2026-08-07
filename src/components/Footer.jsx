@@ -62,7 +62,7 @@ const Footer = () => {
             <div className='flex gap-2 items-start'>
               <MapPin className='lg:size-14 size-12'/>
 
-            <li className='lg:mt-4 mt-3 '>2nd Floor, ETF Gas Engineering Building, Faculty of Engineering, Abuja Park Campus,University of Port Harcourt, Rivers State, Nigeria
+            <li className='lg:mt-4 mt-3 '> Room 320-322 , 2nd Floor ETF Gas Engineering Building, Faculty of Engineering, Abuja Park Campus,University of Port Harcourt, Rivers State, Nigeria
 
              
               

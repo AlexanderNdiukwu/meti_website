@@ -441,7 +441,7 @@ updatePassword: async (newPassword) => {
       // to only this student's own applicant/document rows, plus all
       // announcements (audience/programme filtering already handles who
       // actually sees each one, done client-side in the pages themselves).
-      subscribeToOwnApplicantChanges: () => {
+  subscribeToOwnApplicantChanges: () => {
         const { user } = get();
         if (!user?.id) return null;
         const channel = supabase
@@ -457,7 +457,9 @@ updatePassword: async (newPassword) => {
           .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
             get().fetchAnnouncements();
           })
-          .subscribe();
+          .subscribe((status, err) => {
+            console.log('[Realtime] Student channel status:', status, err || '');
+          });
         return channel;
       },
 
@@ -501,7 +503,7 @@ updatePassword: async (newPassword) => {
 
       // Subscribes the admin dashboard to live database changes — call
       // once when AdminPanel mounts, unsubscribe on unmount.
-      subscribeToApplicantChanges: () => {
+    subscribeToApplicantChanges: () => {
         const channel = supabase
           .channel('admin-live-updates')
           .on('postgres_changes', { event: '*', schema: 'public', table: 'applicants' }, () => {
@@ -516,7 +518,9 @@ updatePassword: async (newPassword) => {
           .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
             get().fetchAnnouncements();
           })
-          .subscribe();
+          .subscribe((status, err) => {
+            console.log('[Realtime] Admin channel status:', status, err || '');
+          });
         return channel;
       },
 
@@ -693,11 +697,28 @@ adminApprovePayment: async (applicantId) => {
         await get().fetchAllApplicants();
       },
 
-      adminResetProgrammeSession: async (programme, sessionLabel) => {
+  adminResetProgrammeSession: async (programme, sessionLabel) => {
         const code = PROG_CODE[programme] || 'MSC';
         const { error } = await supabase
           .from('admission_counters')
           .update({ session: sessionLabel, last_seq: 0 })
+          .eq('programme', code);
+        if (error) throw error;
+        await get().fetchAdmissionCounters();
+      },
+
+      // Sets the counter so the NEXT generated number is exactly what the
+      // admin specifies — distinct from adminResetProgrammeSession, which
+      // always restarts at 000. Never renames a number already issued;
+      // only affects generation going forward. Safe against duplicates:
+      // confirm_applicant_and_generate_number() locks this row and
+      // applicants.application_num has a UNIQUE constraint, so a colliding
+      // number fails loudly instead of silently duplicating.
+      adminSetNextApplicationNumber: async (programme, sessionLabel, nextNumber) => {
+        const code = PROG_CODE[programme] || 'MSC';
+        const { error } = await supabase
+          .from('admission_counters')
+          .update({ session: sessionLabel, last_seq: Math.max(0, nextNumber - 1) })
           .eq('programme', code);
         if (error) throw error;
         await get().fetchAdmissionCounters();

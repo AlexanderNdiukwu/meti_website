@@ -31,10 +31,16 @@ const AboutSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl  lg:text-5xl font-extrabold md:font-bold  text-black uppercase mb-3"
+            className="text-3xl  lg:text-5xl font-extrabold md:font-bold  flex justify-center text-black uppercase mb-3"
           >
-            About
-            <span className='text-blue-800 border-b-4 border-blue-900 pr-1'> METI</span>
+            
+            <span className='text-blue-800 border-b-4 border-blue-900 pr-1 mr-2 text-center'> METI </span>
+            <p>
+
+            At a Glance
+
+            </p>
+            
             
           </motion.h2>
           <motion.p 
@@ -42,13 +48,13 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold max-w-3xl mx-auto leading-tight"
+            className="text-2xl md:text-5xl font-bold max-w-3xl mx-auto leading-tight"
           >
             Pioneering the intersection of engineering capability and business strategy.
           </motion.p>
         </div>
 
-      <p className='text-center text-2xl mb-5 font-bold '>MOTTO: DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
+      <p className='text-center text-sm  lg:text-2xl mb-5 font-bold '>MOTTO: DRIVING SUSTAINABLE DEVELOPMENT THROUGH INNOVATION</p>
 
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -136,12 +142,12 @@ const AboutSection = () => {
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Full-Time:</span>
-                      <span className="font-bold text-sm text-uniport-blue">12 - 24 Months</span>
+                      <span className="text-base font-medium">Full-Time:</span>
+                      <span className="font-bold text-base text-uniport-blue">12  Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Part-Time:</span>
-                      <span className="font-bold text-sm text-indigo-600">24 - 36 Months</span>
+                      <span className="text-base font-medium">Part-Time:</span>
+                      <span className="font-bold text-base text-indigo-600">24 Months</span>
                     </div>
                   </div>
                 </div>
@@ -161,7 +167,7 @@ const AboutSection = () => {
                   <div className="p-3 bg-blue-50 text-uniport-blue rounded-2xl">
                     <GraduationCap size={24} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Master of Science (M.Sc)</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Master of Science (MSc)</h3>
                 </div>
                 
                 <div className="mb-6">
@@ -190,12 +196,12 @@ const AboutSection = () => {
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Full-Time:</span>
-                      <span className="font-bold text-sm text-uniport-blue">12 - 24 Months</span>
+                      <span className="text-base font-medium">Full-Time:</span>
+                      <span className="font-bold text-base text-uniport-blue">12  Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Part-Time:</span>
-                      <span className="font-bold text-sm text-indigo-600">24 - 36 Months</span>
+                      <span className="text-base font-medium">Part-Time:</span>
+                      <span className="font-bold text-base text-indigo-600">24 Months</span>
                     </div>
                   </div>
                 </div>
@@ -224,7 +230,7 @@ const AboutSection = () => {
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
                       <p className=" text-xs md:text-lg leading-relaxed">
-                        Master’s degree (M.Eng., M.Tech., or M.Sc.) in Engineering or Pure and Applied Science disciplines.
+                        Master’s degree (M.Eng., M.Tech., or MSc.) in Engineering or Pure and Applied Science disciplines.
                       </p>
                     </li>
                     <li className="flex items-start gap-2.5">
@@ -244,12 +250,12 @@ const AboutSection = () => {
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Full-Time:</span>
-                      <span className="font-bold text-sm text-uniport-blue">36 - 48 Months</span>
+                      <span className="text-base font-medium">Full-Time:</span>
+                      <span className="font-bold text-base text-uniport-blue">36 Months</span>
                     </div>
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-sm font-medium">Part-Time:</span>
-                      <span className="font-bold text-sm text-indigo-600">36 - 60 Months</span>
+                      <span className="text-base font-medium">Part-Time:</span>
+                      <span className="font-bold text-base text-indigo-600">48 Months</span>
                     </div>
                   </div>
                 </div>

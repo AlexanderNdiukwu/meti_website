@@ -69,11 +69,25 @@ function Root() {
   const initSession = useAdmissionsStore((s) => s.initSession);
   const subscribeToAuthChanges = useAdmissionsStore((s) => s.subscribeToAuthChanges);
   const loading = useAdmissionsStore((s) => s.loading);
-
 useEffect(() => {
     initSession();
     const subscription = subscribeToAuthChanges();
-    return () => subscription?.unsubscribe();
+
+    // Safety net for Realtime — background/inactive browser tabs throttle
+    // or drop WebSocket connections silently. Rather than relying on the
+    // socket reconnecting in time, force a full data refresh the moment
+    // the tab becomes visible again, regardless of the socket's state.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        initSession();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      subscription?.unsubscribe();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // A successful mount past this point means the current chunks loaded

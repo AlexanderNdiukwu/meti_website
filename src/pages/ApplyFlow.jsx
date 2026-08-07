@@ -54,10 +54,10 @@ const PROGRAM_DETAILS = {
     name: 'Postgraduate Diploma (PGD)',
     duration: 'Full-Time: 12–24 months | Part-Time: 24–36 months',
     fee: '₦35,000',
-    requirementsSummary: "Bachelor's degree in engineering/science with a Third Class (3rd Class) or unrelated science degree with minimum Second Class Lower.",
+    requirementsSummary: "Candidates shall possess a Higher National Diploma (HND) or a Third-Class Bachelor’s Degree B.Eng, B.Tech, or B.Sc. in an Engineering discipline or the Pure and Applied science from a recognised university.",
   },
   Masters: {
-    name: 'Master of Science (M.Sc)',
+    name: 'Master of Science (MSc)',
     duration: 'Full-Time: 12–24 months | Part-Time: 24–36 months',
     fee: '₦35,000',
     requirementsSummary: "Bachelor's degree in engineering/science with a minimum of Second Class Lower, or PGD in engineering/METI with CGPA of 3.5/5.0.",
@@ -392,7 +392,7 @@ const {
                     <CheckItem
                       checked={phdChecks.master}
                       onChange={() => handleStep2CheckboxChange('master')}
-                      label="I possess a Master's degree (M.Eng., M.Tech., or M.Sc.) in a relevant Engineering or Pure and Applied Science discipline."
+                      label="I possess a Master's degree (M.Eng., M.Tech., or MSc.) in a relevant Engineering or Pure and Applied Science discipline."
                     />
                     <CheckItem
                       checked={phdChecks.cgpa}

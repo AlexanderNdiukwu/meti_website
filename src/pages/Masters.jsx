@@ -93,7 +93,7 @@ const Masters = () => {
             </div>
             
             <div className="mt-8 pt-6 border-t border-gray-100 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
-              <span>M.Sc / M.Eng Track</span>
+              <span>M.Sc  Track</span>
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
               <span>University of Port Harcourt</span>
             </div>

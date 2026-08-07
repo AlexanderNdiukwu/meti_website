@@ -37,8 +37,8 @@ const Navbar = () => {
     { name: 'Historical Background', path: '/about/history', desc: 'Discover METI creation origins and evolution' },
     { name: 'Director\'s Profile', path: '/about/director', desc: 'Profile details of Dr. Akuro Big-Alabo' },
     { name: 'Programme Duration', path: '/about/duration', desc: 'Calendar timeline and academic schedules' },
-    { name: 'Principal Officers of the University', path: '/about/officers', desc: 'Meet our senior administrative leaders' },
     { name: 'METI at a Glance', path: '/about', desc: ' What METI is all about' },
+    { name: 'Principal Officers of the University', path: '/about/officers', desc: 'Meet our senior administrative leaders' },
 
     
   ];

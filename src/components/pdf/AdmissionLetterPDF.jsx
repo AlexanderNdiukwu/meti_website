@@ -50,12 +50,12 @@ export function AdmissionLetterPDF({
   const spec      = application?.specialization  || application?.course_name || '';
   const appNum    = application?.applicationNum  || application?.application_number || '';
   const mode      = application?.applicationForm?.modeOfStudy || 'Full-time';
-  const signature = application?.applicationForm?.signature
-    || application?.applicationForm?.personal?.signature
-    || application?.signature
-    || null;
+  // const signature = application?.applicationForm?.signature
+  //   || application?.applicationForm?.personal?.signature
+  //   || application?.signature
+  //   || null;
 
-  const degMap   = { PGD: 'PGD', Masters: 'MEng', PhD: 'PhD' };
+  const degMap   = { PGD: 'PGD', Masters: 'MSc', PhD: 'PhD' };
   const degLabel = `${degMap[prog] || prog}${spec ? ' (' + spec + ')' : ''}`;
   const durMap   = { PGD: '12 months', Masters: '18 months', PhD: '3 years' };
   const duration = durMap[prog] || '18 months';
@@ -88,7 +88,7 @@ export function AdmissionLetterPDF({
           </View>
           {metiLogo
             ? <Image src={metiLogo} style={{ width: 58, height: 58, marginLeft: 8 }} />
-            : <View style={{ width: 58, height: 58, marginLeft: 8, backgroundColor: '#dde3f0' }} />
+            : <View style={{ width: 58, height: 50, marginLeft: 8, backgroundColor: '#dde3f0' }} />
           }
         </View>
 
@@ -162,13 +162,13 @@ export function AdmissionLetterPDF({
 
        <Text style={{ marginTop: 6, marginBottom: 14 }}>Accept my congratulations on this admission.</Text>
 
-        {/* Signature */}
+       
+       {/* Signature — always the Director's own signature, never the
+            applicant's. The applicant's signature belongs only on the
+            Acceptance Letter, which they sign themselves. */}
         <View style={S.sigSection}>
           <Text>Yours faithfully</Text>
-          {signature
-            ? <Image src={signature} style={{ height: 40, width: 140, marginTop: 8, marginBottom: 2 }} />
-            : <View style={S.sigLine} />
-          }
+          <Image src="/images/alabosignature.jpeg" style={{ height: 40, width: 140, marginTop: 8, marginBottom: 2 }} />
           <Text style={[S.bold, { marginTop: 4 }]}>{directorName || 'Dr. A. Big-Alabo'}</Text>
           <Text>{directorTitle || 'Ag Director (METI)'}</Text>
         </View>
