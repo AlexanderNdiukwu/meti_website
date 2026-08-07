@@ -35,7 +35,7 @@ const facilitators = [
   },
   {
     name: "Prof. E. O. Diemuodeke",
-    role: "Professor of Mechanical engineering",
+    role: "Professor of Mechanical Engineering",
     special: "Director of Energy Technology Institute (ETI), Uniport.",
     image: "fat4.jpeg"
   },
