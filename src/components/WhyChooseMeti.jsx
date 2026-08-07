@@ -23,7 +23,7 @@ const WhyChooseMeti = () => {
          <div
   key={idx}
   className={`flex items-start gap-4 p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow bg-gray-50/50 ${
-    reason.title === "Flexible Payment Plan" ? " animate-pulse text-blue-800 font-bold" : ""
+    reason.title === "Flexible Payment Plan" ? " animate-bounce text-blue-800 font-bold" : ""
   }`}
 >
               <CheckCircle2 className="w-8 h-8 text-uniport-blue shrink-0" />
