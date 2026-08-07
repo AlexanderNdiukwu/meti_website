@@ -102,8 +102,8 @@ const PGD = () => {
                       The full-time programme runs for continuous immersive coursework and projects.
                     </p>
                     <div className="inline-flex gap-2">
-                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-xs font-bold rounded-full">Min: 12 Months</span>
-                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-xs font-bold rounded-full">Max: 24 Months</span>
+                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-sm font-bold rounded-full">Min: 12 Months</span>
+                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-sm font-bold rounded-full">Max: 24 Months</span>
                     </div>
                   </div>
                 </div>
@@ -119,8 +119,8 @@ const PGD = () => {
                       Flexible evening or weekend study modules for working professionals.
                     </p>
                     <div className="inline-flex gap-2">
-                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">Min: 24 Months</span>
-                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">Max: 36 Months</span>
+                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-full">Min: 24 Months</span>
+                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-bold rounded-full">Max: 36 Months</span>
                     </div>
                   </div>
                 </div>

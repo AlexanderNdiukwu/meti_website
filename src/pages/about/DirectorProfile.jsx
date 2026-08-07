@@ -28,7 +28,7 @@ export default function DirectorProfile() {
             <p className=" font-semibold text-[#1a4fa0]">
               Associate Professor of Mechanical Engineering & Director of METI
             </p>
-            <p className="text-sm ">
+            <p className="text-base ">
               Former Head of Department of Mechanical Engineering (2020–2022) | Assistant Director of Intellectual Property and Technology Transfer Office (IPTTO), UNIPORT.
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function DirectorProfile() {
               <p className=" text-lg leading-relaxed">
                 Dr. Akuro Big-Alabo is an Associate Professor of Mechanical Engineering at the University of Port Harcourt and currently serves as Director of the Institute of Engineering, Technology and Innovation Management (METI). He joined the University of Port Harcourt in 2008 and was promoted to Associate Professor in 2022.
               </p>
-              <p className=" text-sm leading-relaxed">
+              <p className=" text-lg leading-relaxed">
                 Dr. Big-Alabo has distinguished himself through academic excellence, research, and institutional leadership. His research specialization focuses on Applied Mechanics and Design, with extensive investigations into systems dynamics and innovation modeling.
               </p>
             </div>

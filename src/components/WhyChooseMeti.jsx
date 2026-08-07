@@ -20,7 +20,12 @@ const WhyChooseMeti = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reasons.map((reason, idx) => (
-            <div key={idx} className="flex items-start gap-4 p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow bg-gray-50/50">
+         <div
+  key={idx}
+  className={`flex items-start gap-4 p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow bg-gray-50/50 ${
+    reason.title === "Flexible Payment Plan" ? " animate-pulse text-blue-800 font-bold" : ""
+  }`}
+>
               <CheckCircle2 className="w-8 h-8 text-uniport-blue shrink-0" />
               <div>
                 <h3 className="font-bold text-xl  mb-2">{reason.title}</h3>
