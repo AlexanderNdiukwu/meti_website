@@ -35,11 +35,12 @@ function dataUrlToFile(dataUrl, filename = 'signature.png') {
 function mapApplicantRow(row, form, docs) {
   if (!row) return null;
   return {
-    id: row.id,
+  id: row.id,
     profileId: row.profile_id,
     name: row.name,
     email: row.email,
     role: 'applicant',
+    createdAt: row.created_at,
     selectedProgram: row.selected_program,
     specialization: row.specialization,
     eligibilityChecked: row.eligibility_checked,
@@ -749,6 +750,20 @@ adminApprovePayment: async (applicantId) => {
         });
         if (error) throw error;
         await get().fetchAnnouncements();
+      },
+
+      // Permanently deletes ONE applicant's application data (documents,
+      // form, payment records all cascade via the schema's ON DELETE
+      // CASCADE). Deliberately never exposed as a bulk action — a live
+      // system with real students should never be wipeable by one click.
+      // Does NOT delete their login (auth.users) — that still requires
+      // one manual step in Supabase → Authentication → Users, since
+      // deleting a login needs the service-role key, which can't safely
+      // run from the browser.
+      adminDeleteApplicant: async (applicantId) => {
+        const { error } = await supabase.from('applicants').delete().eq('id', applicantId);
+        if (error) throw error;
+        await get().fetchAllApplicants();
       },
 
       deleteAnnouncement: async (announcementId) => {

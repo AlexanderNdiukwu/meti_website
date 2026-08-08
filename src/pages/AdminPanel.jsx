@@ -151,6 +151,7 @@ const {
     adminConfirmApplicationForm, adminRejectApplication,
     adminReturnFormToStudent, adminSaveAdmissionLetter,
 adminAddNote, adminResetProgrammeSession, adminSetNextApplicationNumber,
+    adminDeleteApplicant,
 sendAnnouncement, deleteAnnouncement,
     resetAllData, logout, getFileSignedUrl, updatePassword,
     subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
@@ -159,7 +160,12 @@ sendAnnouncement, deleteAnnouncement,
   const [sidebarExpanded,   setSidebarExpanded]   = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [activeView,        setActiveView]        = useState('Overview');
-  const [searchTerm,        setSearchTerm]        = useState('');
+const [searchTerm,        setSearchTerm]        = useState('');
+  // Purely a VIEW filter — never deletes or archives anything. Switching
+  // back to "All Time" always shows every applicant again; admission
+  // number counters are completely untouched by this.
+const [dateRangeFilter,   setDateRangeFilter]   = useState('all');
+  const [programmeFilter,   setProgrammeFilter]   = useState('all');
   const [selectedAppId,     setSelectedAppId]     = useState(null);
   const [activeDetailTab,   setActiveDetailTab]   = useState('Print');
   const [viewerFile,        setViewerFile]        = useState(null);
@@ -256,9 +262,21 @@ useEffect(() => {
   };
 
   const selectedApp = applicants.find(a => a.id === selectedAppId);
-  const filteredApplicants = applicants.filter(a => {
+const isWithinDateRange = (createdAt) => {
+    if (dateRangeFilter === 'all' || !createdAt) return true;
+    const created = new Date(createdAt);
+    const now = new Date();
+    if (dateRangeFilter === 'today') return created.toDateString() === now.toDateString();
+    if (dateRangeFilter === 'month') return created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+    if (dateRangeFilter === 'year')  return created.getFullYear() === now.getFullYear();
+    return true;
+  };
+
+ const filteredApplicants = applicants.filter(a => {
     const q = searchTerm.toLowerCase();
-    return a.name?.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q) || a.selectedProgram?.toLowerCase().includes(q) || a.status?.toLowerCase().includes(q);
+    const matchesSearch = a.name?.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q) || a.selectedProgram?.toLowerCase().includes(q) || a.status?.toLowerCase().includes(q);
+    const matchesProgramme = programmeFilter === 'all' || a.selectedProgram === programmeFilter;
+    return matchesSearch && matchesProgramme && isWithinDateRange(a.createdAt);
   });
 
   const today = new Date().toLocaleDateString('en-GB', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
@@ -514,12 +532,28 @@ const handleConfirmApp = async () => {
           {/* ════ APPLICATIONS ════ */}
           {activeView === 'Applications' && (
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-2xl font-black text-gray-900">Applications</h1>
-                <div className="relative w-full sm:w-72">
-                  <Search size={14} className="absolute left-3 top-3 text-gray-400" />
-                  <input type="text" placeholder="Search name, email, programme…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-4 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm" />
+               <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <select value={programmeFilter} onChange={e => setProgrammeFilter(e.target.value)}
+                    className="bg-white border border-gray-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm">
+                    <option value="all">All Programmes</option>
+                    <option value="PGD">PGD</option>
+                    <option value="Masters">Masters (MSc)</option>
+                    <option value="PhD">PhD</option>
+                  </select>
+                  <select value={dateRangeFilter} onChange={e => setDateRangeFilter(e.target.value)}
+                    className="bg-white border border-gray-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="month">This Month</option>
+                    <option value="year">This Year</option>
+                  </select>
+                  <div className="relative w-full sm:w-72">
+                    <Search size={14} className="absolute left-3 top-3 text-gray-400" />
+                    <input type="text" placeholder="Search name, email, programme…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-4 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm" />
+                  </div>
                 </div>
               </div>
 
@@ -565,9 +599,26 @@ const handleConfirmApp = async () => {
                         <p className="text-[11px] text-gray-400">App No: <span className="font-mono font-bold text-brand-primary">{selectedApp.applicationNum || 'Not yet assigned'}</span></p>
                         <p className="text-[11px] text-gray-400">{selectedApp.email}</p>
                       </div>
-                      <button onClick={() => { setSelectedAppId(null); navigate('/admin/applications'); }} className="self-start text-xs text-gray-400 hover:text-gray-900 font-bold flex items-center gap-1">
-                        <X size={14} /> Close
-                      </button>
+                    <div className="flex flex-col items-end gap-2">
+                        <button onClick={() => { setSelectedAppId(null); navigate('/admin/applications'); }} className="self-start text-xs text-gray-400 hover:text-gray-900 font-bold flex items-center gap-1">
+                          <X size={14} /> Close
+                        </button>
+                        <button
+                          onClick={() => {
+                            const typed = window.prompt(`This permanently deletes ${selectedApp.name}'s application data. This cannot be undone.\n\nType the applicant's exact name to confirm:`);
+                            if (typed === selectedApp.name) {
+                              adminDeleteApplicant(selectedApp.id);
+                              setSelectedAppId(null);
+                              navigate('/admin/applications');
+                            } else if (typed !== null) {
+                              alert("Name didn't match — nothing was deleted.");
+                            }
+                          }}
+                          className="text-[10px] text-red-400 hover:text-red-600 font-bold flex items-center gap-1"
+                        >
+                          <Trash2 size={11} /> Delete Applicant
+                        </button>
+                      </div>
                     </div>
 
                     {/* Tabs */}

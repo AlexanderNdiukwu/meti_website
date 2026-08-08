@@ -14,12 +14,25 @@ export default function ForgotPassword() {
   // what tells us to skip straight to "set new password" instead of
   // showing the email form.
   const [recoveryMode, setRecoveryMode] = useState(false);
+  // If the person left the original "enter your email" tab open and
+  // completed the reset in the NEW tab the email link opened, this flag
+  // lets that original tab know, instead of sitting there stale.
+  const [recoveredElsewhere, setRecoveredElsewhere] = useState(false);
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') setRecoveryMode(true);
     });
-    return () => listener.subscription.unsubscribe();
+
+    const channel = new BroadcastChannel('meti-password-reset');
+    channel.onmessage = (e) => {
+      if (e.data === 'password-reset-complete') setRecoveredElsewhere(true);
+    };
+
+    return () => {
+      listener.subscription.unsubscribe();
+      channel.close();
+    };
   }, []);
 
   const [email, setEmail] = useState('');
@@ -58,6 +71,10 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       await setNewPassword(newPassword);
+      // Tell any other open tab (e.g. the original one where the reset
+      // was first requested) that this is done, so it doesn't sit there
+      // showing a stale form.
+      new BroadcastChannel('meti-password-reset').postMessage('password-reset-complete');
       toast.success('Password updated');
       navigate('/login');
     } catch (err) {
@@ -76,11 +93,13 @@ export default function ForgotPassword() {
           {!recoveryMode ? (
             <>
               <p className="text-sm text-gray-400 mb-6">
-                {sent
-                  ? 'Check your email for a reset link.'
+                {recoveredElsewhere
+                  ? 'Your password was already reset in another tab. You can log in now.'
+                  : sent
+                  ? "Check your email for a reset link. It'll open in a new tab where you'll set your new password — you can close this tab now."
                   : 'Enter your registered email to receive a password reset link.'}
               </p>
-              {!sent && (
+              {!sent && !recoveredElsewhere && (
                 <form onSubmit={handleSendLink} className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email</label>

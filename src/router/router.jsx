@@ -1,183 +1,7 @@
-// import { createBrowserRouter } from 'react-router-dom';
-
-// import App from '../App';
-
-// import Home from '../pages/Home';
-
-// import Masters from '../pages/Masters';
-
-// import PhD from '../pages/PhD';
-
-// import PGD from '../pages/PGD';
-
-// import Courses from '../pages/Courses';
-
-// import Lecturers from '../pages/Lecturers';
-
-// import FAQ from '../pages/FAQ';
-
-// import About from '../pages/About';
-
-
-
-// // ADMISSIONS PORTAL IMPORTS
-
-// import ApplyFlow from '../pages/ApplyFlow';
-
-// import AdmissionsSignUp from '../pages/AdmissionsSignUp';
-
-// import AdmissionsLogin from '../pages/AdmissionsLogin';
-
-// import ForgotPassword from '../pages/auth/ForgotPassword';
-
-// import PaymentPage from '../pages/PaymentPage';
-// import ApplicationFormPage from '../pages/ApplicationFormPage';
-// import Support from '../pages/Support';
-
-// import DashboardLayout from '../pages/dashboard/DashboardLayout';
-
-// import DashboardHome from '../pages/dashboard/DashboardHome';
-
-
-// import DashboardAnnouncements from '../pages/dashboard/Announcements';
-
-// import DashboardSettings from '../pages/dashboard/Settings';
-
-// import AdminPanel from '../pages/AdminPanel';
-
-// import AdminReports from '../pages/AdminReports';
-
-
-
-
-
-// // ABOUT METI DROPDOWN PAGES
-
-// import PrincipalOfficers from '../pages/about/PrincipalOfficers';
-
-// import History from '../pages/about/History';
-
-// import DirectorProfile from '../pages/about/DirectorProfile';
-
-// import ProgramDuration from '../pages/about/ProgramDuration';
-
-// import Aboutlayout from '../store/Aboutlayout';
-
-
-
-// export const router = createBrowserRouter([
-
-//   {
-
-//     path: '/',
-
-//     element: <App />,
-
-//     children: [
-
-//       { path: '/', element: <Home /> },
-
-//       { path: '/masters', element: <Masters /> },
-
-//       { path: '/phd', element: <PhD /> },
-
-//       { path: '/pgd', element: <PGD /> },
-
-//       { path: '/courses', element: <Courses /> },
-
-//       { path: '/lecturers', element: <Lecturers /> },
-
-//       { path: '/faq', element: <FAQ /> },
-
-//       { path: '/about', element: <About /> },
-
-//     ]
-
-//   },
-
-//   {
-
-//     path: '/about',
-
-//     element: <Aboutlayout />,
-
-//     children: [
-
-//       { path: 'officers', element: <PrincipalOfficers /> },
-
-//       { path: 'history', element: <History /> },
-
-//       { path: 'director', element: <DirectorProfile /> },
-
-//       { path: 'duration', element: <ProgramDuration /> },
-
-//     ]
-    
-//   },
-//   { path: '/support', element: <Support /> },
-  
-
-
-//   // ── Admissions portal (standalone, outside main App layout) ──
-
-//   { path: '/apply', element: <ApplyFlow /> },
-
-//   { path: '/signup', element: <AdmissionsSignUp /> },
-
-//   { path: '/login', element: <AdmissionsLogin /> },
-
-//   { path: '/forgot-password', element: <ForgotPassword /> },
-
-//   { path: '/payment', element: <PaymentPage /> },
-
-//   { path: '/application-form', element: <ApplicationFormPage /> },
-
-//   {
-
-//     path: '/dashboard',
-
-//     element: <DashboardLayout />,
-
-//     children: [
-
-//       { index: true, element: <DashboardHome /> },
-
-
-//       { path: 'announcements', element: <DashboardAnnouncements /> },
-
-//       { path: 'settings', element: <DashboardSettings /> },
-
-//     ],
-
-//   },
-
-
-
-//   // ── Admin portal ──
-
-//   { path: '/admin', element: <AdminPanel /> },
-
-//   { path: '/admin/applications', element: <AdminPanel /> },
-
-//   { path: '/admin/applications/:id', element: <AdminPanel /> },
-
-//   { path: '/admin/announcements', element: <AdminPanel /> },
-
-//   { path: '/admin/reports', element: <AdminPanel /> },
-
-//   { path: '/admin/settings', element: <AdminPanel /> },
-
-
-
-  
-
-
-// ]);
-
-
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import LoadingScreen from '../components/LoadingScreen';
+import RouteErrorBoundary from '../components/RouteErrorBoundary';
 
 import App from '../App';
 
@@ -216,8 +40,6 @@ const DashboardSettings        = lazy(() => import('../pages/dashboard/Settings'
 const AdminPanel   = lazy(() => import('../pages/AdminPanel'));
 const AdminReports = lazy(() => import('../pages/AdminReports'));
 
-// Wraps a lazy page with a fallback so each route shows the loading
-// screen only for its own brief fetch — not the whole app.
 const withSuspense = (Component) => (
   <Suspense fallback={<LoadingScreen />}>
     <Component />
@@ -228,6 +50,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       { path: '/', element: withSuspense(Home) },
       { path: '/masters', element: withSuspense(Masters) },
@@ -242,6 +65,7 @@ export const router = createBrowserRouter([
   {
     path: '/about',
     element: withSuspense(Aboutlayout),
+    errorElement: <RouteErrorBoundary />,
     children: [
       { path: 'officers', element: withSuspense(PrincipalOfficers) },
       { path: 'history', element: withSuspense(History) },
@@ -249,19 +73,20 @@ export const router = createBrowserRouter([
       { path: 'duration', element: withSuspense(ProgramDuration) },
     ]
   },
-  { path: '/support', element: withSuspense(Support) },
+  { path: '/support', element: withSuspense(Support), errorElement: <RouteErrorBoundary /> },
 
   // ── Admissions portal (standalone, outside main App layout) ──
-  { path: '/apply', element: withSuspense(ApplyFlow) },
-  { path: '/signup', element: withSuspense(AdmissionsSignUp) },
-  { path: '/login', element: withSuspense(AdmissionsLogin) },
-  { path: '/forgot-password', element: withSuspense(ForgotPassword) },
-  { path: '/payment', element: withSuspense(PaymentPage) },
-  { path: '/application-form', element: withSuspense(ApplicationFormPage) },
+  { path: '/apply', element: withSuspense(ApplyFlow), errorElement: <RouteErrorBoundary /> },
+  { path: '/signup', element: withSuspense(AdmissionsSignUp), errorElement: <RouteErrorBoundary /> },
+  { path: '/login', element: withSuspense(AdmissionsLogin), errorElement: <RouteErrorBoundary /> },
+  { path: '/forgot-password', element: withSuspense(ForgotPassword), errorElement: <RouteErrorBoundary /> },
+  { path: '/payment', element: withSuspense(PaymentPage), errorElement: <RouteErrorBoundary /> },
+  { path: '/application-form', element: withSuspense(ApplicationFormPage), errorElement: <RouteErrorBoundary /> },
 
   {
     path: '/dashboard',
     element: withSuspense(DashboardLayout),
+    errorElement: <RouteErrorBoundary />,
     children: [
       { index: true, element: withSuspense(DashboardHome) },
       { path: 'announcements', element: withSuspense(DashboardAnnouncements) },
@@ -270,11 +95,10 @@ export const router = createBrowserRouter([
   },
 
   // ── Admin portal ──
-  { path: '/admin', element: withSuspense(AdminPanel) },
-  { path: '/admin/applications', element: withSuspense(AdminPanel) },
-  { path: '/admin/applications/:id', element: withSuspense(AdminPanel) },
-  { path: '/admin/announcements', element: withSuspense(AdminPanel) },
-  { path: '/admin/reports', element: withSuspense(AdminPanel) },
-  { path: '/admin/settings', element: withSuspense(AdminPanel) },
+  { path: '/admin', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/applications', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/applications/:id', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/announcements', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/reports', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/settings', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
 ]);
-

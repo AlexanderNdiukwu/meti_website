@@ -148,17 +148,12 @@ function StatusMessage({ user }) {
           We have received your payment receipt. Our admin team is verifying it.
           This typically takes <strong>24–48 working hours</strong>.
         </p>
-        <p className="flex relative items-center gap-1.5 mt-2">
-          <div className='w-5 pr-3'>
-          <Mail size={15} className="shrink-0 absolute top-1  " />
-
-          </div>
-          <p>
-
-          An email will be sent to <strong className="mx-1">{email}</strong> once confirmed.
-          No action needed right now.
-
-          </p>
+       <p className="flex items-start gap-1.5 mt-2">
+          <Mail size={15} className="shrink-0 mt-0.5" />
+          <span className="wrap-break-words">
+            An email will be sent to <strong className="break-all">{email}</strong> once confirmed.
+            No action needed right now.
+          </span>
         </p>
       </Card>
     );
@@ -232,10 +227,12 @@ function StatusMessage({ user }) {
           Your application form has been submitted successfully. The METI admissions team is
           currently reviewing your application and documents.
         </p>
-        <p className="flex items-center gap-1.5 mt-2">
-          <Mail size={13} className="shrink-0" />
-          You will receive an email at <strong className="mx-1">{email}</strong> with our decision.
-          Please check your inbox and spam folder regularly.
+      <p className="flex items-start gap-1.5 mt-2">
+          <Mail size={13} className="shrink-0 mt-0.5" />
+          <span className="wrap-reak-words">
+            You will receive an email at <strong className="break-all">{email}</strong> with our decision.
+            Please check your inbox and spam folder regularly.
+          </span>
         </p>
       </Card>
     );
