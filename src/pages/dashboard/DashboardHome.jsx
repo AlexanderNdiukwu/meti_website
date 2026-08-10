@@ -582,8 +582,8 @@ export default function DashboardHome() {
 
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-black text-gray-900">Welcome, {fullName}</h1>
-        <p className="text-sm text-gray-400 mt-0.5">{today}</p>
+                 <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-1 break-all sm:break-normal">Welcome, {user.name}</h1>
+                <p className="text-sm text-gray-400">{today}</p>
       </div>
 
       {/* Progress bar */}

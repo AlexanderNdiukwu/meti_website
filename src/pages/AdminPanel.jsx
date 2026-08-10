@@ -79,7 +79,7 @@ function InfoRow({ label, value }) {
   return (
     <div className="flex justify-between items-start py-1.5 border-b border-gray-50 gap-2">
       <span className="text-gray-400 font-semibold shrink-0 text-xs w-44">{label}</span>
-      <span className="font-semibold text-gray-800 text-right text-xs">{value || '—'}</span>
+      <span className="font-semibold text-gray-800 break-all text-right text-xs">{value || '—'}</span>
     </div>
   );
 }
@@ -492,7 +492,7 @@ const handleConfirmApp = async () => {
           {activeView === 'Overview' && (
             <div className="space-y-6">
               <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-                <h1 className="text-2xl font-black text-gray-900 mb-1">Welcome, {user.name}</h1>
+             <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-1 break-all sm:break-normal">Welcome, {user.name}</h1>
                 <p className="text-sm text-gray-400">{today}</p>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -640,7 +640,7 @@ const handleConfirmApp = async () => {
                     </div>
 
                     {/* Tab content */}
-                    <div className="flex-1 overflow-y-auto p-5">
+                    <div className="flex-1 overflow-y-auto p-3">
 
                       {/* ══ PRINT VIEW ══ */}
                       {activeDetailTab === 'Print' && (
@@ -664,7 +664,7 @@ const handleConfirmApp = async () => {
                           </div>
 
                           {/* Form preview */}
-                          <div className="print-root border border-gray-200 rounded-2xl p-6 space-y-5 text-xs bg-white">
+                       <div className="print-root border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5 text-xs bg-white">
                             <div className="text-center border-b border-brand-primary pb-3">
                               <p className="font-black text-brand-primary text-base">UNIVERSITY OF PORT HARCOURT</p>
                               <p className="font-bold text-brand-primary text-[10px]">INSTITUTE OF ENGINEERING, TECHNOLOGY AND INNOVATION
@@ -673,9 +673,9 @@ MANAGEMENT (METI)
                               <p className="text-brand-primary text-[10px]">CENTRE FOR ENGINEERING AND TECHNOLOGY MANAGEMENT (CETM)</p>
                             </div>
 
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <p className="font-bold text-[11px]">APPLICATION NUMBER: <span className="font-mono text-brand-primary">{selectedApp.applicationNum || '______________________________'}</span></p>
+                          <div className="flex justify-between items-start gap-3">
+                              <div className="min-w-0">
+                                <p className="font-bold text-[11px] break-all">APPLICATION NUMBER: <span className="font-mono text-brand-primary">{selectedApp.applicationNum || '______________________________'}</span></p>
                                 <p className="text-[10px] italic text-gray-500 mt-1">*Please carefully fill out this application form and ensure all fields are completed accurately.</p>
                               </div>
                               {/* Passport photo — checks all possible data paths */}
@@ -837,24 +837,24 @@ MANAGEMENT (METI)
                                 return (
                                   <div key={key} className="border border-gray-100 rounded-2xl p-4 bg-gray-50 space-y-2">
                                     <div className="flex items-center justify-between gap-2 flex-wrap">
-                                      <div>
+                                    <div className="min-w-0 flex-1">
                                         <p className="font-bold text-gray-800 text-xs">{DOC_LABELS[key] || key}</p>
-                                        <p className="text-[10px] text-gray-400 font-mono">{dispName}</p>
+                                        <p className="text-[10px] text-gray-400 font-mono break-all">{dispName}</p>
                                       </div>
                                       <div className="flex items-center gap-1.5 flex-wrap">
                                         <button onClick={openDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Eye size={12} /> View</button>
                                         <button onClick={downloadDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Download size={12} /> Download</button>
-                                       {approval !== 'approved'
+                                     {approval !== 'approved'
                                           ? <button onClick={async () => {
                                               setApprovingDocKey(key);
                                               setRejectingDocKey(null);
                                               try { await adminApproveDoc(selectedApp.id, key); }
                                               finally { setApprovingDocKey(null); }
-                                            }} disabled={approvingDocKey === key} className="flex items-center gap-1 px-2.5 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 disabled:opacity-60">
+                                            }} disabled={approvingDocKey === key} className="flex items-center justify-center gap-1 min-w-23 px-2.5 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 disabled:opacity-60">
                                               {approvingDocKey === key ? <Loader2 size={12} className="animate-spin" /> : <ThumbsUp size={12} />}
                                               {approvingDocKey === key ? 'Approving…' : 'Approve'}
                                             </button>
-                                          : <span className="flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
+                                          : <span className="flex items-center justify-center gap-1 min-w-23 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
                                         }
                                         {approval !== 'rejected'
                                           ? <button onClick={() => { setRejectingDocKey(rejectingDocKey===key ? null : key); setDocRejectReason(''); }} className="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 border border-red-200 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100"><ThumbsDown size={12} /> Reject</button>
@@ -951,7 +951,7 @@ MANAGEMENT (METI)
                    {activeDetailTab === 'Decision' && (
                         <div className="space-y-4">
                           {/* ⚠️ TEMP DEBUG — remove once the confirm-button issue is solved */}
-                          <div className="bg-black text-green-400 font-mono text-[10px] rounded-xl p-3 space-y-1">
+                         <div className="bg-black text-green-400 font-mono text-[10px] rounded-xl p-3 space-y-1 break-all">
                             <p>status: "{selectedApp.status}"</p>
                             <p>paymentVerified: {String(selectedApp.paymentVerified)}</p>
                             <p>applicationFormSubmitted: {String(selectedApp.applicationFormSubmitted)}</p>
