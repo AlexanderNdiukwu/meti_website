@@ -19,7 +19,16 @@ export default function ForgotPassword() {
   // lets that original tab know, instead of sitting there stale.
   const [recoveredElsewhere, setRecoveredElsewhere] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+    // The PASSWORD_RECOVERY event only fires ONCE, right when Supabase
+    // processes the link's token — if this component wasn't mounted yet
+    // at that exact instant (e.g. a brand-new tab still loading its
+    // code), the event is missed entirely. Checking the URL hash
+    // directly here is instant and can't race against anything.
+    if (window.location.hash.includes('type=recovery')) {
+      setRecoveryMode(true);
+    }
+
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') setRecoveryMode(true);
     });
