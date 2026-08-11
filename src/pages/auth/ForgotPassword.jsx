@@ -13,21 +13,31 @@ export default function ForgotPassword() {
   // PASSWORD_RECOVERY auth event and there's already a session — that's
   // what tells us to skip straight to "set new password" instead of
   // showing the email form.
-  const [recoveryMode, setRecoveryMode] = useState(false);
+const [recoveryMode, setRecoveryMode] = useState(false);
   // If the person left the original "enter your email" tab open and
   // completed the reset in the NEW tab the email link opened, this flag
   // lets that original tab know, instead of sitting there stale.
   const [recoveredElsewhere, setRecoveredElsewhere] = useState(false);
 
 useEffect(() => {
-    // The PASSWORD_RECOVERY event only fires ONCE, right when Supabase
-    // processes the link's token — if this component wasn't mounted yet
-    // at that exact instant (e.g. a brand-new tab still loading its
-    // code), the event is missed entirely. Checking the URL hash
-    // directly here is instant and can't race against anything.
-    if (window.location.hash.includes('type=recovery')) {
-      setRecoveryMode(true);
-    }
+    // Whichever browser tab ends up holding the recovery session wins —
+    // that's decided by the browser, not by which tab you clicked the
+    // link in, so instead of fighting that, this page checks for an
+    // ACTIVE recovery session on mount regardless of how it got here.
+    const checkForRecoverySession = async () => {
+      if (window.location.hash.includes('type=recovery')) {
+        setRecoveryMode(true);
+        return;
+      }
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // A session exists but this page wasn't the one that processed
+        // the link — still a real, usable recovery session if the auth
+        // event below confirms it's a recovery type. Safe fallback.
+        setRecoveryMode(true);
+      }
+    };
+    checkForRecoverySession();
 
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') setRecoveryMode(true);

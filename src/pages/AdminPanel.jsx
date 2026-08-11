@@ -719,7 +719,7 @@ MANAGEMENT (METI)
                             {/* Section C */}
                             <div>
                               <p className="font-bold text-brand-primary text-[11px] uppercase border-b border-gray-200 pb-1 mb-2">Section C – Academic Background</p>
-                              {[
+                           {[
                                 ['First Degree',    selectedApp.applicationForm?.academic?.firstDegree],
                                 ['Institution',     selectedApp.applicationForm?.academic?.firstInstitution],
                                 ['Year',            selectedApp.applicationForm?.academic?.firstYear],
@@ -730,7 +730,7 @@ MANAGEMENT (METI)
                                 ['Class of Degree', selectedApp.applicationForm?.academic?.secondClass],
                                 ['Other Qualifications',         selectedApp.applicationForm?.academic?.otherQualifications],
                                 ['English Language Proficiency', selectedApp.applicationForm?.academic?.englishProficiency],
-                              ].map(([l,v]) => <InfoRow key={l} label={l} value={v} />)}
+                              ].map(([l,v], i) => <InfoRow key={`${l}-${i}`} label={l} value={v} />)}
                             </div>
 
                             {/* Section D */}
