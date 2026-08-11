@@ -19,7 +19,7 @@ VitePWA({
   },
   includeAssets: ['images/meti-logo-icon.png'],
   manifest: {
-    name: ' Institute of Engineering, Technology and Innovation Management ( METI )',   // shown during install editable anytime
+    name: 'METI Admissions Portal',   // shown during install — editable anytime
     short_name: 'METI',               // shown under the home screen icon — editable anytime
     description: 'METI postgraduate admissions portal',
     theme_color: '#1B3A6B',
