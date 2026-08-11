@@ -58,11 +58,34 @@ import './index.css'
 import 'primereact/resources/themes/lara-light-blue/theme.css'
 import 'primeicons/primeicons.css'
 
+// Captured as early as possible, outside React entirely — Chrome can
+// fire this before the component tree finishes mounting. Attaching the
+// listener only inside a deeply nested component (like InstallAppButton)
+// risks missing it completely, which is exactly why Chrome's own native
+// icon was showing instead of the custom button — our code's preventDefault()
+// never got the chance to run.
+window.deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window.deferredInstallPrompt = e;
+  window.dispatchEvent(new Event('pwa-install-available'));
+});
+window.addEventListener('appinstalled', () => {
+  window.deferredInstallPrompt = null;
+  window.dispatchEvent(new Event('pwa-install-available'));
+});
+
 // Restores a logged-in user's session (and loads their applicant data)
 // once, on first load — before the router renders any page. Without
 // this, a returning user would appear logged out until they manually
 // log in again, even though Supabase still has a valid session.
 function Root() {
+
+  
+
+
+
+
   // Selectors, not whole-store destructuring — Root only cares about
   // `loading`, so this stops it re-rendering on every unrelated store
   // change (applicants fetched, announcements fetched, etc.)

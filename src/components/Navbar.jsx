@@ -85,6 +85,8 @@ const Navbar = () => {
 
   return (
     <>
+      
+
       <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3' : 'bg-white/80 lg:py-2 py-5'}`}>
         <div className="container mx-auto px-3 flex justify-between items-center">
           
@@ -231,11 +233,19 @@ const Navbar = () => {
             </span>
 
            
+
+       
+           
           </div>
 
           {/* RIGHT: Auth */}
           <div className="hidden lg:flex items-center gap-4">
-            <span className="relative group">
+
+            
+          
+            <InstallAppButton className="hidden md:flex  items-center gap-1.5 px-4 py-0.5 rounded-full bg-brand-primary text-white text-lg font-bold hover:bg-blue-900" />
+
+          {/* </div> */}     <span className="relative group">
               <Link to="/login" className="text-sm bg-uniport-blue px-5 py-1.5 rounded-full text-white md:text-lg font-bold transition-colors hover:bg-blue-800 drop-shadow-sm">
                 Login
               </Link>
@@ -253,6 +263,7 @@ const Navbar = () => {
 
           {/* Mobile Right: Small Menu Button and Login */}
           <div className="lg:hidden flex items-center gap-4">
+
             <span className="relative group">
               <Link to="/login" className="text-uniport-blue font-bold drop-shadow-sm">Login</Link>
               <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 text-xs text-white bg-[#0d2a5e] rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50">
@@ -381,7 +392,10 @@ const Navbar = () => {
           </>
         )}
       </AnimatePresence>
+
+      
     </>
+    
   );
 };
 

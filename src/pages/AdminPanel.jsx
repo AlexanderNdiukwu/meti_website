@@ -166,6 +166,9 @@ const [searchTerm,        setSearchTerm]        = useState('');
   // number counters are completely untouched by this.
 const [dateRangeFilter,   setDateRangeFilter]   = useState('all');
   const [programmeFilter,   setProgrammeFilter]   = useState('all');
+  // Free-text year search — separate from the Today/Month/Year/All Time
+  // dropdown, lets the admin type any specific year directly (e.g. 2026).
+  const [yearSearch,        setYearSearch]        = useState('');
   const [selectedAppId,     setSelectedAppId]     = useState(null);
   const [activeDetailTab,   setActiveDetailTab]   = useState('Print');
   const [viewerFile,        setViewerFile]        = useState(null);
@@ -275,11 +278,12 @@ const isWithinDateRange = (createdAt) => {
     return true;
   };
 
- const filteredApplicants = applicants.filter(a => {
+const filteredApplicants = applicants.filter(a => {
     const q = searchTerm.toLowerCase();
     const matchesSearch = a.name?.toLowerCase().includes(q) || a.email?.toLowerCase().includes(q) || a.selectedProgram?.toLowerCase().includes(q) || a.status?.toLowerCase().includes(q);
     const matchesProgramme = programmeFilter === 'all' || a.selectedProgram === programmeFilter;
-    return matchesSearch && matchesProgramme && isWithinDateRange(a.createdAt);
+    const matchesYear = !yearSearch.trim() || (a.createdAt && new Date(a.createdAt).getFullYear() === parseInt(yearSearch, 10));
+    return matchesSearch && matchesProgramme && matchesYear && isWithinDateRange(a.createdAt);
   });
 
   const today = new Date().toLocaleDateString('en-GB', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
@@ -545,13 +549,15 @@ const handleConfirmApp = async () => {
                     <option value="Masters">Masters (MSc)</option>
                     <option value="PhD">PhD</option>
                   </select>
-                  <select value={dateRangeFilter} onChange={e => setDateRangeFilter(e.target.value)}
+                <select value={dateRangeFilter} onChange={e => setDateRangeFilter(e.target.value)}
                     className="bg-white border border-gray-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm">
                     <option value="all">All Time</option>
                     <option value="today">Today</option>
                     <option value="month">This Month</option>
                     <option value="year">This Year</option>
                   </select>
+                  <input type="number" placeholder="Search year e.g. 2026" value={yearSearch} onChange={e => setYearSearch(e.target.value)}
+                    className="bg-white border border-gray-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-gray-600 w-40 focus:outline-none focus:ring-2 focus:ring-brand-primary shadow-sm" />
                   <div className="relative w-full sm:w-72">
                     <Search size={14} className="absolute left-3 top-3 text-gray-400" />
                     <input type="text" placeholder="Search name, email, programme…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
