@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "Engr. Sarah O.",
-      role: "MSc Graduate",
-      company: "Leading Tech Firm",
-      quote: "The combination of deep engineering knowledge and business strategy completely transformed my career trajectory. I moved into a senior management role just months after graduating."
+      name: "Collins Utiri",
+      role: "Masters Student",
+      company: "Student",
+      quote: "METI is strategically positioned to support senior management personnel in developing and advancing themselves academically, even amid the demands of their most hectic professional schedules."
     },
     {
-      name: "Dr. Ahmed M.",
-      role: "PhD Candidate",
-      company: "Research Institute",
-      quote: "The faculty's support and the cutting-edge facilities available for research are unparalleled. It's the perfect environment for pushing the boundaries of technology management."
+      name: "Solomon Obia ",
+      role: "PhD Student",
+      company: "Student",
+      quote: "The centre is known for impacting knowledge for aspiring leaders, managers and innovators. The institute is highly organised with a highly effective director and his team. Programs and classes are structured such that students complete their studies in record time."
     },
     {
       name: "Michael T.",
