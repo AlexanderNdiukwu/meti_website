@@ -82,7 +82,7 @@ const HeroOverlay = () => {
      
 
 
-          <InstallAppButton/>
+       <InstallAppButton className="md:hidden flex items-center justify-center gap-2 whitespace-nowrap shrink-0 px-8 py-3 rounded-full bg-white text-uniport-blue animate-pulse text-lg font-bold hover:bg-blue-100 transition-colors shadow-lg" />
        
 
         </div>

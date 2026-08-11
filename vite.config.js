@@ -7,10 +7,16 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     react(),
-    VitePWA({
+VitePWA({
   registerType: 'autoUpdate', // auto-updates in the background — this is
                                // what prevents the "stale cached version"
                                // problem I flagged earlier
+  devOptions: {
+    enabled: true, // without this, the service worker only runs in a real
+                    // build/preview or on your deployed site — never during
+                    // plain `npm run dev`, which is why nothing shows up
+                    // while testing locally
+  },
   includeAssets: ['images/meti-logo-icon.png'],
   manifest: {
     name: 'METI Admissions Portal',   // shown during install — editable anytime
