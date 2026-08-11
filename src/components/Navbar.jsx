@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, GraduationCap, ChevronRight, ChevronDown } from 'lucide-react';
+import InstallAppButton from './InstallAppButton';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -198,6 +199,8 @@ const Navbar = () => {
                 <ChevronDown size={16} className={`transition-transform duration-200 ${aboutDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
+           
+
               <AnimatePresence>
                 {aboutDropdownOpen && (
                   <motion.div
@@ -226,6 +229,8 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </span>
+
+           
           </div>
 
           {/* RIGHT: Auth */}

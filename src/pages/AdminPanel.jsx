@@ -152,7 +152,7 @@ const {
     adminReturnFormToStudent, adminSaveAdmissionLetter,
 adminAddNote, adminResetProgrammeSession, adminSetNextApplicationNumber,
     adminDeleteApplicant,
-sendAnnouncement, deleteAnnouncement,
+sendAnnouncement, deleteAnnouncement, clearAllAnnouncements,
     resetAllData, logout, getFileSignedUrl, updatePassword,
     subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
   } = useAdmissionsStore();
@@ -205,7 +205,10 @@ const [rejectingDocKey,  setRejectingDocKey]  = useState(null);
   const [annMessage, setAnnMessage] = useState('');
   const [annFile,    setAnnFile]    = useState(null);
   const [annTarget,  setAnnTarget]  = useState('all');
-  const [annAudience, setAnnAudience] = useState('all_applicants');
+const [annAudience, setAnnAudience] = useState('all_applicants');
+  const [annSearchTerm, setAnnSearchTerm] = useState('');
+  const [annDateFilter, setAnnDateFilter] = useState('all');
+  const [annProgFilter, setAnnProgFilter] = useState('all');
   const annFileRef = useRef(null);
   // Dev test upload
   // const testUploadRef  = useRef(null);
@@ -1059,13 +1062,57 @@ MANAGEMENT (METI)
           )}
 
           {/* ════ ANNOUNCEMENTS ════ */}
-          {activeView === 'Announcements' && (
+      {activeView === 'Announcements' && (
             <div className="space-y-6">
-              <h1 className="text-2xl font-black text-gray-900">Announcements</h1>
+              <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-black text-gray-900">Announcements</h1>
+                {announcements.length > 0 && (
+                  <button
+                    onClick={() => {
+                      const t = window.prompt(`Type CLEAR to permanently delete all ${announcements.length} announcements. This removes them from every student's dashboard too.`);
+                      if (t === 'CLEAR') clearAllAnnouncements();
+                    }}
+                    className="text-xs text-red-500 hover:text-red-700 font-bold flex items-center gap-1"
+                  >
+                    <Trash2 size={12} /> Clear All
+                  </button>
+                )}
+              </div>
               <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input type="text" placeholder="Search title or message…" value={annSearchTerm} onChange={e => setAnnSearchTerm(e.target.value)}
+                      className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary" />
+                    <select value={annProgFilter} onChange={e => setAnnProgFilter(e.target.value)}
+                      className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-600">
+                      <option value="all">All Programmes</option>
+                      <option value="pgd">PGD</option>
+                      <option value="msc">Masters</option>
+                      <option value="phd">PhD</option>
+                    </select>
+                    <select value={annDateFilter} onChange={e => setAnnDateFilter(e.target.value)}
+                      className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-600">
+                      <option value="all">All Time</option>
+                      <option value="today">Today</option>
+                      <option value="month">This Month</option>
+                      <option value="year">This Year</option>
+                    </select>
+                  </div>
                   {!announcements.length && <p className="text-gray-400 italic text-sm">No announcements yet.</p>}
-                  {announcements.map(item => (
+                  {announcements.filter(item => {
+                    const q = annSearchTerm.toLowerCase();
+                    const matchesSearch = !q || item.title?.toLowerCase().includes(q) || item.message?.toLowerCase().includes(q);
+                    const matchesProg = annProgFilter === 'all' || item.programme_filter === annProgFilter;
+                    let matchesDate = true;
+                    if (annDateFilter !== 'all' && item.createdAt) {
+                      const created = new Date(item.createdAt);
+                      const now = new Date();
+                      if (annDateFilter === 'today') matchesDate = created.toDateString() === now.toDateString();
+                      else if (annDateFilter === 'month') matchesDate = created.getFullYear() === now.getFullYear() && created.getMonth() === now.getMonth();
+                      else if (annDateFilter === 'year') matchesDate = created.getFullYear() === now.getFullYear();
+                    }
+                    return matchesSearch && matchesProg && matchesDate;
+                  }).map(item => (
                     <div key={item.id} className="border border-gray-100 rounded-2xl p-4 bg-white shadow-sm">
                       <div className="flex items-start justify-between gap-2">
                         <div>

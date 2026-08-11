@@ -766,8 +766,17 @@ adminApprovePayment: async (applicantId) => {
         await get().fetchAllApplicants();
       },
 
-      deleteAnnouncement: async (announcementId) => {
+    deleteAnnouncement: async (announcementId) => {
         const { error } = await supabase.from('announcements').delete().eq('id', announcementId);
+        if (error) throw error;
+        await get().fetchAnnouncements();
+      },
+
+      // Wipes every announcement at once — same single-table-delete
+      // behavior as deleteAnnouncement, just applied to all rows. Visible
+      // to admin and students alike since it's the same table both read from.
+      clearAllAnnouncements: async () => {
+        const { error } = await supabase.from('announcements').delete().neq('id', '00000000-0000-0000-0000-000000000000');
         if (error) throw error;
         await get().fetchAnnouncements();
       },

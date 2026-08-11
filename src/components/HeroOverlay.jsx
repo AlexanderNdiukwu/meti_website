@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowBigLeft } from 'lucide-react';
+import InstallAppButton from './InstallAppButton';
 
 const Typewriter = ({ text, delay = 150, pause = 2500 }) => {
   const [currentText, setCurrentText] = useState("");
@@ -63,7 +64,7 @@ const HeroOverlay = () => {
           DRIVING SUSTAINABLE DEVELOPMENT THROUGH <br></br> <Typewriter text="INNOVATION" />
         </p>
 
-           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
           <span className="relative group  ">
             <Link to="/signup" className="bg-white flex gap-4 items-center   hover:bg-blue-500 text-uniport-blue pl-8 pr-4 py-2 rounded-full font-bold text-lg transition-colors shadow-lg ">
               APPLY NOW 
@@ -77,6 +78,13 @@ const HeroOverlay = () => {
           <Link to="/about" className="bg-transparent border border-white text-white px-8 py-2 rounded-full font-bold text-lg hover:bg-white/10 transition-colors">
             Learn More
           </Link>
+
+     
+
+
+          <InstallAppButton/>
+       
+
         </div>
       </motion.div>
     </div>
