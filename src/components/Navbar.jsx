@@ -87,8 +87,8 @@ const Navbar = () => {
     <>
       
 
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3' : 'bg-white/80 lg:py-2 py-5'}`}>
-        <div className="container mx-auto px-3 flex justify-between items-center">
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3' : 'bg-white/80 lg:py-2 py-5 '}`}>
+        <div className="container mx-auto px-2 flex justify-between items-center">
           
           {/* LEFT: Logos & Name */}
           <div className="flex items-center md:gap-4 gap-2">
@@ -101,25 +101,25 @@ const Navbar = () => {
             </button> */}
             
             <Link to="/" className="flex items-center gap-3">
-              <div className="flex items-center gap-1 md:gap-2">
+              <div className="flex items-center  md:gap-2">
                 <img 
                   src="/images/uniportlogo1.png" 
                   alt="Uniport Logo" 
-                  className="size-13 md:size-27 object-cover rounded-full shadow-sm" 
+                  className="size-13 md:size-24 object-cover rounded-full shadow-sm" 
                 />
                 <img 
                   src="/images/metilogo1.png" 
                   alt="METI Logo" 
-                  className="size-15 md:size-30 object-cover rounded-full shadow-sm" 
+                  className="size-15 md:size-27 object-cover rounded-full shadow-sm" 
                 />
               <div>
 
-              <p className="lg:text-xl text-sm hidden lg:block font-extrabold tracking-tight text-gray-700 drop-shadow-sm">
+              <p className="lg:text-xl text-[10px] lg:block font-extrabold tracking-tight text-gray-700 drop-shadow-sm">
                 Institute of Engineering, <br/>Technology and Innovation <br/>Management (METI)
               </p>
-              <p className="lg:hidden text-2xl font-extrabold tracking-tight text-gray-900 drop-shadow-sm">
+              {/* <p className="lg:hidden text-2xl font-extrabold tracking-tight text-gray-900 drop-shadow-sm">
                 METI
-              </p>
+              </p> */}
 
               {/* <span className="lg:text-3xl text-2xl  font-extrabold tracking-tight text-gray-900 drop-shadow-sm">
                 METI
@@ -243,7 +243,7 @@ const Navbar = () => {
 
             
           
-            <InstallAppButton className="hidden md:flex  items-center gap-1.5 px-4 py-0.5 rounded-full bg-brand-primary text-white text-lg font-bold hover:bg-blue-900" />
+            <InstallAppButton className="hidden md:flex  items-center gap-1.5 px-4 py-1 rounded-full bg-brand-primary text-white text-md font-bold hover:bg-blue-900" />
 
           {/* </div> */}     <span className="relative group">
               <Link to="/login" className="text-sm bg-uniport-blue px-5 py-1.5 rounded-full text-white md:text-lg font-bold transition-colors hover:bg-blue-800 drop-shadow-sm">

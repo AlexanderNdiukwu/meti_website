@@ -37,7 +37,7 @@ const PAST_DIRECTORS = [
 
 export default function History() {
   return (
-    <div className="pt-10 pb-24 bg-black/5 min-h-screen">
+    <div className="pt-15 pb-24 bg-black/5 min-h-screen">
         {/* <About/> */}
       <div className="container  px-5  space-y-16">
         

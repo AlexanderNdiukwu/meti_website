@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, GraduationCap } from 'lucide-react';
+import metilogo from '../../src/assets/unilogos/metilogo1.png'
 
 const GlobalApplyWidgets = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -15,6 +16,7 @@ const GlobalApplyWidgets = () => {
     // Repeat popup once every 60 seconds (1 minute)
     const interval = setInterval(() => {
       setShowPopup(true);
+   
     }, 300000);
 
     return () => {
@@ -37,14 +39,14 @@ const GlobalApplyWidgets = () => {
     <>
       {/* 1. STICKY PULSING "APPLY NOW" BUTTON (BOTTOM-LEFT) */}
       <motion.div
-        className="fixed bottom-6 left-6 z-40 select-none pointer-events-auto"
+        className="fixed bottom-24 left-6 z-40 select-none pointer-events-auto"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
       >
         <Link to="/signup" className="block">
           <motion.div
-            className="flex items-center gap-2.5 bg-[#003366] text-white px-6 py-3.5 rounded-full font-bold text-sm md:text-base uppercase tracking-wider shadow-xl border border-white/20 hover:bg-[#1a4fa0] transition-colors cursor-pointer"
+            className="flex items-center gap-2.5 bg-uniport-blue text-white px-6 py-2 rounded-full font-bold text-sm md:text-base uppercase tracking-wider shadow-xl border border-white/20 hover:bg-[#1a4fa0] transition-colors cursor-pointer"
             animate={{
               scale: [1, 1.05, 1],
               boxShadow: [
@@ -64,7 +66,7 @@ const GlobalApplyWidgets = () => {
                  <img 
                   src="/images/metilogo1.png" 
                   alt="METI Logo" 
-                  className="size-6 md:size-10 object-cover bg-white rounded-full shadow-sm" 
+                  className="size-5 md:size-9 object-cover bg-white rounded-full shadow-sm" 
                 />
             <span>Apply Now</span>
           </motion.div>
@@ -91,11 +93,12 @@ const GlobalApplyWidgets = () => {
 
             {/* Popup Header & Icon */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 bg-blue-50 text-uniport-blue rounded-2xl shrink-0">
-                <Sparkles className="w-5 h-5 animate-pulse" />
+              <div className="p-2.5   rounded-2xl shrink-0">
+                {/* <Sparkles className="w-5 h-5 animate-pulse" /> */}
+                <img src={metilogo} alt='metilogo' className='w-12 h-10 '/>
               </div>
               <div>
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">METI Uniport</h4>
+                <h4 className="text-xs font-bold text-gray-900 uppercase tracking-widest">METI Uniport</h4>
                 <h3 className="font-extrabold text-gray-900 text-lg">Admissions Are Open!</h3>
               </div>
             </div>
@@ -110,7 +113,7 @@ const GlobalApplyWidgets = () => {
               <Link 
                 to="/signup" 
                 onClick={() => setShowPopup(false)}
-                className="flex-1 py-3 text-center bg-[#003366] text-white font-bold text-sm rounded-2xl hover:bg-[#1a4fa0] transition-colors shadow-md shadow-blue-900/10"
+                className="flex-1 py-3 text-center bg-uniport-blue text-white font-bold text-sm rounded-2xl hover:bg-[#1a4fa0] transition-colors shadow-md shadow-blue-900/10"
               >
                 APPLY NOW
               </Link>

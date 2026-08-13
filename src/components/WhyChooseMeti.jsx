@@ -22,7 +22,7 @@ const WhyChooseMeti = () => {
           {reasons.map((reason, idx) => (
          <div
   key={idx}
-  className={`flex items-start gap-4 p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow bg-gray-50/50 ${
+  className={`flex items-start gap-4 p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow bg-gray-50/50 ${
     reason.title === "Flexible Payment Plan" ? " animate-bounce text-blue-800 font-bold" : ""
   }`}
 >

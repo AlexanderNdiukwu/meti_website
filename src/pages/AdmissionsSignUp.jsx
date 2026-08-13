@@ -50,11 +50,16 @@ export default function AdmissionsSignUp() {
 
   return (
     <div className='bg-black/5'>
-      <div className='pt-5 pl-8'>
-        <Link to={'/'} className='text-blue-500'>{"< "}Back</Link>
-      </div>
+     <div className='  hover:text-black  ' >
+          
+         <Link to={'/'} className='text-black hover:text-uniport-blue absolute ml-5 mt-5 bg-white px-2 rounded-lg '>
+            {"< "}
+            Back
+         
+         </Link>
+           </div>
 
-      <div className="pt-10 pb-24 min-h-screen flex items-center justify-center">
+      <div className="pt-21 pb-24 min-h-screen flex items-center justify-center">
         <div className="">
           {/* TAB TOGGLE SELECTOR */}
           <div className='mx-7'>
@@ -70,7 +75,7 @@ export default function AdmissionsSignUp() {
 
           </div>
 
-          <div className="bg-white p-8 rounded-3xl border border-black/10 shadow-lg">
+          <div className="bg-white lg:mx-0 mx-2  p-8 rounded-3xl border border-black/20 shadow-lg">
             {sent ? (
               <div className="flex flex-col items-center text-center py-4">
                 <div className="p-3 bg-blue-50 text-uniport-blue rounded-full mb-4">
@@ -91,7 +96,7 @@ export default function AdmissionsSignUp() {
                 </Link>
               </div>
             ) : (
-              <>
+              <div className="">
                 <h2 className="text-2xl font-black text-gray-900 mb-2">Create Account</h2>
                 <p className="text-gray-400 text-sm mb-6">Create your admissions account to track and complete your program registration.</p>
 
@@ -162,7 +167,7 @@ export default function AdmissionsSignUp() {
                     {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><span>Create Account</span><ArrowRight size={16} /></>}
                   </button>
                 </form>
-              </>
+              </div>
             )}
           </div>
         </div>

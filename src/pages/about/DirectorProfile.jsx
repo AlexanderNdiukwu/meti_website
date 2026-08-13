@@ -3,7 +3,7 @@ import { Award, GraduationCap, ShieldCheck, BookOpen, Brain, Briefcase } from 'l
 
 export default function DirectorProfile() {
   return (
-    <div className="pt-10 pb-24 bg-gray-50 min-h-screen">
+    <div className="pt-15 pb-24 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-6 ">
         
         {/* Profile Card Header */}

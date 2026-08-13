@@ -65,7 +65,7 @@ const StaffGrid = () => {
       {facilitators.map((staff, idx) => (
         <motion.div
           key={idx}
-          className="bg-gray-50/50 p-6 rounded-2xl border border-gray-200 text-center hover:shadow-lg transition-all duration-300"
+          className="bg-gray-50/50 p-6 rounded-2xl border border-gray-300 text-center hover:shadow-lg transition-all duration-300"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

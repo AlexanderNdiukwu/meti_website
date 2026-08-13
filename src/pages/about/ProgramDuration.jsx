@@ -23,7 +23,7 @@ const DURATION_ITEMS = [
 
 export default function ProgramDuration() {
   return (
-    <div className="pt-10 pb-24 bg-black/5 min-h-screen">
+    <div className="pt-15 pb-24 bg-black/5 min-h-screen">
       <div className="container mx-auto px-6 max-w-7xl space-y-12">
         
         {/* Header */}

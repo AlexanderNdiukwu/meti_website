@@ -26,16 +26,18 @@ VitePWA({
     background_color: '#ffffff',
     display: 'standalone',            // opens without browser address bar
     start_url: '/',
-    icons: [
+ icons: [
       {
         src: '/images/meti-logo-icon.png',
         sizes: '512x512',
         type: 'image/png',
+        purpose: 'any',
       },
       {
         src: '/images/meti-logo-icon.png',
         sizes: '192x192',
         type: 'image/png',
+        purpose: 'any',
       },
     ],
   },

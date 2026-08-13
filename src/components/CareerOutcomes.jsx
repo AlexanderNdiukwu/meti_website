@@ -10,7 +10,7 @@ const CareerOutcomes = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
             <Briefcase className="w-12 h-12 text-uniport-blue mb-6" />
             <h3 className="text-xl font-bold text-gray-900 mb-4">Executive Roles</h3>
             <ul className="space-y-3 text-gray-600">
@@ -19,7 +19,7 @@ const CareerOutcomes = () => {
               <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-uniport-blue rounded-full"></span> Smart Manufacturing Director</li>
             </ul>
           </div>
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
             <Building2 className="w-12 h-12 text-indigo-500 mb-6" />
             <h3 className="text-xl font-bold text-gray-900 mb-4">Management & Consulting</h3>
             <ul className="space-y-3 text-gray-600">
@@ -28,7 +28,7 @@ const CareerOutcomes = () => {
               <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span> Clean Tech Project Manager</li>
             </ul>
           </div>
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
             <TrendingUp className="w-12 h-12 text-emerald-500 mb-6" />
             <h3 className="text-xl font-bold text-gray-900 mb-4">Entrepreneurship</h3>
             <ul className="space-y-3 text-gray-600">

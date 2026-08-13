@@ -69,14 +69,14 @@ export default function Support() {
 
     <div>
       <ScrollToTop/>
-        <div className='   pt-3 ' >
-         <Link to={'/'} className='text-blue-500 hover:text-black  pt-5  ml-5 '>
-                {"< "}
-                Back
-             
-             </Link>
-
-        </div>
+       <div className='  hover:text-black ' >
+          
+         <Link to={'/'} className='text-black hover:text-uniport-blue absolute ml-5 mt-5 bg-white px-2 rounded-lg '>
+            {"< "}
+            Back
+         
+         </Link>
+           </div>
 
     <div className="pt-15 pb-24 bg-black/5 min-h-screen">
       <div className="container mx-auto px-3 max-w-7xl  space-y-16">

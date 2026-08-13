@@ -7,17 +7,17 @@ export default function Aboutlayout() {
   return (
     <div>
 
-       <div className=' bg-white  hover:text-black ' >
-       <p className='h-5'></p>
-     <Link to={'/'} className='text-blue-500 hover:text-black  pt-5 ml-5 '>
+
+       <ScrollToTop/>
+
+       <div className='  hover:text-black ' >
+       <p className=''></p>
+     <Link to={'/'} className='text-black font-bold hover:text-uniport-blue absolute ml-5 mt-5 bg-white px-2 rounded-lg '>
         {"< "}
         Back
      
      </Link>
        </div>
-
-       <ScrollToTop/>
-
        
 
         <Outlet/>

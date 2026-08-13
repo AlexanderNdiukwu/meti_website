@@ -4,7 +4,7 @@ import Principalsgrid from "../../components/Principalsgrid";
 
 export default function PrincipalOfficers() {
   return (
-    <div className="pt-10 pb-24 min-h-screen  bg-black/5">
+    <div className="pt-15 pb-24 min-h-screen  bg-black/5">
       <div className="container  text-center">
 
       
