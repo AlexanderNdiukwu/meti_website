@@ -39,7 +39,7 @@ const GlobalApplyWidgets = () => {
     <>
       {/* 1. STICKY PULSING "APPLY NOW" BUTTON (BOTTOM-LEFT) */}
       <motion.div
-        className="fixed bottom-24 left-6 z-40 select-none pointer-events-auto"
+        className="fixed lg:bottom-24 bottom-26  left-6 z-40 select-none pointer-events-auto"
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
@@ -66,7 +66,7 @@ const GlobalApplyWidgets = () => {
                  <img 
                   src="/images/metilogo1.png" 
                   alt="METI Logo" 
-                  className="size-5 md:size-9 object-cover bg-white rounded-full shadow-sm" 
+                  className="size-7 md:size-9 object-cover bg-white rounded-full shadow-sm" 
                 />
             <span>Apply Now</span>
           </motion.div>

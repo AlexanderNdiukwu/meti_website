@@ -32,10 +32,10 @@ export default function BackToTopButton() {
         <div>
         <button
           onClick={scrollToTop}
-          className="fixed bottom-20 px-2 lg:hidden  left-8   z-50 flex items-center justify-center rounded-full bg-blue-900 text-white shadow-lg transition-all duration-300 hover:bg-gray-800 hover:scale-110 active:scale-95"
+          className="fixed lg:bottom-20 bottom-14 px-2 lg:hidden  left-7   z-50 flex items-center justify-center rounded-full bg-blue-900 text-white shadow-lg transition-all duration-300 hover:bg-gray-800 hover:scale-110 active:scale-95"
           aria-label="Go to top"
         >
-            <span className="py-2 px-4">
+            <span className="py-1 px-6">
             Back to top
 
             </span>

@@ -87,7 +87,7 @@ const Hero = () => {
         <HeroOverlay />
 
       </div>
-          <div className="absolute bottom-6 lg:mt-8 md:bottom-8 lg:-bottom-9 left-0 right-0">
+          <div className="absolute bottom-2 lg:mt-8 md:bottom-8 lg:-bottom-7 left-0 right-0">
       <HeroHighlights/>
     </div>
     </>
