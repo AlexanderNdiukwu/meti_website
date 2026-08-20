@@ -4,6 +4,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState(0);
 
+
+  
   const faqs = [
     {
       question: "What are the admission requirements for the Master's (MSc) programmes?",
@@ -12,6 +14,10 @@ const FAQSection = () => {
     {
       question: "What are the requirements for the PhD programmes?",
       answer: "Candidates are required to possess a Master's degree (M.Eng., M.Tech., or MSc.) in an Engineering discipline or Pure and Applied science disciplines, or hold a degree from any METI programme with a minimum CGPA of 3.5 on a 5.0 scale."
+    },
+      {
+      question: "What are the requirements for the PGD programmes?",
+      answer: "  Candidates shall possess a Higher National Diploma (HND) or a Third-Class Bachelor’s Degree (B.Eng, B.Tech, or B.Sc.) in an Engineering discipline or the Pure and Applied science from a recognised university."
     },
     {
       question: "How long does it take to complete the programmes?",
@@ -51,6 +57,7 @@ const FAQSection = () => {
                 ) : (
                   <ChevronDown className="w-5 h-5 text-gray-400 shrink-0" />
                 )}
+                
               </button>
               
               {openIndex === idx && (

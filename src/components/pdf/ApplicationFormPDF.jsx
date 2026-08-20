@@ -159,8 +159,8 @@ function PdfHeader({ uniportLogo, metiLogo }) {
 
       {/* METI logo — right */}
       {metiLogo
-        ? <Image src={metiLogo} style={{ width: 55, height: 55, marginLeft: 8 }} />
-        : <View style={{ width: 55, height: 49, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
+        ? <Image src={metiLogo} style={{ width: 70, height: 63, marginLeft: 8 }} />
+        : <View style={{ width: 70, height: 63, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
       }
     </View>
   );
@@ -329,18 +329,7 @@ export default function ApplicationFormPDF({ application, uniportLogo, metiLogo 
         <Field label="Position"  value={work.position} />
         <Field label="Duration"  value={work.duration} />
 
-        {/* ── SECTION F: ANY OTHER INFORMATION ── (F before E — matches official form) */}
-        <Text style={styles.sectionTitle}>Section F – Any Other Information to Support Your Application</Text>
-        {otherInfo ? (
-          <Text style={{ fontSize: 9, lineHeight: 1.5 }}>{otherInfo}</Text>
-        ) : (
-          <>
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
-            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
-          </>
-        )}
+       
 
         {/* ── SECTION E: REFEREES ── (E after F — matches official form) */}
         <Text style={styles.sectionTitle}>Section E – Referees</Text>
@@ -366,6 +355,19 @@ export default function ApplicationFormPDF({ application, uniportLogo, metiLogo 
               </View>
             ))
         }
+
+         {/* ── SECTION F: ANY OTHER INFORMATION ── (F before E — matches official form) */}
+        <Text style={styles.sectionTitle}>Section F – Any Other Information to Support Your Application</Text>
+        {otherInfo ? (
+          <Text style={{ fontSize: 9, lineHeight: 1.5 }}>{otherInfo}</Text>
+        ) : (
+          <>
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
+            <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#000', marginBottom: 6 }} />
+          </>
+        )}
 
         {/* ── SECTION G: DECLARATION ── */}
         <Text style={styles.sectionTitle}>Section G – Declaration</Text>
@@ -424,7 +426,7 @@ export default function ApplicationFormPDF({ application, uniportLogo, metiLogo 
 
         {/* ── FOOTER (appears on every page) ── */}
         <Text style={styles.footer} fixed>
-          ©METI@UNIPORT.{'                                                            '}
+          © METI@UNIPORT.{'                                                            '}
           Application For Admission Form
         </Text>
 

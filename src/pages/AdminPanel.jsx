@@ -151,7 +151,7 @@ const {
     adminConfirmApplicationForm, adminRejectApplication,
     adminReturnFormToStudent, adminSaveAdmissionLetter,
 adminAddNote, adminResetProgrammeSession, adminSetNextApplicationNumber,
-    adminDeleteApplicant,
+    adminDeleteApplicant, adminRevertDocApproval,
 sendAnnouncement, deleteAnnouncement, clearAllAnnouncements,
     resetAllData, logout, getFileSignedUrl, updatePassword,
     subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
@@ -582,7 +582,13 @@ const handleConfirmApp = async () => {
                         {filteredApplicants.map(app => (
                           <tr key={app.id} onClick={() => { setSelectedAppId(app.id); setActiveDetailTab('Print'); navigate(`/admin/applications/${app.id}`); }}
                             className={`hover:bg-blue-50/10 cursor-pointer ${selectedAppId===app.id ? 'bg-blue-50/20' : ''}`}>
-                            <td className="p-4"><p className="font-bold text-gray-900 text-sm">{app.name}</p><p className="text-[10px] text-gray-400 hidden sm:block">{app.email}</p></td>
+                         <td className="p-4">
+                              <p className="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+                                {app.name}
+                                {app.correctionRequested && <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" title="Requested form back" />}
+                              </p>
+                              <p className="text-[10px] text-gray-400 hidden sm:block">{app.email}</p>
+                            </td>
                             <td className="p-4 hidden sm:table-cell font-bold">{app.selectedProgram}</td>
                             <td className="p-4"><StatusBadge status={app.status} /></td>
                             <td className="p-4 text-center"><button className="text-brand-primary font-bold text-xs px-2 py-1 rounded-lg hover:bg-blue-50">View</button></td>
@@ -654,17 +660,23 @@ const handleConfirmApp = async () => {
                       {/* ══ PRINT VIEW ══ */}
                       {activeDetailTab === 'Print' && (
                         <div className="space-y-4">
+                      {selectedApp.correctionRequested && (
+                            <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-4 flex items-center justify-between gap-3 flex-wrap">
+                              <p className="text-xs font-bold text-red-700">
+                                ⚠ {selectedApp.name} has requested their form back for correction.
+                              </p>
+                              <button onClick={() => setReturnFormOpen(true)}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 shrink-0">
+                                <RotateCcw size={13} /> Return Form to Student
+                              </button>
+                            </div>
+                          )}
                           <div className="flex gap-2 flex-wrap no-print">
                            <button onClick={() => handleDownloadApplicationFormPDF()} disabled={!!pdfLoading}
                               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-primary text-white text-xs font-bold hover:bg-blue-900 disabled:opacity-50">
                               <Download size={13} />{pdfLoading === 'form' ? 'Generating…' : 'Download Application Form PDF'}
                             </button>
-                            {/* <button onClick={() => window.print()}
-                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-brand-primary text-brand-primary text-xs font-bold hover:bg-blue-50">
-                              <Printer size={13} /> Print
-                            </button> */}
-                            {/* Return Form from Print View — for written field errors */}
-                            {selectedApp.applicationFormSubmitted && selectedApp.status !== 'Rejected' && selectedApp.status !== 'active_student' && (
+                            {selectedApp.applicationFormSubmitted && selectedApp.status !== 'Rejected' && selectedApp.status !== 'active_student' && !selectedApp.correctionRequested && (
                               <button onClick={() => setReturnFormOpen(true)}
                                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-orange-400 text-orange-600 text-xs font-bold hover:bg-orange-50">
                                 <RotateCcw size={13} /> Return Form to Student
@@ -850,11 +862,22 @@ MANAGEMENT (METI)
                                         <p className="font-bold text-gray-800 text-xs">{DOC_LABELS[key] || key}</p>
                                         <p className="text-[10px] text-gray-400 font-mono break-all">{dispName}</p>
                                       </div>
-                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
                                         <button onClick={openDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Eye size={12} /> View</button>
                                         <button onClick={downloadDoc} className="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 bg-white rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"><Download size={12} /> Download</button>
-                                     {approval !== 'approved'
-                                          ? <button onClick={async () => {
+                                        {approval === 'approved' ? (
+                                          <>
+                                            <span className="flex items-center justify-center gap-1 min-w-23 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
+                                            <button onClick={async () => {
+                                              if (!window.confirm(`Revert ${DOC_LABELS[key] || key} back to pending? This undoes the approval.`)) return;
+                                              setApprovingDocKey(key);
+                                              try { await adminRevertDocApproval(selectedApp.id, key); }
+                                              finally { setApprovingDocKey(null); }
+                                            }} className="text-[10px] text-gray-400 hover:text-gray-700 font-bold underline">Revert</button>
+                                          </>
+                                        ) : (
+                                          <button onClick={async () => {
+                                              if (!window.confirm(`Approve ${DOC_LABELS[key] || key}?`)) return;
                                               setApprovingDocKey(key);
                                               setRejectingDocKey(null);
                                               try { await adminApproveDoc(selectedApp.id, key); }
@@ -863,19 +886,28 @@ MANAGEMENT (METI)
                                               {approvingDocKey === key ? <Loader2 size={12} className="animate-spin" /> : <ThumbsUp size={12} />}
                                               {approvingDocKey === key ? 'Approving…' : 'Approve'}
                                             </button>
-                                          : <span className="flex items-center justify-center gap-1 min-w-23 px-2.5 py-1 bg-green-50 text-green-700 rounded-full text-[10px] font-bold border border-green-200"><CheckCircle2 size={11} /> Approved</span>
-                                        }
-                                        {approval !== 'rejected'
-                                          ? <button onClick={() => { setRejectingDocKey(rejectingDocKey===key ? null : key); setDocRejectReason(''); }} className="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 border border-red-200 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100"><ThumbsDown size={12} /> Reject</button>
-                                          : <span className="flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-bold border border-red-200"><XCircle size={11} /> Rejected</span>
-                                        }
+                                        )}
+                                        {approval === 'rejected' ? (
+                                          <>
+                                            <span className="flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-bold border border-red-200"><XCircle size={11} /> Rejected</span>
+                                            <button onClick={() => { setRejectingDocKey(rejectingDocKey===key ? null : key); setDocRejectReason(rejReason || ''); }} className="text-[10px] text-gray-400 hover:text-gray-700 font-bold underline">Edit Reason</button>
+                                          </>
+                                        ) : (
+                                          <button onClick={() => { setRejectingDocKey(rejectingDocKey===key ? null : key); setDocRejectReason(''); }} className="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 border border-red-200 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100"><ThumbsDown size={12} /> Reject</button>
+                                        )}
                                       </div>
                                     </div>
                                     {rejectingDocKey === key && (
                                       <div className="flex gap-2 mt-2 items-start">
                                         <textarea rows={2} value={docRejectReason} onChange={e => setDocRejectReason(e.target.value)} placeholder="Reason (min 10 chars)" className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none resize-none" />
                                         <div className="flex flex-col gap-1">
-                                          <button onClick={() => { if(docRejectReason.trim().length<10) return; adminRejectDoc(selectedApp.id, key, docRejectReason); setRejectingDocKey(null); setDocRejectReason(''); }} disabled={docRejectReason.trim().length<10} className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-lg disabled:opacity-40">Confirm</button>
+                                       <button onClick={() => {
+                                            if (docRejectReason.trim().length < 10) return;
+                                            if (!window.confirm(`Reject ${DOC_LABELS[key] || key} with this reason?`)) return;
+                                            adminRejectDoc(selectedApp.id, key, docRejectReason);
+                                            setRejectingDocKey(null);
+                                            setDocRejectReason('');
+                                          }} disabled={docRejectReason.trim().length<10} className="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-lg disabled:opacity-40">Confirm</button>
                                           <button onClick={() => setRejectingDocKey(null)} className="px-3 py-1 border border-gray-200 text-gray-600 text-xs rounded-lg">Cancel</button>
                                         </div>
                                       </div>
@@ -931,9 +963,13 @@ MANAGEMENT (METI)
                               )}
                               {!selectedApp.paymentVerified && (
                                 <div className="space-y-3 pt-2">
-                                  <button onClick={() => { adminApprovePayment(selectedApp.id); console.log('[EMAIL SIMULATED] Payment confirmed →', selectedApp.email, '→ link to /application-form'); }}
+                                 <button onClick={async () => {
+                                    if (!window.confirm(`Approve payment for ${selectedApp.name} and generate their application number?`)) return;
+                                    const num = await adminApprovePayment(selectedApp.id);
+                                    if (num) alert(`Payment approved. Application number generated: ${num}`);
+                                  }}
                                     className="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-xs">
-                                    ✓ Confirm Payment — Notify Student to Fill Form
+                                    ✓ Approve Payment — Generate Application Number
                                   </button>
                                   {!payRejectOpen
                                     ? <button onClick={() => setPayRejectOpen(true)} className="w-full py-2.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-xl text-xs border border-red-200">✕ Reject Payment</button>
@@ -941,7 +977,11 @@ MANAGEMENT (METI)
                                       <div className="space-y-2">
                                         <textarea rows={3} value={payRejectComment} onChange={e => setPayRejectComment(e.target.value)} placeholder="Reason for rejection (min 10 chars)" className="w-full border border-gray-200 rounded-xl p-3 text-xs resize-none focus:outline-none" />
                                         <div className="flex gap-2">
-                                          <button onClick={() => { if(payRejectComment.trim().length<10) return; adminRejectPayment(selectedApp.id, payRejectComment); setPayRejectOpen(false); setPayRejectComment(''); }} disabled={payRejectComment.trim().length<10} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40">Confirm Rejection</button>
+                                      <button onClick={() => {
+                                            if(payRejectComment.trim().length<10) return;
+                                            if (!window.confirm(`Reject this payment for ${selectedApp.name}?`)) return;
+                                            adminRejectPayment(selectedApp.id, payRejectComment); setPayRejectOpen(false); setPayRejectComment('');
+                                          }} disabled={payRejectComment.trim().length<10} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40">Confirm Rejection</button>
                                           <button onClick={() => { setPayRejectOpen(false); setPayRejectComment(''); }} className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-xl text-xs">Cancel</button>
                                         </div>
                                         <p className="text-[10px] text-gray-400">Min 10 chars. Reason sent to student by email.</p>
@@ -960,7 +1000,7 @@ MANAGEMENT (METI)
                    {activeDetailTab === 'Decision' && (
                         <div className="space-y-4">
                           {/* ⚠️ TEMP DEBUG — remove once the confirm-button issue is solved */}
-                         <div className="bg-black text-green-400 font-mono text-[10px] rounded-xl p-3 space-y-1 break-all">
+                         {/* <div className="bg-black text-green-400 font-mono text-[10px] rounded-xl p-3 space-y-1 break-all">
                             <p>status: "{selectedApp.status}"</p>
                             <p>paymentVerified: {String(selectedApp.paymentVerified)}</p>
                             <p>applicationFormSubmitted: {String(selectedApp.applicationFormSubmitted)}</p>
@@ -968,7 +1008,7 @@ MANAGEMENT (METI)
                             <p>docApprovals: {JSON.stringify(selectedApp.docApprovals || {})}</p>
                             <p>allDocsApproved(): {String(allDocsApproved(selectedApp))}</p>
                             <p>canConfirm(): {String(canConfirm(selectedApp))}</p>
-                          </div>
+                          </div> */}
 
                           {/* Timeline */}
                           <div>
@@ -987,7 +1027,7 @@ MANAGEMENT (METI)
                               <p className="text-[10px] text-brand-primary uppercase tracking-wider font-extrabold">Committee Decision</p>
                               <div>
                                 {/* Always VISIBLE — green only when canConfirm */}
-                                <button
+                               <button
                                   onClick={() => canConfirm(selectedApp) && setConfirmOpen(true)}
                                   className={`w-full py-3 font-bold rounded-xl text-xs transition-all ${
                                     canConfirm(selectedApp)
@@ -995,7 +1035,7 @@ MANAGEMENT (METI)
                                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                   }`}
                                 >
-                                  ✓ Confirm Application Form — Generate Application Number
+                                  ✓ Approve Student — Welcome to METI
                                 </button>
                                 {/* Show what's blocking */}
                                 {!canConfirm(selectedApp) && (
@@ -1014,7 +1054,11 @@ MANAGEMENT (METI)
                                   <div className="space-y-2">
                                     <textarea rows={3} value={appRejectComment} onChange={e => setAppRejectComment(e.target.value)} placeholder="Reason (min 20 chars)…" className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs focus:outline-none resize-none" />
                                     <div className="flex gap-2">
-                                      <button onClick={() => { if(appRejectComment.trim().length<20) return; adminRejectApplication(selectedApp.id, appRejectComment); setAppRejectOpen(false); setAppRejectComment(''); }} disabled={appRejectComment.trim().length<20} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40">Confirm Rejection</button>
+                                  <button onClick={() => {
+                                        if(appRejectComment.trim().length<20) return;
+                                        if (!window.confirm(`Reject ${selectedApp.name}'s entire application?`)) return;
+                                        adminRejectApplication(selectedApp.id, appRejectComment); setAppRejectOpen(false); setAppRejectComment('');
+                                      }} disabled={appRejectComment.trim().length<20} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40">Confirm Rejection</button>
                                       <button onClick={() => { setAppRejectOpen(false); setAppRejectComment(''); }} className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-xl text-xs">Cancel</button>
                                     </div>
                                     <p className="text-[10px] text-gray-400">Min 20 chars. Emailed to student.</p>
@@ -1362,22 +1406,22 @@ MANAGEMENT (METI)
       )}
 
       {/* Confirm application number modal */}
-      {confirmOpen && selectedApp && (
+{confirmOpen && selectedApp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
-            <h3 className="font-bold text-lg mb-2">Confirm Application Form</h3>
-            <p className="text-sm text-gray-600 mb-3">This will generate an Application Number and is <strong>irreversible</strong>.</p>
+            <h3 className="font-bold text-lg mb-2">Approve Student</h3>
+            <p className="text-sm text-gray-600 mb-3">This marks {selectedApp.name} as admitted into METI and is <strong>irreversible</strong>.</p>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
-              <p className="text-xs text-gray-500 mb-1">Application Number will be:</p>
+              <p className="text-xs text-gray-500 mb-1">Application Number:</p>
              <p className="font-mono font-black text-lg text-brand-primary  ">
-                {previewAppNumber(selectedApp.selectedProgram, admissionCounters)}
+                {selectedApp.applicationNum || '—'}
               </p>
             </div>
-            <p className="text-xs text-gray-400 mb-4">Student will receive an email with their number and a link to their dashboard to download their letters.</p>
+            <p className="text-xs text-gray-400 mb-4">Student will receive an email confirming their admission. You'll still need to prepare and send their admission letter separately, from the Letters tab.</p>
             <div className="flex gap-3">
               <button onClick={() => setConfirmOpen(false)} className="flex-1 py-2 border border-gray-200 rounded-xl text-sm font-semibold">Cancel</button>
               <button onClick={handleConfirmApp} disabled={isApproving} className="flex-1 py-2 bg-green-600 text-white rounded-xl text-sm font-bold hover:bg-green-700 disabled:opacity-50">
-                {isApproving ? 'Generating…' : 'Yes, Confirm & Generate Number'}
+                {isApproving ? 'Approving…' : 'Yes, Approve Student'}
               </button>
             </div>
           </div>

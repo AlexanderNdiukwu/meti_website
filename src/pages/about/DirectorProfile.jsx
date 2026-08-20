@@ -25,10 +25,10 @@ export default function DirectorProfile() {
               Director's Profile
             </span>
             <h1 className="text-3xl font-black text-gray-900 leading-tight">Dr. Akuro Big-Alabo</h1>
-            <p className=" font-semibold text-[#1a4fa0]">
+            <p className=" font-semibold text-lg text-[#1a4fa0]">
               Associate Professor of Mechanical Engineering & Director of METI
             </p>
-            <p className="text-base ">
+            <p className="text-lg">
               Former Head of Department of Mechanical Engineering (2020–2022) | Assistant Director of Intellectual Property and Technology Transfer Office (IPTTO), UNIPORT.
             </p>
           </div>
@@ -90,8 +90,8 @@ export default function DirectorProfile() {
                 <BookOpen className="text-uniport-blue" size={20} />
                 Scholarly Publications
               </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                 Dr. Big-Alabo has published over <span className="font-bold text-gray-900"> 60 scholarly articles</span> in highly reputable local and international journals. Co-inventor for two(2) National Patents
+              <p className="text-gray-900 text-lg leading-relaxed">
+                 Dr. Big-Alabo has published over <span className="font-bold text-gray-900"> 60 scholarly articles</span> in highly reputable local and international journals. Co-inventor for  <span className="font-bold text-gray-900"> two (2) National Patents</span> 
               </p>
               <div className="border border-gray-100 p-4 rounded-2xl bg-gray-50 flex items-center justify-between text-xs">
                 <span className="text-gray-500 text-lg font-semibold">Specialization Area:</span>

@@ -24,7 +24,7 @@ const facilitators = [
   {
     
     name: "PROFESSOR CHUKWUDI O. ONYEASO",
-    role: "Deputy Vice-Chancellor ( Admin & Adv )",
+    role: "Deputy Vice-Chancellor ( Admin & Advancement )",
     special: "BDS [IB], FWACS, FWFO, MSIL, MICS,FICOI, D.Sc, FIMC, CMC",
     image: "pal1.jpeg"
   },
@@ -109,7 +109,7 @@ const Principalsgrid = () => {
 
           {/* TEXT */}
           <h3 className="font-bold text-lg text-gray-900 mb-1">{staff.name}</h3>
-          <p className="text-sm font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
+          <p className="text-md font-semibold text-[#1a4fa0] mb-2">{staff.role}</p>
           <p className="text-sm font-bold  leading-relaxed">{staff.special}</p>
         </motion.div>
       ))}

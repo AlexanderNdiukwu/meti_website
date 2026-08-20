@@ -102,3 +102,7 @@ export const router = createBrowserRouter([
   { path: '/admin/reports', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
   { path: '/admin/settings', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
 ]);
+
+
+
+

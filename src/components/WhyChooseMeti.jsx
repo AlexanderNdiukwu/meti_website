@@ -6,8 +6,8 @@ const WhyChooseMeti = () => {
     { title: "Industry Connections", desc: "Extensive networking opportunities with leading tech and engineering firms." },
     { title: "Modern Curriculum", desc: "Programs tailored to current labor market demands and Industry 4.0." },
     { title: "Flexible Learning", desc: "Hybrid delivery modes combining virtual and in-person experiences." },
-    { title: "Career Acceleration", desc: "Equipping you to transition into senior management and executive roles." },
     { title: "Flexible Payment Plan", desc: "Tuition fees can be paid in installments" },
+    { title: "Career Acceleration", desc: "Equipping you to transition into senior management and executive roles." },
   ];
 
   return (
@@ -23,7 +23,9 @@ const WhyChooseMeti = () => {
          <div
   key={idx}
   className={`flex items-start gap-4 p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow bg-gray-50/50 ${
-    reason.title === "Flexible Payment Plan" ? " animate-bounce text-blue-800 font-bold" : ""
+    reason.title == "Flexible Payment Plan"   ? " animate-pulse text-blue-800 font-bold" : ""
+  } ${
+    reason.title == "Flexible Learning"   ? " animate-pulse text-blue-800 font-bold" : ""
   }`}
 >
               <CheckCircle2 className="w-8 h-8 text-uniport-blue shrink-0" />

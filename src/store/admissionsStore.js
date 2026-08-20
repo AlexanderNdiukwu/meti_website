@@ -58,8 +58,10 @@ function mapApplicantRow(row, form, docs) {
     receiptSize: row.receipt_size,
     receiptUrl: row.receipt_url,
     notes: row.notes,
-    rejected_doc_types: row.rejected_doc_types || [],
+  rejected_doc_types: row.rejected_doc_types || [],
     rejection_reason: row.rejection_reason,
+    correctionRequested: row.correction_requested,
+    correctionRequestedAt: row.correction_requested_at,
     admissionLetterTitle: row.admission_letter_title,
     admissionLetterAcceptance: row.admission_letter_acceptance,
     admissionLetterTuition: row.admission_letter_tuition,
@@ -136,17 +138,19 @@ async function loadAppUser(authUser) {
     };
   }
 
-  // maybeSingle(), not single() — a brand-new applicant who hasn't started
-  // ApplyFlow yet won't have an applicants row at all. Expected, not an error.
-  const { data: appRow, error: appError } = await supabase
+// A profile can now have more than one applicant row (one per
+  // programme). This shows the most RECENTLY created one on the main
+  // dashboard — a full switcher between simultaneous applications is a
+  // future addition, not built yet.
+  const { data: appRows, error: appError } = await supabase
     .from('applicants')
     .select('id')
     .eq('profile_id', authUser.id)
-    .maybeSingle();
+    .order('created_at', { ascending: false });
   if (appError) throw appError;
 
-  if (appRow) {
-    return await loadFullApplicant(appRow.id);
+  if (appRows && appRows.length > 0) {
+    return await loadFullApplicant(appRows[0].id);
   }
 
   return {
@@ -274,6 +278,17 @@ export const useAdmissionsStore = create(
           }
         });
         return listener.subscription;
+      },
+
+   // Student-side "please look at my form" flag — sets a boolean the
+      // admin sees highlighted; does NOT unlock anything itself. Only the
+      // admin's existing adminReturnFormToStudent actually re-opens the form.
+      studentRequestCorrection: async () => {
+        const { error } = await supabase.rpc('request_application_correction');
+        if (error) throw error;
+        const { user } = get();
+        const full = await loadFullApplicant(user.id);
+        set({ user: full });
       },
 
       requestPasswordReset: async (email) => {
@@ -528,20 +543,22 @@ updatePassword: async (newPassword) => {
       // ── ADMIN ACTIONS ──
 adminApprovePayment: async (applicantId) => {
         const applicant = get().applicants.find((a) => a.id === applicantId);
-        await supabase.from('payments').update({ verified: true, verified_at: new Date().toISOString() }).eq('applicant_id', applicantId);
-        const { error } = await supabase
-          .from('applicants')
-          .update({ payment_verified: true, status: applicant?.applicationFormSubmitted ? 'Under Review' : 'Application Incomplete' })
-          .eq('id', applicantId);
-        if (error) throw error;
+        const { data: appNumber, error } = await supabase.rpc('admin_approve_payment_and_generate_number', {
+          p_applicant_id: applicantId,
+        });
+        if (error) {
+          alert(error.message);
+          throw error;
+        }
         if (applicant?.email) {
           get().notifyByEmail(
             applicant.email,
-            'Payment Confirmed — METI Admissions',
-            `<p>Hi ${applicant.name},</p><p>Your payment has been verified. You can now proceed to fill out your application form.</p>`
+            'Payment Confirmed — Your METI Application Number',
+            `<p>Hi ${applicant.name},</p><p>Your payment has been verified. Your application number is:</p><p style="font-size:18px;font-weight:bold;">${appNumber}</p><p>Log in to your dashboard to complete your application form.</p>`
           );
         }
         await get().fetchAllApplicants();
+        return appNumber;
       },
 
    adminRejectPayment: async (applicantId, comment = '') => {
@@ -572,7 +589,7 @@ adminApprovePayment: async (applicantId) => {
         await get().fetchAllApplicants();
       },
 
-      adminRejectDoc: async (applicantId, docKey, reason) => {
+  adminRejectDoc: async (applicantId, docKey, reason) => {
         const { error } = await supabase
           .from('documents')
           .update({ approval_status: 'rejected', rejection_reason: reason })
@@ -582,9 +599,21 @@ adminApprovePayment: async (applicantId) => {
         await get().fetchAllApplicants();
       },
 
+      // Undoes an approval, putting the document back to 'pending' —
+      // exactly the "revert to how it was before" the client asked for.
+      adminRevertDocApproval: async (applicantId, docKey) => {
+        const { error } = await supabase
+          .from('documents')
+          .update({ approval_status: 'pending', rejection_reason: null })
+          .eq('applicant_id', applicantId)
+          .eq('doc_key', docKey);
+        if (error) throw error;
+        await get().fetchAllApplicants();
+      },
+
       // Calls the atomic RPC from Step 4.5 — every business rule is
       // enforced INSIDE the database, not just by a greyed-out button.
-     adminConfirmApplicationForm: async (applicantId) => {
+adminConfirmApplicationForm: async (applicantId) => {
         const applicant = get().applicants.find((a) => a.id === applicantId);
         const { data, error } = await supabase.rpc('confirm_applicant_and_generate_number', {
           p_applicant_id: applicantId,
@@ -596,15 +625,15 @@ adminApprovePayment: async (applicantId) => {
         if (applicant?.email) {
           get().notifyByEmail(
             applicant.email,
-            'Application Confirmed — METI Admissions',
-            `<p>Hi ${applicant.name},</p><p>Your application has been approved. Your application number is:</p><p style="font-size:18px;font-weight:bold;">${data}</p><p>Log in to your dashboard to track next steps. Your admission letter will follow separately.</p>`
+            'You Have Been Approved — Welcome to METI!',
+            `<p>Hi ${applicant.name},</p><p>Congratulations! Your application (${data}) has been approved and you are now admitted into METI. Your admission letter will follow separately from the admissions team.</p>`
           );
         }
         await get().fetchAllApplicants();
         return data;
       },
 
-   adminReturnFormToStudent: async (applicantId, rejectedDocTypes, rejectionReason) => {
+ adminReturnFormToStudent: async (applicantId, rejectedDocTypes, rejectionReason) => {
         const applicant = get().applicants.find((a) => a.id === applicantId);
         const { error } = await supabase
           .from('applicants')
@@ -613,6 +642,8 @@ adminApprovePayment: async (applicantId) => {
             application_form_submitted: false,
             rejected_doc_types: rejectedDocTypes,
             rejection_reason: rejectionReason,
+            correction_requested: false,
+            correction_requested_at: null,
           })
           .eq('id', applicantId);
         if (error) throw error;

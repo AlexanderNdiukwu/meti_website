@@ -86,10 +86,15 @@ export function AdmissionLetterPDF({
             <Text style={S.uniName}>UNIVERSITY OF PORT HARCOURT</Text>
             <Text style={S.uniSub}>INSTITUTE OF ENGINEERING, TECHNOLOGY AND INNOVATION{'\n'}MANAGEMENT (METI){'\n'}CENTRE FOR ENGINEERING AND TECHNOLOGY MANAGEMENT (CETM)</Text>
           </View>
-          {metiLogo
+          {/* {metiLogo
             ? <Image src={metiLogo} style={{ width: 58, height: 58, marginLeft: 8 }} />
             : <View style={{ width: 58, height: 50, marginLeft: 8, backgroundColor: '#dde3f0' }} />
-          }
+          } */}
+
+            {metiLogo
+        ? <Image src={metiLogo} style={{ width: 70, height: 63, marginLeft: 8 }} />
+        : <View style={{ width: 70, height: 63, marginLeft: 8, backgroundColor: '#dde3f0' }} />
+      }
         </View>
 
         {/* Date */}

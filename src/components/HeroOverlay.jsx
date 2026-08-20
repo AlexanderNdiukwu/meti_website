@@ -68,7 +68,7 @@ const HeroOverlay = () => {
 
          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
           <span className="relative group  ">
-            <Link to="/signup" className="bg-white flex gap-4 items-center   hover:bg-blue-500 text-uniport-blue pl-8 pr-4 py-2 sm:py-1 rounded-full font-bold lg:text-lg transition-colors shadow-lg sm:text-sm text-lg">
+            <Link to="/signup" className="bg-white flex gap-4 items-center   hover:bg-blue-500 text-uniport-blue pl-8 pr-4 py-2 sm:py-1 rounded-full font-bold lg:text-xl transition-colors shadow-lg sm:text-sm ">
               APPLY NOW 
             {/* <div className='size-2 bg-blue-700 animate-ping rounded-full'>
 
@@ -77,7 +77,7 @@ const HeroOverlay = () => {
             </Link>
 
           </span>
-          <Link to="/about" className="bg-transparent border border-white text-white px-8 py-2 rounded-full font-bold lg:text-lg text-lg sm:py-1 hover:bg-white/10 transition-colors">
+          <Link to="/about" className="bg-transparent border border-white text-white px-8 py-2 rounded-full font-bold  lg:text-xl sm:py-1 hover:bg-white/10 transition-colors">
             Learn More
           </Link>
 

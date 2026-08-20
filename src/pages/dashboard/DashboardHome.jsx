@@ -164,31 +164,33 @@ function StatusMessage({ user }) {
   // (checked BEFORE the generic "fill your form" message, and keyed on
   // rejected_doc_types rather than formDone — formDone gets reset to
   // false when the form is unlocked, so it can't be the signal here)
- if (s === 'Application Incomplete' && (user?.rejected_doc_types || []).length > 0) {
-    const rejectedDocs = user.rejected_doc_types;
+if (s === 'Application Incomplete' && ((user?.rejected_doc_types || []).length > 0 || user?.rejection_reason)) {
+    const rejectedDocs = user.rejected_doc_types || [];
     return (
       <Card colour="amber" icon={<FileText size={20} />} title="Documents Need Correction">
         <p>
-          Some of your submitted documents were not approved, and your application has been
-          returned for correction.
+          Your application has been returned for correction.
         </p>
-        <div className="mt-2 space-y-1.5">
-          <p className="font-bold">Documents to resubmit:</p>
-          <ul className="list-disc list-inside space-y-1">
-            {rejectedDocs.map(k => {
-              const label  = DOC_LABELS_STUDENT[k] || k;
-              const reason = user?.docApprovals?.[`${k}_reason`];
-              return (
-                <li key={k}>
-                  <strong>{label}</strong>{reason ? <> — {reason}</> : ''}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        {user?.rejection_reason && (
-          <p className="mt-2"><strong>Overall note from admissions:</strong> {user.rejection_reason}</p>
+        {rejectedDocs.length > 0 && (
+          <div className="mt-2 space-y-1.5">
+            <p className="font-bold">Documents to resubmit:</p>
+            <ul className="list-disc list-inside space-y-1">
+              {rejectedDocs.map(k => {
+                const label  = DOC_LABELS_STUDENT[k] || k;
+                const reason = user?.docApprovals?.[`${k}_reason`];
+                return (
+                  <li key={k}>
+                    <strong>{label}</strong>{reason ? <> — {reason}</> : ''}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
+        {user?.rejection_reason && (
+          <p className="mt-2"><strong>Note from admissions:</strong> {user.rejection_reason}</p>
+        )}
+        <p className="mt-2">Make your corrections and resubmit for review.</p>
         <Link
           to="/application-form"
           className="inline-flex items-center gap-2 mt-3 px-6 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-blue-900 transition-colors"
@@ -199,14 +201,20 @@ function StatusMessage({ user }) {
     );
   }
 
-  // Payment confirmed but form not yet filled
+  
+// Payment confirmed but form not yet filled — application number
+  // already exists by this point, generated the moment payment was approved.
   if (paymentDone && !formDone && s === 'Application Incomplete') {
     return (
       <Card colour="blue" icon={<FileText size={20} />} title="Payment Confirmed — Fill Your Application Form">
-        <p>
-          Your payment has been verified. You can now complete your application form.
-          Click the link sent to <strong>{email}</strong> or use the button below.
-        </p>
+        <p>Your payment has been verified.</p>
+        {appNum && (
+          <div className="mt-3 bg-white/60 rounded-xl px-4 py-2 inline-block">
+            <p className="text-xs text-gray-500 font-semibold">Your Application Number</p>
+            <p className="font-mono font-black text-brand-primary text-base">{appNum}</p>
+          </div>
+        )}
+        <p className="mt-3">You can now complete your application form.</p>
         <Link
           to="/application-form"
           className="inline-flex items-center gap-2 mt-3 px-6 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-blue-900 transition-colors"
@@ -217,10 +225,10 @@ function StatusMessage({ user }) {
     );
   }
 
+ 
   // Form submitted — under review
-
-  // Form submitted — under review
-  if (s === 'Under Review') {
+if (s === 'Under Review') {
+    const requestCorrection = useAdmissionsStore.getState().studentRequestCorrection;
     return (
       <Card colour="indigo" icon={<Clock size={20} />} title="Application Being Reviewed">
         <p>
@@ -234,6 +242,26 @@ function StatusMessage({ user }) {
             Please check your inbox and spam folder regularly.
           </span>
         </p>
+        {user?.correctionRequested ? (
+          <p className="mt-3 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 inline-block">
+            You've asked the admissions team to return your form for correction — waiting on them now.
+          </p>
+        ) : (
+          <button
+            onClick={async () => {
+              if (!window.confirm('You are telling the admissions team you want your form back to make a correction. Continue?')) return;
+              try {
+                await requestCorrection();
+                alert('Request sent. The admissions team will review it and return your form if needed.');
+              } catch (err) {
+                alert(err.message || 'Could not send your request. Please try again.');
+              }
+            }}
+            className="mt-3 text-xs text-brand-primary underline font-bold"
+          >
+            Made a mistake? Request your form back
+          </button>
+        )}
       </Card>
     );
   }
@@ -462,6 +490,49 @@ const handleDownload = async (type) => {
   );
 }
 
+// ── Download own Application Form — separate from the Admission/Acceptance
+// letters in DocumentTabs below. Available the moment the form is
+// submitted, regardless of approval status, so the student can grab a
+// copy anytime without waiting to be approved.
+function DownloadApplicationForm({ user }) {
+  const [downloading, setDownloading] = useState(false);
+  if (!user?.applicationFormSubmitted) return null;
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const { uniportLogo, metiLogo } = await fetchPdfLogos();
+      const { pdf } = await import('@react-pdf/renderer');
+      const { default: ApplicationFormPDF } = await import('../../components/pdf/ApplicationFormPDF');
+      const blob = await pdf(
+        <ApplicationFormPDF application={user} uniportLogo={uniportLogo} metiLogo={metiLogo} />
+      ).toBlob();
+      const url  = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href     = url;
+      link.download = `METI_Application_Form_${(user?.name || '').replace(/\s+/g, '_')}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Application form PDF error:', err);
+      alert('Could not generate the PDF. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3 flex-wrap">
+      <p className="text-xs font-semibold text-gray-600">You can download a copy of your submitted application form anytime.</p>
+      <button onClick={handleDownload} disabled={downloading}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary text-white font-bold text-xs hover:bg-blue-900 disabled:opacity-50 shrink-0">
+        {downloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+        Download Application Form
+      </button>
+    </div>
+  );
+}
+
 // ── Announcement preview ──
 function AnnouncementPreview({ user, announcements }) {
   const getAnnouncementAttachmentUrl = useAdmissionsStore((s) => s.getAnnouncementAttachmentUrl);
@@ -591,6 +662,9 @@ export default function DashboardHome() {
 
       {/* Status message */}
       <StatusMessage user={user} />
+
+      {/* Download own application form — always available once submitted */}
+      <DownloadApplicationForm user={user} />
 
       {/* Document tabs (Admission + Acceptance) */}
       <DocumentTabs user={user} />

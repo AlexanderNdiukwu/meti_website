@@ -38,7 +38,7 @@ const HeroHighlights = () => {
 
       <div className="max-w-full mx-auto   rounded-2xl md:rounded-xl py-2  overflow-hidden">
 
-        <div className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4">
 
           {highlights.map((item, index) => {
             const Icon = item.icon;

@@ -127,8 +127,8 @@ const PhD = () => {
                       Rigorous, dedicated full-time research under faculty supervision.
                     </p>
                     <div className="inline-flex gap-2">
-                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-xs font-bold rounded-full">Min: 36 Months</span>
-                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-xs font-bold rounded-full">Max: 48 Months</span>
+                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-base font-bold rounded-full">Min: 36 Months</span>
+                      <span className="px-3 py-1 bg-blue-50 text-uniport-blue text-base font-bold rounded-full">Max: 48 Months</span>
                     </div>
                   </div>
                 </div>
@@ -144,8 +144,8 @@ const PhD = () => {
                       Flexible thesis research combined with industrial executive schedules.
                     </p>
                     <div className="inline-flex gap-2">
-                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">Min: 36 Months</span>
-                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">Max: 60 Months</span>
+                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-base font-bold rounded-full">Min: 36 Months</span>
+                      <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-base font-bold rounded-full">Max: 60 Months</span>
                     </div>
                   </div>
                 </div>

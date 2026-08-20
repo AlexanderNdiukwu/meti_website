@@ -7,7 +7,7 @@ const Staff = () => {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Staff of METI</h2>
           <p className="text-xl max-w-2xl mx-auto">
-            Learn from a distinguished faculty of industry veterans and leading academic researchers at the University of Port Harcourt.
+          Our dedicated team—supporting the mission, powering the operations.The people behind the excellence, efficiency, and seamless operations of METI.
           </p>
         </div>
 

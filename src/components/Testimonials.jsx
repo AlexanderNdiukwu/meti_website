@@ -6,21 +6,27 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: "Collins Utiri",
-      role: "Masters Student",
-      company: "Student",
+      role: "METI MSc graduate",
+      company: "",
       quote: "METI is strategically positioned to support senior management personnel in developing and advancing themselves academically, even amid the demands of their most hectic professional schedules."
     },
     {
       name: "Solomon Obia ",
       role: "PhD Student",
-      company: "Student",
+      company: "",
       quote: "The centre is known for impacting knowledge for aspiring leaders, managers and innovators. The institute is highly organised with a highly effective director and his team. Programs and classes are structured such that students complete their studies in record time."
     },
     {
-      name: "Michael T.",
-      role: "PGD Student",
-      company: "Manufacturing Sector",
-      quote: "Coming from a non-engineering background, the PGD program provided the perfect bridge. The curriculum is incredibly practical and aligned with Industry 4.0 standards."
+      name: "Ekeh Lucky Nnmadi",
+      role: "PhD Student",
+      company: "",
+      quote: "METI Centre provides a strong academic environment with quality teaching, knowledgeable instructors, and a well-structured learning approach. The centre focuses not only on academic excellence but also on developing students’ understanding, confidence, and practical knowledge. Overall, METI Centre is a good choice for students seeking quality and well-rounded academic development."
+    },
+    {
+      name: "Ubong Emmanuel Paul",
+      role: "PhD Student",
+      company: "",
+      quote: "As a PhD student in the METI program at the University of Port Harcourt, I’ve found real beauty in how the journey feels both rigorous and human.The flexible structure lets me pursue deep research without having to step away from my professional life, which makes the whole experience feel sustainable rather than overwhelming.There’s a quiet satisfaction in knowing the work is grounded in real industry challenges."
     }
   ];
 
