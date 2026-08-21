@@ -15,22 +15,17 @@ import { useEffect } from 'react';
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 function deriveMonthlyApplications(applicants) {
-  // Last 6 months, including the current one
-  const now = new Date();
-  const months = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, month: MONTH_NAMES[d.getMonth()], count: 0 });
-  }
+  // Full calendar year, Jan–Dec — uses createdAt (always reliably set on
+  // every applicant row), not timeline[0].date which isn't a dependable source.
+  const year = new Date().getFullYear();
+  const months = MONTH_NAMES.map((month) => ({ month, count: 0 }));
   applicants.forEach(a => {
-    const created = a.timeline?.[0]?.date; // "Account Created" is always first
-    if (!created) return;
-    const d = new Date(created);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
-    const bucket = months.find(m => m.key === key);
-    if (bucket) bucket.count += 1;
+    if (!a.createdAt) return;
+    const d = new Date(a.createdAt);
+    if (d.getFullYear() !== year) return;
+    months[d.getMonth()].count += 1;
   });
-  return months.map(({ month, count }) => ({ month, count }));
+  return months;
 }
 
 function deriveByProgramme(applicants) {
@@ -132,12 +127,14 @@ function CustomTooltip({ active, payload, label }) {
 
 export default function AdminReports() {
   const navigate = useNavigate();
-  const { user, applicants } = useAdmissionsStore();
+  const { user, applicants, totalApplicantsEver, fetchTotalApplicantsEver } = useAdmissionsStore();
 
   useEffect(() => {
     if (!user || user.role !== 'admin') {
       navigate('/login');
+      return;
     }
+    fetchTotalApplicantsEver();
   }, [user, navigate]);
 
   if (!user || user.role !== 'admin') return null;
@@ -299,7 +296,7 @@ export default function AdminReports() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
        {[
-            { label: 'Total Applications', value: applicants.length },
+            { label: 'Total Applications (all-time)', value: totalApplicantsEver ?? applicants.length },
             { label: 'Active Students', value: statusPipeline.find(s => s.status === 'Active Student')?.count || 0 },
             { label: 'Rejected', value: statusPipeline.find(s => s.status === 'Rejected')?.count || 0 },
             { label: 'Under Review', value: statusPipeline.find(s => s.status === 'Under Review')?.count || 0 },

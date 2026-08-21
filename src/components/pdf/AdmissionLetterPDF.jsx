@@ -55,10 +55,16 @@ export function AdmissionLetterPDF({
   //   || application?.signature
   //   || null;
 
-  const degMap   = { PGD: 'PGD', Masters: 'MSc', PhD: 'PhD' };
+ const degMap   = { PGD: 'PGD', Masters: 'MSc', PhD: 'PhD' };
   const degLabel = `${degMap[prog] || prog}${spec ? ' (' + spec + ')' : ''}`;
-  const durMap   = { PGD: '12 months', Masters: '18 months', PhD: '3 years' };
-  const duration = durMap[prog] || '18 months';
+
+  const DURATION_MONTHS = {
+    PGD:     { 'Full-Time': 12, 'Part-Time': 24 },
+    Masters: { 'Full-Time': 12, 'Part-Time': 24 },
+    PhD:     { 'Full-Time': 36, 'Part-Time': 48 },
+  };
+  const durationMonths = DURATION_MONTHS[prog]?.[mode] ?? DURATION_MONTHS[prog]?.['Full-Time'];
+  const duration = durationMonths ? `${durationMonths} months` : '18 months';
 
  // Application form instructs "SURNAME Firstname Middlename" — surname is
   // the FIRST word, not the last (this was greeting students by their

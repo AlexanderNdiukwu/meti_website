@@ -174,8 +174,9 @@ const [dateRangeFilter,   setDateRangeFilter]   = useState('all');
   const [viewerFile,        setViewerFile]        = useState(null);
 
   // Payment rejection
-  const [payRejectOpen,    setPayRejectOpen]    = useState(false);
+const [payRejectOpen,    setPayRejectOpen]    = useState(false);
   const [payRejectComment, setPayRejectComment] = useState('');
+  const [paymentActionLoading, setPaymentActionLoading] = useState(false);
   // Doc rejection
 const [rejectingDocKey,  setRejectingDocKey]  = useState(null);
   const [docRejectReason,  setDocRejectReason]  = useState('');
@@ -209,7 +210,8 @@ const [rejectingDocKey,  setRejectingDocKey]  = useState(null);
   const [annFile,    setAnnFile]    = useState(null);
   const [annTarget,  setAnnTarget]  = useState('all');
 const [annAudience, setAnnAudience] = useState('all_applicants');
-  const [annSearchTerm, setAnnSearchTerm] = useState('');
+const [annSearchTerm, setAnnSearchTerm] = useState('');
+  const [publishingAnn, setPublishingAnn] = useState(false);
   const [annDateFilter, setAnnDateFilter] = useState('all');
   const [annProgFilter, setAnnProgFilter] = useState('all');
   const annFileRef = useRef(null);
@@ -963,26 +965,41 @@ MANAGEMENT (METI)
                               )}
                               {!selectedApp.paymentVerified && (
                                 <div className="space-y-3 pt-2">
-                                 <button onClick={async () => {
+                               <button onClick={async () => {
                                     if (!window.confirm(`Approve payment for ${selectedApp.name} and generate their application number?`)) return;
-                                    const num = await adminApprovePayment(selectedApp.id);
-                                    if (num) alert(`Payment approved. Application number generated: ${num}`);
+                                    setPaymentActionLoading(true);
+                                    try {
+                                      const num = await adminApprovePayment(selectedApp.id);
+                                      if (num) alert(`Payment approved. Application number generated: ${num}`);
+                                    } finally {
+                                      setPaymentActionLoading(false);
+                                    }
                                   }}
-                                    className="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-xs">
-                                    ✓ Approve Payment — Generate Application Number
+                                    disabled={paymentActionLoading}
+                                    className="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-xs disabled:opacity-50 flex items-center justify-center gap-1.5">
+                                    {paymentActionLoading ? <Loader2 size={13} className="animate-spin" /> : null}
+                                    {paymentActionLoading ? 'Processing…' : '✓ Approve Payment — Generate Application Number'}
                                   </button>
                                   {!payRejectOpen
-                                    ? <button onClick={() => setPayRejectOpen(true)} className="w-full py-2.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-xl text-xs border border-red-200">✕ Reject Payment</button>
+                                    ? <button onClick={() => setPayRejectOpen(true)} disabled={paymentActionLoading} className="w-full py-2.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-xl text-xs border border-red-200 disabled:opacity-50">✕ Reject Payment</button>
                                     : (
                                       <div className="space-y-2">
                                         <textarea rows={3} value={payRejectComment} onChange={e => setPayRejectComment(e.target.value)} placeholder="Reason for rejection (min 10 chars)" className="w-full border border-gray-200 rounded-xl p-3 text-xs resize-none focus:outline-none" />
                                         <div className="flex gap-2">
-                                      <button onClick={() => {
+                                          <button onClick={async () => {
                                             if(payRejectComment.trim().length<10) return;
                                             if (!window.confirm(`Reject this payment for ${selectedApp.name}?`)) return;
-                                            adminRejectPayment(selectedApp.id, payRejectComment); setPayRejectOpen(false); setPayRejectComment('');
-                                          }} disabled={payRejectComment.trim().length<10} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40">Confirm Rejection</button>
-                                          <button onClick={() => { setPayRejectOpen(false); setPayRejectComment(''); }} className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-xl text-xs">Cancel</button>
+                                            setPaymentActionLoading(true);
+                                            try {
+                                              await adminRejectPayment(selectedApp.id, payRejectComment); setPayRejectOpen(false); setPayRejectComment('');
+                                            } finally {
+                                              setPaymentActionLoading(false);
+                                            }
+                                          }} disabled={payRejectComment.trim().length<10 || paymentActionLoading} className="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl text-xs disabled:opacity-40 flex items-center justify-center gap-1.5">
+                                            {paymentActionLoading ? <Loader2 size={12} className="animate-spin" /> : null}
+                                            {paymentActionLoading ? 'Processing…' : 'Confirm Rejection'}
+                                          </button>
+                                          <button onClick={() => { setPayRejectOpen(false); setPayRejectComment(''); }} disabled={paymentActionLoading} className="px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-xl text-xs disabled:opacity-50">Cancel</button>
                                         </div>
                                         <p className="text-[10px] text-gray-400">Min 10 chars. Reason sent to student by email.</p>
                                       </div>
@@ -1210,17 +1227,21 @@ MANAGEMENT (METI)
                     ? <button onClick={() => annFileRef.current?.click()} className="w-full border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 font-semibold hover:border-brand-primary flex items-center justify-center gap-1"><Paperclip size={13} /> Attach file (optional)</button>
                     : <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl px-3 py-2"><span className="text-xs font-semibold truncate">{annFile.name}</span><button onClick={() => { setAnnFile(null); if(annFileRef.current) annFileRef.current.value=''; }} className="text-red-500 text-xs font-bold ml-2 shrink-0">Remove</button></div>
                   }
-              <button onClick={async () => {
-                    if (!annMessage.trim()) return;
+            <button onClick={async () => {
+                    if (!annMessage.trim() || publishingAnn) return;
+                    setPublishingAnn(true);
                     try {
                       await sendAnnouncement({ title: annTitle||'Announcement', message: annMessage, file: annFile, programme_filter: annTarget==='all'?null:annTarget, audience: annAudience });
                       setAnnTitle(''); setAnnMessage(''); setAnnFile(null); setAnnTarget('all'); setAnnAudience('all_applicants');
                     } catch (err) {
                       console.error('Announcement publish error:', err);
                       alert(`Failed to publish announcement: ${err.message || 'Unknown error — check the console for details.'}`);
+                    } finally {
+                      setPublishingAnn(false);
                     }
-                  }} disabled={!annMessage.trim()} className="w-full rounded-full bg-brand-primary                                                                           text-white font-bold py-2.5 text-sm disabled:opacity-40 flex items-center justify-center gap-2">
-                    <Send size={14} /> Publish Announcement
+                  }} disabled={!annMessage.trim() || publishingAnn} className="w-full rounded-full bg-brand-primary text-white font-bold py-2.5 text-sm disabled:opacity-40 flex items-center justify-center gap-2">
+                    {publishingAnn ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+                    {publishingAnn ? 'Publishing…' : 'Publish Announcement'}
                   </button>
                 </div>
               </div>
@@ -1464,8 +1485,14 @@ const [accountNumber,   setAccountNumber]   = useState(app?.admissionLetterAccNu
   const appNum   = app?.applicationNum || '';
   const prog     = app?.selectedProgram || '';
   const spec     = app?.specialization  || '';
-  const durMap   = { PGD:'12 months', Masters:'18 months', PhD:'3 years' };
-  const duration = durMap[prog] || '18 months';
+ const DURATION_MONTHS = {
+    PGD:     { 'Full-Time': 12, 'Part-Time': 24 },
+    Masters: { 'Full-Time': 12, 'Part-Time': 24 },
+    PhD:     { 'Full-Time': 36, 'Part-Time': 48 },
+  };
+  const modeOfStudy = app?.applicationForm?.modeOfStudy || 'Full-Time';
+  const durationMonths = DURATION_MONTHS[prog]?.[modeOfStudy] ?? DURATION_MONTHS[prog]?.['Full-Time'];
+  const duration = durationMonths ? `${durationMonths} months` : '—';
   const sig      = app?.applicationForm?.signature || app?.applicationForm?.personal?.signature || app?.signature || null;
 
 if (!['Approved','active_student'].includes(app?.status)) {

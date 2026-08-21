@@ -2,7 +2,7 @@
 // Place at: src/pages/dashboard/DashboardHome.jsx
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Clock, CheckCircle2, Circle, FileText,
   FileSignature, Download, Loader2, Mail, Star
@@ -523,11 +523,45 @@ function DownloadApplicationForm({ user }) {
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3 flex-wrap">
-      <p className="text-xs font-semibold text-gray-600">You can download a copy of your submitted application form anytime.</p>
+      <p className="text-sm font-semibold text-gray-600">download a copy of your submitted application form anytime.</p>
       <button onClick={handleDownload} disabled={downloading}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary text-white font-bold text-xs hover:bg-blue-900 disabled:opacity-50 shrink-0">
         {downloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
         Download Application Form
+      </button>
+    </div>
+  );
+}
+
+// ── Apply for Another Programme — only visible to approved/active
+// students. Uses a type-to-confirm prompt (same pattern as the rest of
+// the app) since this starts a real new application, not a casual click.
+function ApplyForAnotherProgramme({ user }) {
+  const navigate = useNavigate();
+  const s = user?.status || '';
+  const visible = ['Approved', 'active_student'].includes(s);
+
+  useEffect(() => {
+    if (visible) useAdmissionsStore.getState().fetchExistingApplications();
+  }, [visible]);
+
+  if (!visible) return null;
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3 flex-wrap">
+      <p className="text-sm font-semibold text-gray-600">Want to apply for a different programme?</p>
+      <button
+        onClick={() => {
+          const typed = window.prompt('Type APPLY to start a new application for another programme (PGD, Masters, or PhD).');
+          if (typed && typed.trim().toUpperCase() === 'APPLY') {
+            navigate('/apply');
+          } else if (typed !== null) {
+            alert('That didn\'t match — nothing was started.');
+          }
+        }}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-brand-primary text-brand-primary font-bold text-xs hover:bg-brand-primary/5 shrink-0"
+      >
+        Apply for Another Programme
       </button>
     </div>
   );
@@ -668,6 +702,9 @@ export default function DashboardHome() {
 
       {/* Document tabs (Admission + Acceptance) */}
       <DocumentTabs user={user} />
+
+   {/* Apply for another programme — approved/active students only */}
+      <ApplyForAnotherProgramme user={user} />
 
       {/* Announcements preview */}
       <AnnouncementPreview user={user} announcements={announcements} />

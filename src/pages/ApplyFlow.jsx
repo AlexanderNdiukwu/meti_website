@@ -92,10 +92,12 @@ const {
     setReadiness,
   } = useAdmissionsStore();
 
-  useEffect(() => {
+useEffect(() => {
     if (!user || user.role === 'admin') {
       navigate('/login');
+      return;
     }
+    useAdmissionsStore.getState().fetchExistingApplications();
   }, [user, navigate]);
 
   const [activeStep, setActiveStep] = useState(1);
@@ -164,11 +166,20 @@ const {
     return {};
   };
 
-  const handleProgramClick = (progKey) => {
+const handleProgramClick = (progKey) => {
     const courses = getFilteredCourses(progKey);
     const firstSpec = courses[0]?.name || '';
     setTempSpec(firstSpec);
     selectProgram(progKey, firstSpec);
+  };
+
+  // Warns immediately if this exact programme+specialization combo is
+  // already held — before the student invests time in eligibility/docs
+  // steps, rather than letting the database reject it at the very end.
+  const checkForDuplicate = (progKey, spec) => {
+    const existing = (useAdmissionsStore.getState().existingApplications || [])
+      .find(a => a.selectedProgram === progKey && a.specialization === spec);
+    return existing || null;
   };
 
   const handleSpecChange = (e) => {
@@ -238,11 +249,25 @@ const {
               alert(err.message || 'Could not save your application details. Please try again.');
             }
           }}
-
-          nextButtonText={activeStep === 3 ? 'Continue to Payment' : 'Proceed'}
+nextButtonText={activeStep === 3 ? 'Continue to Payment' : 'Proceed'}
           backButtonText="Back"
           disableStepIndicators={true}
           nextButtonProps={getNextBtnState()}
+          beforeStepChange={(fromStep) => {
+            if (fromStep === 1) {
+              const dup = checkForDuplicate(selectedProgram, tempSpec);
+              if (dup) {
+                const goToExisting = window.confirm(
+                  `You already have an active ${selectedProgram} application in ${tempSpec}. Press OK to view it, or Cancel to pick a different programme.`
+                );
+                if (goToExisting) {
+                  navigate('/dashboard');
+                }
+                return false; // block advancing either way — they must resolve this first
+              }
+            }
+            return true;
+          }}
           stepCircleContainerClassName="shadow-lg border border-gray-150 p-2"
         >
           {/* ── STEP 1: PROGRAMME SELECTION ── */}

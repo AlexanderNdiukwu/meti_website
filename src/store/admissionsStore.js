@@ -180,7 +180,9 @@ export const useAdmissionsStore = create(
       loading: true,
       applicants: [],
       announcements: [],
-      admissionCounters: {},
+ admissionCounters: {},
+      totalApplicantsEver: null,
+      existingApplications: [], // this profile's other applications, for duplicate-checking and the dashboard switcher
 
       // Wizard state
       selectedProgram: null,
@@ -237,7 +239,7 @@ export const useAdmissionsStore = create(
         set({ user });
         await get().fetchAdmissionCounters();
         await get().fetchAnnouncements();
-        if (user.role === 'admin') await get().fetchAllApplicants();
+        if (user.role === 'admin') { await get().fetchAllApplicants(); await get().fetchTotalApplicantsEver(); }
       },
 
    initSession: async () => {
@@ -283,10 +285,10 @@ export const useAdmissionsStore = create(
    // Student-side "please look at my form" flag — sets a boolean the
       // admin sees highlighted; does NOT unlock anything itself. Only the
       // admin's existing adminReturnFormToStudent actually re-opens the form.
-      studentRequestCorrection: async () => {
-        const { error } = await supabase.rpc('request_application_correction');
-        if (error) throw error;
+   studentRequestCorrection: async () => {
         const { user } = get();
+        const { error } = await supabase.rpc('request_application_correction', { p_applicant_id: user.id });
+        if (error) throw error;
         const full = await loadFullApplicant(user.id);
         set({ user: full });
       },
@@ -324,6 +326,17 @@ updatePassword: async (newPassword) => {
         set({ selectedProgram: program, selectedSpecialization: specialization }),
       setEligibility: (checked) => set({ eligibilityChecked: checked }),
       setReadiness: (checked) => set({ readinessChecked: checked }),
+
+     // All applicant rows tied to this profile — used both for the
+      // duplicate-check in ApplyFlow and (next) the dashboard switcher.
+      fetchExistingApplications: async () => {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (!authUser) return;
+        const { data: rows } = await supabase.from('applicants').select('id, selected_program, specialization, status').eq('profile_id', authUser.id);
+        if (rows) {
+          set({ existingApplications: rows.map(r => ({ id: r.id, selectedProgram: r.selected_program, specialization: r.specialization, status: r.status })) });
+        }
+      },
 
       commitApplyFlowToUser: async () => {
         const { data: { user: authUser } } = await supabase.auth.getUser();
@@ -398,8 +411,10 @@ updatePassword: async (newPassword) => {
 
       // Calls the RPC — the ONLY legitimate way status becomes 'Under
       // Review'; a plain table update is silently blocked for non-admins.
-      submitApplicationForm: async (formData, signatureUrl) => {
+  submitApplicationForm: async (formData, signatureUrl) => {
+        const { user } = get();
         const { error } = await supabase.rpc('submit_own_application_form', {
+          p_applicant_id: user.id,
           p_personal: formData.personal,
           p_mode_of_study: formData.modeOfStudy,
           p_passport_photo_url: formData.passportPhoto,
@@ -410,7 +425,6 @@ updatePassword: async (newPassword) => {
           p_signature_url: signatureUrl,
         });
         if (error) throw error;
-        const { user } = get();
         const full = await loadFullApplicant(user.id);
         set({ user: full });
       },
@@ -486,6 +500,13 @@ updatePassword: async (newPassword) => {
         if (!rows) return;
         const full = await Promise.all(rows.map((r) => loadFullApplicant(r.id)));
         set({ applicants: full });
+      },
+
+     // Survives applicant deletions — a running total that only ever
+      // goes up, unlike applicants.length which shrinks when someone is deleted.
+      fetchTotalApplicantsEver: async () => {
+        const { data } = await supabase.from('stats_counters').select('value').eq('key', 'total_applicants_ever').maybeSingle();
+        set({ totalApplicantsEver: data?.value ?? null });
       },
 
       fetchAdmissionCounters: async () => {
