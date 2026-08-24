@@ -29,7 +29,7 @@ const TIMELINE_EVENTS = [
 
 const PAST_DIRECTORS = [
   { name: "Prof. J. Amadi-Echendu", tenure: "2009 - 2013" },
-  { name: "Prof. O.M.O. Efebu", tenure: "2013 - 2015" },
+  { name: "Prof. O.M.O. Etebu", tenure: "2013 - 2015" },
   { name: "Prof. S.U. Ejezie", tenure: "2015 - 2017" },
   { name: "Dr. U.A. Kamalu", tenure: "2017 - 2021" },
   { name: "Dr. E. Omorogiuwa", tenure: "2021 - 2025" }
