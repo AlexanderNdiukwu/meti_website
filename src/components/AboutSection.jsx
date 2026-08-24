@@ -128,7 +128,7 @@ const AboutSection = () => {
                     <li className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-uniport-blue mt-1 shrink-0" />
                       <p className=" text-xs md:text-lg leading-relaxed">
-                        Candidates from unrelated science disciplines must have a minimum of <span className="font-semibold ">Second Class Lower (2/2)</span>.
+                        Candidates from unrelated science disciplines must have a minimum of <span className="font-semibold ">Second Class Lower (2.2)</span>.
                       </p>
                     </li>
                   </ul>

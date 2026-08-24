@@ -39,6 +39,7 @@ const DashboardSettings        = lazy(() => import('../pages/dashboard/Settings'
 // ── Admin portal ──
 const AdminPanel   = lazy(() => import('../pages/AdminPanel'));
 const AdminReports = lazy(() => import('../pages/AdminReports'));
+const AdminChatbot = lazy(() => import('../pages/AdminChatbot'));
 
 const withSuspense = (Component) => (
   <Suspense fallback={<LoadingScreen />}>
@@ -101,6 +102,7 @@ export const router = createBrowserRouter([
   { path: '/admin/announcements', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
   { path: '/admin/reports', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
   { path: '/admin/settings', element: withSuspense(AdminPanel), errorElement: <RouteErrorBoundary /> },
+  { path: '/admin/chatbot', element: withSuspense(AdminChatbot), errorElement: <RouteErrorBoundary /> },
 ]);
 
 

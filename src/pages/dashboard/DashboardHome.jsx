@@ -8,6 +8,7 @@ import {
   FileSignature, Download, Loader2, Mail, Star
 } from 'lucide-react';
 import { useAdmissionsStore } from '../../store/admissionsStore';
+import ChatbotWidget from '../../components/ChatbotWidget';
 import { fetchPdfLogos, getCurrentSession } from '../../utils/pdfUtils';
 
 // ── Application number format: APPL/METI/CETM/[PROG]/[YEAR]/[SEQ] ──
@@ -19,7 +20,7 @@ const STEPS = [
   { id: 'payment',     label: 'Payment',          description: 'Application fee paid and verified' },
   { id: 'form',        label: 'Application Form',  description: 'Form filled and submitted'         },
   { id: 'review',      label: 'Under Review',      description: 'Admissions team reviewing'         },
-  { id: 'approved',    label: 'Approved',           description: 'Application approved'              },
+ { id: 'approved',    label: 'Final Decision',      description: 'Application decision made'         },
   { id: 'enrolled',    label: 'Active Student',     description: 'Enrollment confirmed'              },
 ];
 
@@ -268,65 +269,30 @@ if (s === 'Under Review') {
 
   // Approved — show application number, direct to sign documents
  // Approved — show application number, waiting for admission letter
-  if (s === 'Approved') {
+if (s === 'Rejected') {
     return (
-      <Card colour="green" icon={<Star size={20} />} title="🎉 Application Approved!">
-        <p>Congratulations! Your application has been approved by the METI admissions team.</p>
-        {appNum && (
-          <div className="mt-3 bg-white/60 rounded-xl px-4 py-2 inline-block">
-            <p className="text-xs text-gray-500 font-semibold">Application Number</p>
-            <p className="font-mono font-black text-brand-primary text-base">{appNum}</p>
-          </div>
-        )}
-        <p className="mt-3">
-          Your admission letter is being prepared. An email will be sent to <strong>{email}</strong> once
-          it's ready — you'll then be able to download it below.
-        </p>
-      </Card>
-    );
-  }
-
-
-
-  // Active student
-  if (s === 'active_student') {
-    return (
-      <Card colour="green" icon={<CheckCircle2 size={20} />} title="🎓 Welcome to METI!">
-        <p>
-        You are now a fully enrolled student of the Institute of Engineering, Technology
-          and Innovation Management (METI), University of Port Harcourt for the {user?.admissionLetterSession || getCurrentSession()}
-          academic session.
-        </p>
-        {appNum && (
-          <div className="mt-3 bg-white/60 rounded-xl px-4 py-2 inline-block">
-            <p className="text-xs text-gray-500 font-semibold">Application Number</p>
-            <p className="font-mono font-black text-brand-primary text-base">{appNum}</p>
-          </div>
-        )}
-      </Card>
-    );
-  }
-
-  // Rejected
-// Rejected — student can correct and resubmit
-  if (s === 'Rejected') {
-    return (
-      <Card colour="red" icon={<Clock size={20} />} title="Application Not Approved">
-        <p>
-          We regret to inform you that your application was not approved at this time.
-          {user?.notes ? <><br /><strong>Reason:</strong> {user.notes}</> : ''}
-        </p>
+      <Card colour="red" icon={<Clock size={20} />} title="Application Status Update">
+        <p>Dear applicant,</p>
         <p className="mt-2">
-          You can correct the issue and resubmit your application below.
+          Thank you for your interest in the Institute of Engineering, Technology and Innovation Management. After careful review and consideration of your application by the admissions board, we regret to inform you that we are unable to offer you admission at this time.
         </p>
+        <p className="mt-2">Unfortunately, your application did not meet the admission requirements for the programme.</p>
+        {user?.notes && <p className="mt-2"><strong>Reason:</strong> {user.notes}</p>}
+        {appNum && (
+          <div className="mt-3 bg-white/60 rounded-xl px-4 py-2 inline-block">
+            <p className="text-xs text-gray-500 font-semibold">Application Number</p>
+            <p className="font-mono font-black text-brand-primary text-base">{appNum}</p>
+          </div>
+        )}
+        <p className="mt-2">We sincerely appreciate your interest in METI and wish you every success in your academic and professional pursuits.</p>
         <Link
-          to="/application-form"
+          to="/apply"
           className="inline-flex items-center gap-2 mt-3 px-6 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-blue-900 transition-colors"
         >
-          <FileText size={15} /> Correct and Resubmit →
+          <FileText size={15} /> Reapply →
         </Link>
         <p className="mt-3">
-          Questions? Contact: <a href="mailto:meti@uniport.edu.ng" className="underline font-bold">meti@uniport.edu.ng</a>
+          Should you have any questions regarding this decision, please contact: <a href="mailto:meti@uniport.edu.ng" className="underline font-bold">meti@uniport.edu.ng</a>
         </p>
       </Card>
     );
@@ -536,15 +502,11 @@ function DownloadApplicationForm({ user }) {
 // ── Apply for Another Programme — only visible to approved/active
 // students. Uses a type-to-confirm prompt (same pattern as the rest of
 // the app) since this starts a real new application, not a casual click.
-function ApplyForAnotherProgramme({ user }) {
+// ── Apply for Another Programme — visible if ANY of the student's
+// applications is approved/active, not just the currently viewed tab.
+function ApplyForAnotherProgramme({ applications }) {
   const navigate = useNavigate();
-  const s = user?.status || '';
-  const visible = ['Approved', 'active_student'].includes(s);
-
-  useEffect(() => {
-    if (visible) useAdmissionsStore.getState().fetchExistingApplications();
-  }, [visible]);
-
+  const visible = applications.some(a => ['Approved', 'active_student'].includes(a.status));
   if (!visible) return null;
 
   return (
@@ -552,17 +514,70 @@ function ApplyForAnotherProgramme({ user }) {
       <p className="text-sm font-semibold text-gray-600">Want to apply for a different programme?</p>
       <button
         onClick={() => {
-          const typed = window.prompt('Type APPLY to start a new application for another programme (PGD, Masters, or PhD).');
-          if (typed && typed.trim().toUpperCase() === 'APPLY') {
+          if (window.confirm('Start a new application for another programme (PGD, Masters, or PhD)?')) {
             navigate('/apply');
-          } else if (typed !== null) {
-            alert('That didn\'t match — nothing was started.');
           }
         }}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-brand-primary text-brand-primary font-bold text-xs hover:bg-brand-primary/5 shrink-0"
       >
         Apply for Another Programme
       </button>
+    </div>
+  );
+}
+
+// ── Programme switcher — tabs between a student's simultaneous applications ──
+const PROG_TAB_LABEL = { PGD: 'PGD', Masters: 'Masters', PhD: 'PhD' };
+function ApplicationSwitcher({ applications, selectedId, onSelect }) {
+  if (applications.length <= 1) return null;
+  return (
+    <div className="bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm flex gap-1 overflow-x-auto">
+      {applications.map(app => (
+        <button
+          key={app.id}
+          onClick={() => onSelect(app.id)}
+          className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
+            selectedId === app.id ? 'bg-brand-primary text-white' : 'text-gray-500 hover:bg-gray-50'
+          }`}
+        >
+          {PROG_TAB_LABEL[app.selectedProgram] || app.selectedProgram}
+          {app.specialization ? ` — ${app.specialization}` : ''}
+          {app.status === 'Rejected' && <span className="ml-1 text-red-400">●</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ── Interview request card — shows the request, date, and when it was sent ──
+function InterviewNotice({ user }) {
+  if (!user?.interviewRequested) return null;
+  return (
+    <Card colour="indigo" icon={<Clock size={20} />} title="🎓 Interview Requested">
+      {user.applicationNum && (
+        <p className="text-xs font-mono font-bold text-brand-primary mb-1">Application Number: {user.applicationNum}</p>
+      )}
+      <p style={{ whiteSpace: 'pre-line' }}>{user.interviewMessage}</p>
+      {user.interviewDate && (
+        <p className="mt-2"><strong>Interview Date:</strong> {new Date(user.interviewDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+      )}
+      {user.interviewSentAt && (
+        <p className="mt-1 text-xs text-gray-500">Sent {new Date(user.interviewSentAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+      )}
+    </Card>
+  );
+}
+
+// ── Quick contact card ──
+function ContactAdmin() {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-3 flex-wrap">
+      <p className="text-sm font-semibold text-gray-600">Need to reach the admissions team directly?</p>
+      <div className="flex gap-2">
+        <a href="mailto:meti@uniport.edu.ng" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-primary text-white font-bold text-xs hover:bg-blue-900">
+          <Mail size={13} /> Email
+        </a>
+      </div>
     </div>
   );
 }
@@ -668,14 +683,26 @@ function Card({ colour, icon, title, children }) {
 // ════════════════════════════════════════════════════════
 export default function DashboardHome() {
   const { user, announcements, subscribeToOwnApplicantChanges } = useAdmissionsStore();
+  const applications = useAdmissionsStore((s) => s.applications);
+  const fetchApplications = useAdmissionsStore((s) => s.fetchApplications);
+  const [selectedId, setSelectedId] = useState(null);
 
-  // Live updates — status changes and new announcements appear without
-  // the student needing to refresh the page.
   useEffect(() => {
     if (!user?.id) return;
+    fetchApplications();
     const channel = subscribeToOwnApplicantChanges();
     return () => { if (channel) channel.unsubscribe(); };
   }, [user?.id]);
+
+  // Default to the same application the session is already loaded as,
+  // falling back to the first one once the list arrives.
+  useEffect(() => {
+    if (!selectedId && applications.length > 0) {
+      setSelectedId(applications.find(a => a.id === user?.id)?.id || applications[0].id);
+    }
+  }, [applications, user?.id]);
+
+  const selected = applications.find(a => a.id === selectedId) || user;
 
   const fullName = user?.applicationForm?.personal?.fullName || user?.name || 'Student';
   const today    = new Date().toLocaleDateString('en-GB', {
@@ -691,23 +718,34 @@ export default function DashboardHome() {
                 <p className="text-sm text-gray-400">{today}</p>
       </div>
 
-      {/* Progress bar */}
-      <ProgressBar user={user} />
+      {/* Switch between simultaneous applications */}
+      <ApplicationSwitcher applications={applications} selectedId={selected?.id} onSelect={setSelectedId} />
 
-      {/* Status message */}
-      <StatusMessage user={user} />
+      {/* Progress bar */}
+      <ProgressBar user={selected} />
+
+   {/* Status message */}
+      <StatusMessage user={selected} />
+
+      {/* Interview request, if one has been sent */}
+      <InterviewNotice user={selected} />
 
       {/* Download own application form — always available once submitted */}
-      <DownloadApplicationForm user={user} />
+      <DownloadApplicationForm user={selected} />
 
       {/* Document tabs (Admission + Acceptance) */}
-      <DocumentTabs user={user} />
+      <DocumentTabs user={selected} />
 
-   {/* Apply for another programme — approved/active students only */}
-      <ApplyForAnotherProgramme user={user} />
+      {/* Apply for another programme — approved/active students only */}
+      <ApplyForAnotherProgramme applications={applications} />
 
-      {/* Announcements preview */}
+      {/* Quick contact */}
+      <ContactAdmin />
+
+ {/* Announcements preview */}
       <AnnouncementPreview user={user} announcements={announcements} />
+
+     <ChatbotWidget context={{ selectedProgram: selected?.selectedProgram, applicationNum: selected?.applicationNum, name: user?.name }} />
 
     </div>
   );

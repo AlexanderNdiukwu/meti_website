@@ -8,7 +8,7 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 const S = StyleSheet.create({
-page:          { padding: '32 50', fontFamily: 'Helvetica', fontSize: 9.5, color: '#000', lineHeight: 1.35 },
+page:          { padding: '32 54', fontFamily: 'Helvetica', fontSize: 9.5, color: '#000', lineHeight: 1.35 },
 header:      { flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderBottomWidth: 1.5, borderBottomColor: '#1B3A6B', paddingBottom: 6 },
   uniName:     { fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: '#1B3A6B' },
   uniSub:      { fontSize: 8.5, fontWeight: 'bold', textAlign: 'center', color: '#1B3A6B', marginTop: 2, lineHeight: 1.5 },
@@ -167,7 +167,7 @@ export function AdmissionLetterPDF({
         <View style={S.li}><Text style={S.liNum}>iv.</Text><Text style={S.liText}>Evidence of payments should be provided at the METI office or sent by email.</Text></View>
         <View style={S.li}><Text style={S.liNum}>v.</Text><Text style={S.liText}>This offer will be withdrawn if any information provided is discovered to be false.</Text></View>
         <View style={S.li}><Text style={S.liNum}>vi.</Text><Text style={S.liText}>You are to report to METI office for necessary registration before proceeding on the orientation procedure and programme.</Text></View>
-        <View style={S.li}><Text style={S.liNum}>vii.</Text><Text style={S.liText}>Attach to this letter of provisional admission is a copy of acceptance form which you must fill and return with the acceptance fee to METI office.</Text></View>
+        <View style={S.li}><Text style={S.liNum}>vii.</Text><Text style={S.liText}>Attach to this letter of provisional admission is a copy of acceptance form </Text></View>
 
         {extraNotes ? <Text style={[S.body, { marginTop: 6 }]}>{extraNotes}</Text> : null}
 
@@ -179,7 +179,7 @@ export function AdmissionLetterPDF({
             Acceptance Letter, which they sign themselves. */}
         <View style={S.sigSection}>
           <Text>Yours faithfully</Text>
-          <Image src="/images/alabosignature.jpeg" style={{ height: 40, width: 140, marginTop: 8, marginBottom: 2 }} />
+          <Image src="/images/alabosignature1.jpeg" style={{ height: 40, width: 140, marginTop: 8, marginBottom: 2 }} />
           <Text style={[S.bold, { marginTop: 4 }]}>{directorName || 'Dr. A. Big-Alabo'}</Text>
           <Text>{directorTitle || 'Ag Director (METI)'}</Text>
         </View>

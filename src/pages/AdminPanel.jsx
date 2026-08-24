@@ -13,8 +13,8 @@ import {
   LayoutDashboard, Users, Megaphone, BarChart2, Settings, LogOut,
   Search, ChevronRight, CheckCircle, XCircle, FileText, CreditCard,
   ClipboardCheck, AlertCircle, Download, Eye, X, Menu, Paperclip,
-  CheckCircle2, Clock, FileSignature, Printer, Upload, RefreshCw,
-  ThumbsUp, ThumbsDown, Send, Trash2, RotateCcw ,Loader2
+CheckCircle2, Clock, FileSignature, Printer, Upload, RefreshCw,
+  ThumbsUp, ThumbsDown, Send, Trash2, RotateCcw ,Loader2, Bot
 } from 'lucide-react';
 
 
@@ -136,6 +136,9 @@ const SIDEBAR_ITEMS = [
   { id: 'Reports',       label: 'Reports',       icon: BarChart2       },
 ];
 
+// Handled separately from SIDEBAR_ITEMS since it's a real standalone
+// route (its own page), not one of AdminPanel's internal tabs.
+
 // ──────────────────────────────────────────
 // MAIN COMPONENT
 // ──────────────────────────────────────────
@@ -151,7 +154,7 @@ const {
     adminConfirmApplicationForm, adminRejectApplication,
     adminReturnFormToStudent, adminSaveAdmissionLetter,
 adminAddNote, adminResetProgrammeSession, adminSetNextApplicationNumber,
-    adminDeleteApplicant, adminRevertDocApproval,
+    adminDeleteApplicant, adminRevertDocApproval, adminSendInterviewRequest,
 sendAnnouncement, deleteAnnouncement, clearAllAnnouncements,
     resetAllData, logout, getFileSignedUrl, updatePassword,
     subscribeToApplicantChanges, getAnnouncementAttachmentUrl,
@@ -221,8 +224,14 @@ const [annSearchTerm, setAnnSearchTerm] = useState('');
   // const [testName, setTestName] = useState(null);
   // PDF loading
 // PDF loading
-  const [pdfLoading, setPdfLoading] = useState(null);
+const [pdfLoading, setPdfLoading] = useState(null);
   const [previewFile, setPreviewFile] = useState(null);
+const [interviewOpen, setInterviewOpen] = useState(false);
+  const [interviewTitle, setInterviewTitle] = useState('Request for Interview');
+  const [interviewProgramme, setInterviewProgramme] = useState('');
+  const [interviewMessage, setInterviewMessage] = useState('');
+  const [interviewDate, setInterviewDate] = useState('');
+  const [interviewSending, setInterviewSending] = useState(false);
 
   useEffect(() => {
     const p = location.pathname;
@@ -441,6 +450,13 @@ const handleConfirmApp = async () => {
         {mobile && <button onClick={() => setMobileSidebarOpen(false)} className="ml-auto"><X size={18} className="text-white/60" /></button>}
       </div>
       <nav className="flex-1 px-2 py-4 space-y-0.5">
+        <button onClick={() => { navigate('/admin/chatbot'); if (mobile) setMobileSidebarOpen(false); }}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-semibold text-sm text-white/70 hover:bg-white/10 border-l-4 border-transparent cursor-pointer"
+          title={!sidebarExpanded && !mobile ? 'Assistant' : undefined}
+        >
+          <Bot size={18} className="shrink-0" />
+          {(sidebarExpanded || mobile) && <span>Assistant</span>}
+        </button>
         {SIDEBAR_ITEMS.map(({ id, label, icon: Icon }) => {
           const active = activeView === id;
           return (
@@ -1038,6 +1054,50 @@ MANAGEMENT (METI)
                             ))}
                           </div>
 
+                     {/* Interview request — independent of approve order, just
+                              needs docs approved. Can be sent before OR after Approve.
+                              Disabled after sending — it's a one-time notification, not
+                              something to accidentally re-send. */}
+                          {allDocsApproved(selectedApp) && selectedApp.status !== 'Rejected' && (
+                            <div className="border-t pt-4">
+                              {selectedApp.interviewRequested ? (
+                                <div className="w-full py-2.5 bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold rounded-xl text-xs text-center">
+                                  🎓 Interview Already Requested{selectedApp.interviewSentAt ? ` — Sent ${new Date(selectedApp.interviewSentAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}` : ''}
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setInterviewProgramme(selectedApp.selectedProgram || '');
+                                    setInterviewTitle(`Notification of Interview for ${selectedApp.selectedProgram} Admission – METI Programmes`);
+                                    setInterviewMessage(
+`We acknowledge receipt of your application and supporting documents for admission into the ${selectedApp.selectedProgram} programme of the Institute of Engineering, Technology and Innovation Management (METI), University of Port Harcourt.
+
+After careful review of your submission, we are pleased to inform you that you have been shortlisted for the next stage of the admission process, which will be an interview session.
+
+As part of the interview exercise, you are required to prepare and present a brief PowerPoint presentation on a proposed dissertation topic of your choice.
+
+Your presentation will be for 10 minutes and should briefly cover the following key components:
+- Proposed Title of the Research
+- Background/Introduction
+- Proposed Aim and Objectives
+- Proposed Research Methodology
+
+A virtual link (where applicable) will be sent to you in due course.
+
+Please ensure that your presentation is concise, well-structured and demonstrates clarity of research direction, as it will form a key component of your assessment.
+
+We look forward to your participation and wish you the best in your preparation.`
+                                    );
+                                    setInterviewOpen(true);
+                                  }}
+                                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs"
+                                >
+                                  🎓 Request Interview
+                                </button>
+                              )}
+                            </div>
+                          )}
+
                           {/* Confirm button — grey unless all conditions met */}
                           {selectedApp.status === 'Under Review' && (
                             <div className="border-t pt-4 space-y-3">
@@ -1426,8 +1486,61 @@ MANAGEMENT (METI)
         </div>
       )}
 
+ {/* Interview request modal — fully editable before sending */}
+      {interviewOpen && selectedApp && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+  <h3 className="font-bold text-lg mb-3">Dear Applicant — {selectedApp.name}</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Email Subject</label>
+                <input type="text" value={interviewTitle} onChange={e => setInterviewTitle(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Programme</label>
+                <select value={interviewProgramme} onChange={e => setInterviewProgramme(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm">
+                  <option value="PGD">PGD</option>
+                  <option value="Masters">Masters</option>
+                  <option value="PhD">PhD</option>
+                </select>
+              </div>
+            <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Interview Date</label>
+                <input type="date" value={interviewDate} onChange={e => setInterviewDate(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm" placeholder="Select the interview date" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Message</label>
+                <textarea rows={8} value={interviewMessage} onChange={e => setInterviewMessage(e.target.value)} className="w-full border border-gray-200 rounded-xl p-3 text-sm resize-none" />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-4">
+              <button onClick={() => setInterviewOpen(false)} className="flex-1 py-2 border border-gray-200 rounded-xl text-sm font-semibold">Cancel</button>
+              <button
+                onClick={async () => {
+                  if (!window.confirm(`Send this interview request to ${selectedApp.name}?`)) return;
+                  setInterviewSending(true);
+                  try {
+               await adminSendInterviewRequest(selectedApp.id, { title: interviewTitle, programme: interviewProgramme, message: interviewMessage, interviewDate });
+                    alert('Interview request sent.');
+                    setInterviewOpen(false);
+                  } catch (err) {
+                    alert(err.message || 'Could not send interview request.');
+                  } finally {
+                    setInterviewSending(false);
+                  }
+                }}
+                disabled={interviewSending}
+                className="flex-1 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {interviewSending ? 'Sending…' : 'Send to Student'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Confirm application number modal */}
-{confirmOpen && selectedApp && (
+      {confirmOpen && selectedApp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
             <h3 className="font-bold text-lg mb-2">Approve Student</h3>

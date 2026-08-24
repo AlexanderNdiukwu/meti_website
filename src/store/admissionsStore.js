@@ -60,8 +60,12 @@ function mapApplicantRow(row, form, docs) {
     notes: row.notes,
   rejected_doc_types: row.rejected_doc_types || [],
     rejection_reason: row.rejection_reason,
-    correctionRequested: row.correction_requested,
+ correctionRequested: row.correction_requested,
     correctionRequestedAt: row.correction_requested_at,
+    interviewRequested: row.interview_requested,
+    interviewDate: row.interview_date,
+    interviewMessage: row.interview_message,
+    interviewSentAt: row.interview_sent_at,
     admissionLetterTitle: row.admission_letter_title,
     admissionLetterAcceptance: row.admission_letter_acceptance,
     admissionLetterTuition: row.admission_letter_tuition,
@@ -182,7 +186,8 @@ export const useAdmissionsStore = create(
       announcements: [],
  admissionCounters: {},
       totalApplicantsEver: null,
-      existingApplications: [], // this profile's other applications, for duplicate-checking and the dashboard switcher
+     existingApplications: [], // this profile's other applications, for duplicate-checking and the dashboard switcher
+      applications: [], // FULL applicant objects for every application this profile holds — powers the dashboard switcher
 
       // Wizard state
       selectedProgram: null,
@@ -329,13 +334,25 @@ updatePassword: async (newPassword) => {
 
      // All applicant rows tied to this profile — used both for the
       // duplicate-check in ApplyFlow and (next) the dashboard switcher.
-      fetchExistingApplications: async () => {
+  fetchExistingApplications: async () => {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         if (!authUser) return;
         const { data: rows } = await supabase.from('applicants').select('id, selected_program, specialization, status').eq('profile_id', authUser.id);
         if (rows) {
           set({ existingApplications: rows.map(r => ({ id: r.id, selectedProgram: r.selected_program, specialization: r.specialization, status: r.status })) });
         }
+      },
+
+      // Loads EVERY application this profile holds, in full — this is
+      // what lets the dashboard switch between a student's PhD, Masters,
+      // PGD applications instead of only ever showing the newest one.
+      fetchApplications: async () => {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (!authUser) return;
+        const { data: rows } = await supabase.from('applicants').select('id').eq('profile_id', authUser.id).order('created_at', { ascending: false });
+        if (!rows) return;
+        const full = await Promise.all(rows.map(r => loadFullApplicant(r.id)));
+        set({ applications: full });
       },
 
       commitApplyFlowToUser: async () => {
@@ -411,7 +428,7 @@ updatePassword: async (newPassword) => {
 
       // Calls the RPC — the ONLY legitimate way status becomes 'Under
       // Review'; a plain table update is silently blocked for non-admins.
-  submitApplicationForm: async (formData, signatureUrl) => {
+submitApplicationForm: async (formData, signatureUrl) => {
         const { user } = get();
         const { error } = await supabase.rpc('submit_own_application_form', {
           p_applicant_id: user.id,
@@ -427,6 +444,13 @@ updatePassword: async (newPassword) => {
         if (error) throw error;
         const full = await loadFullApplicant(user.id);
         set({ user: full });
+        if (full?.email) {
+          get().notifyByEmail(
+            full.email,
+            'Application Status Update',
+            `<p>Dear applicant,</p><p>This is to inform you that your application form and documents have been received and reviewed by our admissions team. Your application has been confirmed to be complete and has now been forwarded to the admission board for the final decision. You will be notified by email once a decision has been made.</p><p>We appreciate your patience during this process.</p><p>Thank you for choosing METI.</p>`
+          );
+        }
       },
 
       // Uploads one document and upserts its row. Re-uploads correctly
@@ -473,16 +497,21 @@ updatePassword: async (newPassword) => {
       // actually sees each one, done client-side in the pages themselves).
   subscribeToOwnApplicantChanges: () => {
         const { user } = get();
-        if (!user?.id) return null;
+        const profileId = user?.profileId || user?.id;
+        if (!profileId) return null;
         const channel = supabase
-          .channel(`student-live-${user.id}`)
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'applicants', filter: `id=eq.${user.id}` }, async () => {
-            const full = await loadFullApplicant(user.id);
-            set({ user: full });
+          .channel(`student-live-${profileId}`)
+          // Filters by profile_id, not a single applicant id — this is what
+          // makes ALL of a student's simultaneous applications (PhD, Masters,
+          // etc.) update live, not just whichever one happened to load first.
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'applicants', filter: `profile_id=eq.${profileId}` }, async () => {
+            await get().fetchApplications();
+            const apps = get().applications;
+            const primary = apps.find(a => a.id === get().user?.id) || apps[0];
+            if (primary) set({ user: primary });
           })
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'documents', filter: `applicant_id=eq.${user.id}` }, async () => {
-            const full = await loadFullApplicant(user.id);
-            set({ user: full });
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'documents' }, async () => {
+            await get().fetchApplications();
           })
           .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
             get().fetchAnnouncements();
@@ -704,8 +733,16 @@ adminConfirmApplicationForm: async (applicantId) => {
         if (applicant?.email) {
           get().notifyByEmail(
             applicant.email,
-            'Application Update — METI Admissions',
-            `<p>Hi ${applicant.name},</p><p>We regret to inform you that your application was not approved at this time.</p><p><strong>Reason:</strong> ${comment}</p><p>You can correct the issue and resubmit your application from your dashboard.</p>`
+            'Application Status Update',
+            `<p>Dear applicant,</p>
+             <p>Thank you for your interest in the Institute of Engineering, Technology and Innovation Management. After careful review and consideration of your application by the admissions board, we regret to inform you that we are unable to offer you admission at this time.</p>
+             <p>Unfortunately, your application did not meet the admission requirements for the programme.</p>
+             ${applicant.applicationNum ? `<p><strong>Application Number:</strong> ${applicant.applicationNum}</p>` : ''}
+             <p><strong>Reason:</strong> ${comment}</p>
+             <p>We sincerely appreciate your interest in METI and wish you every success in your academic and professional pursuits.</p>
+             <p>Should you have any questions regarding this decision, please feel free to contact our office.</p>
+             <p>Log in to your dashboard and click "Reapply" to submit a fresh application.</p>
+             <p>Best regards,<br/>METI Admissions</p>`
           );
         }
         await get().fetchAllApplicants();
@@ -740,11 +777,11 @@ adminConfirmApplicationForm: async (applicantId) => {
         }
         const { error } = await supabase.from('applicants').update(payload).eq('id', applicantId);
         if (error) throw error;
-        if (data.sent && applicant?.email) {
+       if (data.sent && applicant?.email) {
           get().notifyByEmail(
             applicant.email,
             'Your Admission Letter is Ready — METI',
-            `<p>Hi ${applicant.name},</p><p>Congratulations! Your admission letter is ready. Log in to your dashboard to download your Admission Letter and Acceptance Letter.</p>`
+            `<p>Hi ${applicant.name},</p><p>Congratulations! You are now officially a student of the Institute of Engineering, Technology and Innovation Management (METI), University of Port Harcourt. Your admission letter is ready — log in to your dashboard to download your Admission Letter and Acceptance Letter.</p>`
           );
         }
         await get().fetchAllApplicants();
@@ -856,8 +893,37 @@ adminConfirmApplicationForm: async (applicantId) => {
         alert('Reset is disabled in Phase 2. Test data must be cleared via the SQL cleanup script, not from the browser.');
       },
 
-      adminApproveApplication: (applicantId) => {
+   adminApproveApplication: (applicantId) => {
         get().adminConfirmApplicationForm(applicantId);
+      },
+
+      // Sends an interview-request email — does NOT change application
+      // status at all. Deliberately flexible about ordering (interview
+      // before or after Approve) per how the admissions team actually works.
+    adminSendInterviewRequest: async (applicantId, { title, programme, message, interviewDate }) => {
+        const applicant = get().applicants.find((a) => a.id === applicantId);
+        if (!applicant?.email) throw new Error('No email on file for this applicant.');
+        const { error } = await supabase
+          .from('applicants')
+          .update({
+            interview_requested: true,
+            interview_date: interviewDate || null,
+            interview_message: message,
+            interview_sent_at: new Date().toISOString(),
+          })
+          .eq('id', applicantId);
+        if (error) throw error;
+        await get().notifyByEmail(
+          applicant.email,
+          title || 'Interview Request — METI Admissions',
+          `<p><strong>Application Number:</strong> ${applicant.applicationNum || '—'}</p>
+           <p>Dear ${applicant.name},</p>
+           <p>${message.replace(/\n/g, '<br/>')}</p>
+           <p><strong>Programme:</strong> ${programme}</p>
+           ${interviewDate ? `<p><strong>Interview Date:</strong> ${interviewDate}</p>` : ''}
+           <p>Best regards,<br/>METI Admissions</p>`
+        );
+        await get().fetchAllApplicants();
       },
     }),
     {

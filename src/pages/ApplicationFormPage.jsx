@@ -7,6 +7,7 @@ import { useAdmissionsStore } from '../store/admissionsStore';
 import {
   FileText, Save, CheckCircle2, AlertCircle, Loader2, ArrowRight, Camera, FileUp
 } from 'lucide-react';
+import ChatbotWidget from '../components/ChatbotWidget';
 
 // ── Section tabs in correct regform.pdf order: A,B,C,D,F,E,Docs,G ──
 const SECTIONS = [
@@ -410,10 +411,13 @@ const handleFormSubmit = async (e) => {
 
         {/* Header */}
         <div className="bg-white p-4 sm:p-6 rounded-3xl border border-gray-150 shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div>
+         <div>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 mb-1">
               Admissions Application Form
             </h1>
+            {user?.applicationNum && (
+              <p className="text-xs font-mono font-bold text-brand-primary mb-1">Application Number: {user.applicationNum}</p>
+            )}
             <p className="text-xs text-gray-400">
               Complete all parts. Auto-saves draft every 10 seconds.
             </p>
@@ -1275,9 +1279,10 @@ const handleFormSubmit = async (e) => {
               </div>
             )}
 
-          </form>
+       </form>
         </div>
       </div>
+      <ChatbotWidget context={{ selectedProgram: user?.selectedProgram, name: user?.name }} />
     </div>
   );
 }

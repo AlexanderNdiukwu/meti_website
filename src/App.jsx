@@ -6,6 +6,7 @@ import CallToAction from './components/CallToAction';
 import GlobalApplyWidgets from './components/GlobalApplyWidgets';
 import ScrollToTop from './components/ScrollToTop';
 import BackToTopButton from './components/BackToTopButton';
+import ChatbotWidget from './components/ChatbotWidget';
 
 
 function App() {
@@ -20,9 +21,10 @@ function App() {
         <Outlet />
         <BackToTopButton />
       </main>
-      <CallToAction />
+<CallToAction />
       <Footer />
       <GlobalApplyWidgets />
+      <ChatbotWidget />
     </div>
   );
 }

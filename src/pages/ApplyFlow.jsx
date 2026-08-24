@@ -176,9 +176,9 @@ const handleProgramClick = (progKey) => {
   // Warns immediately if this exact programme+specialization combo is
   // already held — before the student invests time in eligibility/docs
   // steps, rather than letting the database reject it at the very end.
-  const checkForDuplicate = (progKey, spec) => {
+const checkForDuplicate = (progKey, spec) => {
     const existing = (useAdmissionsStore.getState().existingApplications || [])
-      .find(a => a.selectedProgram === progKey && a.specialization === spec);
+      .find(a => a.selectedProgram === progKey && a.specialization === spec && a.status !== 'Rejected');
     return existing || null;
   };
 
