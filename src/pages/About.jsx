@@ -6,7 +6,7 @@ import Facilitators from '../components/Facilitators';
 
 const About = () => {
   return (
-    <div className="pt-24 pb-12 min-h-screen bg-black/5">
+    <div className="pt-14 pb-12 min-h-screen bg-black/5">
       <AboutSection />
       <Testimonials />
       <StaffGrid/>
