@@ -87,8 +87,8 @@ const Navbar = () => {
     <>
       
 
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3' : 'bg-white/80 lg:py-4 lg:px-4 py-5 '}`}>
-        <div className="container mx-auto px-2 flex justify-between items-center">
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav py-3' : 'bg-white/80 lg:py-4  py-5 '}`}>
+        <div className="container mx-auto px-2 lg:px-0 flex justify-between items-center">
           
           {/* LEFT: Logos & Name */}
           <div className="flex items-center md:gap-4 gap-2">

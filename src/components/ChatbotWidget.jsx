@@ -141,12 +141,22 @@ const FAQ = [
 ];
 
 function findAnswer(input) {
-  const text = input.toLowerCase();
+  // Strip standalone "please" so polite phrasing ("please tell me the
+  // duration for phd") still matches the same way as without it.
+  const text = input.toLowerCase().replace(/\bplease\b/g, '').trim();
+
+  // Pure greeting on its own ("hi", "hello", "hey"...) — only when that's
+  // the whole message, so a greeting tucked into a real question ("hi,
+  // what is the pgd duration") still falls through to the real answer
+  // below instead of being swallowed by this.
+  if (/^(hi|hello|hey|hiya|good (morning|afternoon|evening))[\s!.,]*$/.test(text)) {
+    return "Hello! 👋 Ask me anything about METI — try \"list masters\", \"requirements for PhD\", \"documents for PGD\", \"duration for masters\", fees, applying, or reapplying.";
+  }
 
   // Plain "what is meti" / "what is meti?" on its own — the general
   // description. Kept as an exact-ish check, not a loose keyword, so it
   // doesn't hijack more specific questions like "what is meti phone number".
-  if (/^what is meti\s*\??\s*$/.test(text.trim())) {
+  if (/^what is meti\s*\??\s*$/.test(text)) {
     return 'METI is the Institute of Engineering, Technology and Innovation Management at the University of Port Harcourt — a postgraduate institute offering PGD, Masters, and PhD programmes focused on engineering and technology management.';
   }
 
@@ -170,7 +180,7 @@ function findAnswer(input) {
   if (prog && /(fee|cost|price|how much)/.test(text)) {
     return `${PROGRAMMES[prog].label} — Fee: ${PROGRAMMES[prog].fee}`;
   }
-  if (prog && /(duration|how long is|how many years|how many months)/.test(text)) {
+  if (prog && /(duration|durations|how long is|how many years|how many months)/.test(text)) {
     return `${PROGRAMMES[prog].label} — Duration: ${PROGRAMMES[prog].duration}`;
   }
   if (prog && /(specializ|course|which course)/.test(text)) {
@@ -188,6 +198,9 @@ function findAnswer(input) {
   }
   if (/(document|what do i need|upload)/.test(text)) {
     return 'Required documents differ slightly by programme (PhD needs a couple of extra ones). Type "documents for PGD", "documents for Masters", or "documents for PhD" and I\'ll list them for you.';
+  }
+  if (/(duration|durations|how long is|how many years|how many months)/.test(text)) {
+    return 'Programme duration depends on which one you mean. Type "duration for PGD", "duration for Masters", or "duration for PhD" and I\'ll give you the exact timeline.';
   }
 
   // Plain keyword FAQ fallback
