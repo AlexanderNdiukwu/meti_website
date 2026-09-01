@@ -8,7 +8,7 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 const S = StyleSheet.create({
-page:          { padding: '32 54', fontFamily: 'Helvetica', fontSize: 9.5, color: '#000', lineHeight: 1.35 },
+page:          { padding: '32 54', fontFamily: 'Times-Roman', fontSize: 9.5, color: '#000', lineHeight: 1.35 },
 header:      { flexDirection: 'row', alignItems: 'center', marginBottom: 10, borderBottomWidth: 1.5, borderBottomColor: '#1B3A6B', paddingBottom: 6 },
   uniName:     { fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: '#1B3A6B' },
   uniSub:      { fontSize: 8.5, fontWeight: 'bold', textAlign: 'center', color: '#1B3A6B', marginTop: 2, lineHeight: 1.5 },
@@ -85,8 +85,8 @@ export function AdmissionLetterPDF({
         {/* Header */}
         <View style={S.header}>
           {uniportLogo
-            ? <Image src={uniportLogo} style={{ width: 58, height: 58, marginRight: 8 }} />
-            : <View style={{ width: 58, height: 58, marginRight: 8, backgroundColor: '#dde3f0' }} />
+            ? <Image src={uniportLogo} style={{ width: 80, height: 80, marginRight: 8 }} />
+            : <View style={{ width: 80, height: 80, marginRight: 8, backgroundColor: '#dde3f0' }} />
           }
           <View style={{ flex: 1, alignItems: 'center' }}>
             <Text style={S.uniName}>UNIVERSITY OF PORT HARCOURT</Text>
@@ -98,8 +98,8 @@ export function AdmissionLetterPDF({
           } */}
 
             {metiLogo
-        ? <Image src={metiLogo} style={{ width: 70, height: 63, marginLeft: 8 }} />
-        : <View style={{ width: 70, height: 63, marginLeft: 8, backgroundColor: '#dde3f0' }} />
+        ? <Image src={metiLogo} style={{ width: 90, height: 90, marginLeft: 8 }} />
+        : <View style={{ width: 90, height: 90, marginLeft: 8, backgroundColor: '#dde3f0' }} />
       }
         </View>
 
@@ -179,8 +179,8 @@ export function AdmissionLetterPDF({
             Acceptance Letter, which they sign themselves. */}
         <View style={S.sigSection}>
           <Text>Yours faithfully</Text>
-          <Image src="/images/alabosignature1.jpeg" style={{ height: 40, width: 140, marginTop: 8, marginBottom: 2 }} />
-          <Text style={[S.bold, { marginTop: 4 }]}>{directorName || 'Dr. A. Big-Alabo'}</Text>
+          <Image src="/images/alabosignaturewe1(200).png" style={{ height: 60, width: 100, marginTop: 1, marginBottom: 1 }} />
+          <Text style={[S.bold, { marginTop: 1 }]}>{directorName || 'Dr. A. Big-Alabo'}</Text>
           <Text>{directorTitle || 'Ag Director (METI)'}</Text>
         </View>
 

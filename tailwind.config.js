@@ -10,7 +10,7 @@ export default {
         'uniport-blue': '#003366',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'sans-serif','Times-Roman'],
       }
     },
   },

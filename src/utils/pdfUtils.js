@@ -14,7 +14,7 @@ export const toBase64 = async (url) => {
 
 export const LOGO_PATHS = {
   uniport: '/images/uniportlogo1.png',
-  meti: '/images/metilogo1.png',
+  meti: '/images/metilogo3.png',
 };
 
 export async function fetchPdfLogos() {

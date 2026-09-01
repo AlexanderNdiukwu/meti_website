@@ -3,7 +3,7 @@ import { PdfHeader, Field } from './ApplicationFormPDF';
 import { programmeDeclarationLabel, surnameFirst, getCurrentSession } from '../../utils/pdfUtils';
 
 const styles = StyleSheet.create({
-  page: { padding: 36, fontFamily: 'Helvetica', backgroundColor: '#fff', color: '#111827' },
+  page: { padding: 36, fontFamily: 'Times-Roman', backgroundColor: '#fff', color: '#111827' },
   title: { fontSize: 14, fontWeight: 'bold', textAlign: 'center', marginTop: 10, marginBottom: 12, color: '#1B3A6B' },
   boldText: { fontSize: 11, fontWeight: 'bold', marginTop: 8 },
   bodyText: { fontSize: 10, lineHeight: 1.5 },

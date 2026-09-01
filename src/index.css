@@ -37,6 +37,7 @@
     background-color: #ffffff;
     color: #111827;
     font-family: var(--font-sans);
+      /* font-family: 'Times New Roman'; */
     margin: 0;
   }
 }

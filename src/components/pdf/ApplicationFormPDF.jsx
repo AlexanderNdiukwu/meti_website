@@ -6,7 +6,7 @@ import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/render
 const styles = StyleSheet.create({
   page: {
     padding: 36,
-    fontFamily: 'Helvetica',
+    fontFamily: 'Times-Roman',
     fontSize: 10,
     color: '#111',
   },
@@ -140,8 +140,8 @@ function PdfHeader({ uniportLogo, metiLogo }) {
     <View style={styles.header}>
       {/* UniPort crest — left */}
       {uniportLogo
-        ? <Image src={uniportLogo} style={{ width: 55, height: 55, marginRight: 8 }} />
-        : <View style={{ width: 55, height: 55, marginRight: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
+        ? <Image src={uniportLogo} style={{ width: 80, height: 80, marginRight: 8 }} />
+        : <View style={{ width: 80, height: 80, marginRight: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
       }
 
       {/* University name block — centre */}
@@ -159,8 +159,8 @@ function PdfHeader({ uniportLogo, metiLogo }) {
 
       {/* METI logo — right */}
       {metiLogo
-        ? <Image src={metiLogo} style={{ width: 70, height: 63, marginLeft: 8 }} />
-        : <View style={{ width: 70, height: 63, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
+        ? <Image src={metiLogo} style={{ width: 90, height: 90, marginLeft: 8 }} />
+        : <View style={{ width: 90, height: 90, marginLeft: 8, backgroundColor: '#dde3f0', borderRadius: 4 }} />
       }
     </View>
   );
